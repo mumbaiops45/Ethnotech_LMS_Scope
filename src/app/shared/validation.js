@@ -11,7 +11,7 @@ export const validateEmail = (email) => {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return "Enter valid email";
   }
-  return "";
+  return null;
 };
 
 // ✅ Mobile

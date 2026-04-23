@@ -4,12 +4,18 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-// ✅ import validation service
 import {
   validateEmail,
   validateMobile,
   validateOtp,
-} from "../../utils/validation";
+} from "../../shared/validation";
+
+
+
+import {
+  loginService, sendOtpService,
+  verifyOtpService,
+} from "../../../../service/login.service";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -24,8 +30,8 @@ export default function LoginPage() {
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
 
-  // ✅ Handle Login
-  const handleLogin = () => {
+  // ================= LOGIN =================
+  const handleLogin = async () => {
     let newErrors = {};
     setErrors({});
     setMessage("");
@@ -43,12 +49,27 @@ export default function LoginPage() {
         return;
       }
 
-      if (email === "admin@gmail.com" && password === "123456") {
-        router.push("/dashboard/admin");
-      } else {
-        setErrors({ general: "Invalid email or password" });
+      try {
+        const res = await loginService({
+          email,
+          password,
+        });
+        if (res?.token) {
+          localStorage.setItem("token", res.token);
+          router.push("/dashboard/admin");
+
+        } else {
+          setErrors({ general: "Invalid email or password" });
+        }
+      } catch (error) {
+        setErrors({
+          general:
+            error?.response?.data?.message ||
+            "Invalid email or password",
+        });
       }
     } else {
+      // ================= OTP LOGIN =================
       const mobileErr = validateMobile(mobile);
       if (mobileErr) newErrors.mobile = mobileErr;
 
@@ -64,16 +85,29 @@ export default function LoginPage() {
         return;
       }
 
-      if (mobile === "9999999999" && otp === "123456") {
-        router.push("/dashboard/admin");
-      } else {
-        setErrors({ general: "Invalid OTP" });
+      try {
+        const res = await verifyOtpService({
+          mobile,
+          otp,
+        });
+        if (res?.token) {
+          localStorage.setItem("token", res.token);
+          router.push("/dashboard/admin");
+
+        } else {
+          setErrors({ general: "Invalid OTP" });
+        }
+      } catch (error) {
+        setErrors({
+          general:
+            error?.response?.data?.message || "Invalid OTP",
+        });
       }
     }
   };
 
-  // ✅ Send OTP
-  const handleSendOtp = () => {
+  // ================= SEND OTP =================
+  const handleSendOtp = async () => {
     setErrors({});
     setMessage("");
 
@@ -83,14 +117,26 @@ export default function LoginPage() {
       return;
     }
 
-    setOtpSent(true);
-    setMessage("OTP sent successfully (demo: 1234)");
+    try {
+      const res = await sendOtpService({ mobile });
+
+      if (res) {
+        setOtpSent(true);
+        setMessage("OTP sent successfully");
+      }
+    } catch (error) {
+      setErrors({
+        mobile:
+          error?.response?.data?.message ||
+          "Failed to send OTP",
+      });
+    }
   };
 
   return (
     <div className="flex h-screen">
 
-      {/* 🔹 LEFT SIDE */}
+      {/* 🔹 LEFT SIDE (UNCHANGED) */}
       <div className="hidden md:flex w-1/2 bg-gradient-to-br from-blue-700 to-indigo-800 text-white flex-col justify-center items-center p-10">
         <h1 className="text-4xl font-bold mb-4">Ethnotech LMS</h1>
         <p className="text-lg text-center max-w-md">
@@ -119,9 +165,8 @@ export default function LoginPage() {
             <div className="relative flex bg-gray-200 rounded-xl p-1">
 
               <div
-                className={`absolute top-1 bottom-1 w-1/2 rounded-lg bg-white shadow transition-all duration-300 ${
-                  mode === "email" ? "left-1" : "left-1/2"
-                }`}
+                className={`absolute top-1 bottom-1 w-1/2 rounded-lg bg-white shadow transition-all duration-300 ${mode === "email" ? "left-1" : "left-1/2"
+                  }`}
               ></div>
 
               <button
@@ -148,7 +193,7 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* Errors */}
+          {/* ERRORS */}
           {errors.general && (
             <p className="text-red-500 text-sm mb-3 text-center">
               {errors.general}
@@ -161,7 +206,7 @@ export default function LoginPage() {
             </p>
           )}
 
-          {/* EMAIL */}
+          {/* EMAIL UI */}
           {mode === "email" && (
             <div className="space-y-4">
 
@@ -201,7 +246,7 @@ export default function LoginPage() {
             </div>
           )}
 
-          {/* OTP */}
+          {/* OTP UI */}
           {mode === "otp" && (
             <div className="space-y-4">
 
@@ -213,10 +258,9 @@ export default function LoginPage() {
                     value={mobile}
                     placeholder="Enter mobile number"
                     className="w-full py-2 outline-none bg-transparent"
-                    onChange={(e) => {
-                      const value = e.target.value.replace(/\D/g, "");
-                      if (value.length <= 10) setMobile(value);
-                    }}
+                    onChange={(e) =>
+                      setMobile(e.target.value.replace(/\D/g, ""))
+                    }
                   />
                 </div>
                 {errors.mobile && (
@@ -234,35 +278,26 @@ export default function LoginPage() {
                   Send OTP
                 </button>
               ) : (
-                <>
-                  <div>
-                    <div className="flex items-center border rounded-xl px-3 focus-within:ring-2 focus-within:ring-blue-500">
-                      <span className="text-gray-400 mr-2">🔢</span>
-                      <input
-                        type="text"
-                        value={otp}
-                        placeholder="Enter OTP"
-                        className="w-full py-2 outline-none bg-transparent"
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/\D/g, "");
-                          if (value.length <= 6) setOtp(value);
-                        }}
-                      />
-                    </div>
-                    {errors.otp && (
-                      <span className="text-red-500 text-sm">
-                        {errors.otp}
-                      </span>
-                    )}
+                <div>
+                  <div className="flex items-center border rounded-xl px-3 focus-within:ring-2 focus-within:ring-blue-500">
+                    <span className="text-gray-400 mr-2">🔢</span>
+                    <input
+                      type="text"
+                      value={otp}
+                      placeholder="Enter OTP"
+                      className="w-full py-2 outline-none bg-transparent"
+                      onChange={(e) =>
+                        setOtp(e.target.value.replace(/\D/g, ""))
+                      }
+                    />
                   </div>
 
-                  <button
-                    onClick={handleSendOtp}
-                    className="text-xs text-blue-600"
-                  >
-                    Resend OTP
-                  </button>
-                </>
+                  {errors.otp && (
+                    <span className="text-red-500 text-sm">
+                      {errors.otp}
+                    </span>
+                  )}
+                </div>
               )}
             </div>
           )}
@@ -274,17 +309,6 @@ export default function LoginPage() {
           >
             Continue
           </button>
-
-          <div className="flex justify-between items-center mt-4 text-sm">
-            <label className="flex items-center gap-2 text-gray-600">
-              <input type="checkbox" />
-              Remember me
-            </label>
-
-            <span className="text-blue-600 cursor-pointer hover:underline">
-              Forgot?
-            </span>
-          </div>
 
           <p className="text-sm mt-5 text-center">
             Don’t have an account?{" "}
