@@ -48,3 +48,18 @@ export const sendOtpApi = (data) => {
 export const verifyOtpApi = (data) => {
   return api.post("/verify-otp", data);
 };
+
+// ================= FORGOT PASSWORD =================
+export const sendResetOtp = (data) => {
+  return api.post("/student/send-reset-otp", data);   // { email }
+};
+
+export const resetPassword = (data) => {
+  return api.post("/student/reset-password", data);   // { email, otp, newPassword }
+};
+
+// ================= ADMIN AUTH =================
+export const adminLogin = async (data) => {
+  const response = await api.post("/admins/login", data);
+  return response.data;
+};

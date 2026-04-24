@@ -21,6 +21,11 @@ export default function DashboardLayout({ children }) {
 
   const profileRef = useRef(null);
   const notificationRef = useRef(null);
+  const hydrate = useAuthStore((state) => state.hydrate);
+
+  useEffect(() => {
+  hydrate();
+}, [hydrate]);
 
   // Fetch user profile if token exists but user is missing
   useEffect(() => {
@@ -53,9 +58,9 @@ export default function DashboardLayout({ children }) {
       icon: "👤",
       isMaster: true,
       subItems: [
-        { name: "Users", path: "/dashboard/users", icon: "👥" },
+        { name: "Users", path: "/dashboard/user", icon: "👥" },
         { name: "Roles", path: "/dashboard/roles", icon: "🔑" },
-        { name: "Permissions", path: "/dashboard/permissions", icon: "🔒" },
+        // { name: "Permissions", path: "/dashboard/permissions", icon: "🔒" },
       ],
     },
     { name: "Courses", path: "/dashboard/courses", icon: "📚" },
@@ -319,7 +324,7 @@ export default function DashboardLayout({ children }) {
                       </svg>
                       Your Profile
                     </Link>
-                    <Link
+                    {/* <Link
                       href="/dashboard/settings"
                       className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition"
                     >
@@ -343,7 +348,7 @@ export default function DashboardLayout({ children }) {
                         />
                       </svg>
                       Settings
-                    </Link>
+                    </Link> */}
                   </div>
                   <div className="border-t p-2">
                     <button

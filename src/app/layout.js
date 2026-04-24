@@ -1,5 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "react-hot-toast"; 
+import DashboardLayout from "./dashboard/layout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,6 +26,7 @@ export default function RootLayout({ children }) {
     >
       <body className="min-h-screen bg-gray-100">
         {children}
+        <Toaster position="top-right" />
       </body>
     </html>
   );
