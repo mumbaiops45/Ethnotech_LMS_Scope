@@ -52,7 +52,7 @@ export default function DashboardLayout({ children }) {
       isMaster: true,
       key: "userManagement",
       subItems: [
-        { name: "Users", path: "/dashboard/card", icon: "👥" },
+        { name: "Users", path: "/components/card", icon: "👥" },
       ],
     },
     {
@@ -61,7 +61,7 @@ export default function DashboardLayout({ children }) {
       isMaster: true,
       key: "courses",
       subItems: [
-        { name: "All Courses", path: "/dashboard/courses", icon: "📖" },
+        { name: "All Courses", path: "/components/courses", icon: "📖" },
       ],
     },
     {
@@ -70,7 +70,7 @@ export default function DashboardLayout({ children }) {
       isMaster: true,
       key: "assignment",
       subItems: [
-        { name: "All Assignment", path: "/dashboard/assignment", icon: "📝" },
+        { name: "All Assignment", path: "/components/assignment", icon: "📝" },
       ],
     },
     {
@@ -78,20 +78,25 @@ export default function DashboardLayout({ children }) {
       icon: "📦",
       isMaster: true,
       subItems: [
-        { name: "All Batches", path: "/dashboard/batches", icon: "📋" },
-        { name: "Assign Courses to Batch", path: "/dashboard/batches/batch-course-assign", icon: "📋" }
+        { name: "All Batches", path: "/components/batches", icon: "📋" },
+        { name: "Assign Courses to Batch", path: "/components/batches/batch-course-assign", icon: "📋" }
 
       ],
     },
+    // {
+    //   name: "Live Classes List",
+    //   icon: "🎓",
+    //   isMaster: true,
+    //   key: "liveClasses List",
+    //   subItems: [
+    //     { name: "All Live Classes", path: "/dashboard/live-classes", icon: "🎓" },
+    //   ],
+    // },
     {
-      name: "Live Classes List",
-      icon: "🎓",
-      isMaster: true,
-      key: "liveClasses List",
-      subItems: [
-        { name: "All Live Classes", path: "/dashboard/live-classes", icon: "🎓" },
-      ],
-    },
+  name: "Live Sessions",
+  icon: "🎥",
+  path: "/components/live-classes",
+}
   ];
 
   const toggleMenu = (menuKey) => {

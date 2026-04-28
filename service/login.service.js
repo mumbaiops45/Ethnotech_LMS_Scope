@@ -34,14 +34,8 @@ export const deleteProfileService = async () => deleteProfile();
 export const sendResetOtpService = async (data) => sendResetOtp(data);
 export const resetPasswordService = async (data) => resetPassword(data);
 
-// ================= ADMIN LOGIN (already exists) =================
-// adminLogin already exported above
-
 // ================= ADMIN USER MANAGEMENT =================
-// Use "/admins" as per your backend URL
 const ADMIN_BASE = "/admins/";
-// student/admin/students
-
 export const getAdmins = () => api.get(ADMIN_BASE);
 export const getAdminById = (id) => api.get(`${ADMIN_BASE}/${id}`);
 export const createAdmin = (data) => api.post(ADMIN_BASE, data);
@@ -51,7 +45,6 @@ export const deactivateAdmin = (id) => api.patch(`/admin/${id}/deactivate`, {});
 
 // ================= STUDENT MANAGEMENT (Super Admin) =================
 const STUDENT_BASE = "/student/admin/students";
-
 export const getStudents = () => api.get(STUDENT_BASE);
 export const getStudentById = (id) => api.get(`${STUDENT_BASE}/${id}`);
 export const updateStudent = (id, data) => api.put(`${STUDENT_BASE}/${id}`, data);
@@ -59,7 +52,6 @@ export const deleteStudent = (id) => api.delete(`${STUDENT_BASE}/${id}`);
 
 // ================= BATCH MANAGEMENT =================
 const BATCH_BASE = "/batches";
-
 export const getBatches = () => api.get(BATCH_BASE);
 export const getBatchById = (id) => api.get(`${BATCH_BASE}/${id}`);
 export const createBatch = (data) => api.post(BATCH_BASE, data);
@@ -73,3 +65,10 @@ export const assignCoursesToBatch = (batchId, courseIds) =>
   api.put(`/batches/${batchId}/assign-courses`, { courseIds });
 
 export const getCourses = () => api.get("/courses");
+
+
+// ================= LIVE SESSIONS =================
+export const getSessions = () => api.get("/live-sessions");
+export const createSession = (data) => api.post("/live-sessions", data);
+export const updateSession = (id, data) => api.put(`/live-sessions/${id}`, data);
+export const cancelSession = (id) => api.patch(`/live-sessions/${id}/cancel`, {});
