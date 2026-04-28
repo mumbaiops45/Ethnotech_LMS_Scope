@@ -57,7 +57,7 @@ export default function CourseDetailPage() {
       setModules(data.modules || []);
     } catch (error) {
       toast.error("Failed to load course");
-      router.push("/dashboard/courses");
+      router.push("/components/courses");
     } finally {
       setLoading(false);
     }
@@ -235,7 +235,7 @@ export default function CourseDetailPage() {
     <div className="p-6 max-w-4xl mx-auto">
       <div className="mb-6">
         <button
-          onClick={() => router.push("/dashboard/courses")}
+          onClick={() => router.push("/components/courses")}
           className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 mb-4"
         >
           <FaArrowLeft />

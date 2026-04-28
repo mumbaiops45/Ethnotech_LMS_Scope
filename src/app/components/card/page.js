@@ -12,7 +12,7 @@ export default function DashboardHome() {
       icon: "🎓",
       bgGradient: "from-emerald-500 to-teal-600",
       hoverGradient: "from-emerald-600 to-teal-700",
-      route: "/dashboard/student",
+      route: "/components/student",
     },
     {
       title: "Admin Management",
@@ -20,7 +20,7 @@ export default function DashboardHome() {
       icon: "👥",
       bgGradient: "from-blue-500 to-indigo-600",
       hoverGradient: "from-blue-600 to-indigo-700",
-      route: "/dashboard/user",
+      route: "/components/user",
     },
   ];
   return (

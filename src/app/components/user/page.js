@@ -750,7 +750,7 @@ export default function UsersPage() {
       {/* Back Button */}
       <div className="mb-4">
         <button
-          onClick={() => router.push("/dashboard/card")}
+          onClick={() => router.push("/components/card")}
           className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-800 transition"
         >
           <FaArrowLeft className="text-sm" />
