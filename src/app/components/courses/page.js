@@ -9,7 +9,7 @@ import {
   createCourse,
   updateCourse,
   deleteCourse,
-} from "../../../../service/courses.service";
+} from "../../../../service/login.service";
 
 export default function CoursesPage() {
   const router = useRouter();
@@ -181,15 +181,7 @@ export default function CoursesPage() {
   return (
     <div className="p-6">
       {/* Back Button */}
-      <div className="mb-4">
-        <button
-          onClick={() => router.push("/dashboard")}
-          className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-800 transition"
-        >
-          <FaArrowLeft className="text-sm" />
-          Back to Dashboard
-        </button>
-      </div>
+     
 
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h1 className="text-2xl font-bold text-gray-800">My Courses</h1>
