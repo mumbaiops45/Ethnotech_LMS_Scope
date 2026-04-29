@@ -16,6 +16,7 @@ export default function LoginPage() {
   const login = useAuthStore((state) => state.login);
   const sendOtp = useAuthStore((state) => state.sendOtp);
   const verifyOtp = useAuthStore((state) => state.verifyOtp);
+  const getProfile = useAuthStore((state) => state.getProfile);
   const [loading, setLoading] = useState(false);
 
   const [mode, setMode] = useState("email");
@@ -49,9 +50,26 @@ export default function LoginPage() {
       }
 
       try {
+        // Call login API
         await login({ email: email.trim(), password: password.trim() }, selectedRole);
-        toast.success(`Welcome ${selectedRole}! 🎉`);
-        router.push("/components/dashboard");
+        
+        // Wait a moment for the auth store to update user data
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        // Get the logged-in user from store
+        const user = useAuthStore.getState().user;
+        const userRole = user?.role || selectedRole;
+
+        toast.success(`Welcome ${userRole}! 🎉`);
+
+        // Role-based redirect
+        if (userRole === "superadmin") {
+          router.push("/superadmin/dashboard");
+        } else if (userRole === "Instructor") {
+          router.push("/instructor/dashboard");
+        } else {
+          router.push("/student/dashboard");
+        }
         
       } catch (error) {
         toast.error(error?.message || "Login failed");
@@ -82,7 +100,7 @@ export default function LoginPage() {
       try {
         await verifyOtp({ mobile, otp });
         toast.success(`Welcome ${selectedRole}! 🎉`);
-        router.push("/dashboard/profile");
+        router.push("/student/dashboard");
       } catch (error) {
         toast.error(error?.message || "Invalid OTP");
         setErrors({ general: error?.message || "Invalid OTP" });

@@ -11,12 +11,18 @@ import {
   sendResetOtp,
   resetPassword,
   adminLogin,
+  instructorLogin,
+  getInstructorProfile,
+  updateInstructorProfile
 } from "../api/auth/api";
 
 // ================= LOGIN =================
 export const loginService = async (data) => loginUser(data);
 export const adminLoginService = async (data) => adminLogin(data);
-
+// ================= INSTRUCTOR PROFILE =================
+export const instructorLoginService = async (data) => instructorLogin(data);
+export const getInstructorProfileService = async () => getInstructorProfile();
+export const updateInstructorProfileService = async (data) => updateInstructorProfile(data);
 // ================= OTP =================
 export const sendOtpService = async (data) => sendOtpApi(data);
 export const verifyOtpService = async (data) => verifyOtpApi(data);
@@ -41,7 +47,7 @@ export const getAdminById = (id) => api.get(`${ADMIN_BASE}/${id}`);
 export const createAdmin = (data) => api.post(ADMIN_BASE, data);
 export const updateAdmin = (id, data) => api.put(`${ADMIN_BASE}/${id}`, data);
 export const deleteAdmin = (id) => api.delete(`${ADMIN_BASE}/${id}`);
-export const deactivateAdmin = (id) => api.patch(`/admin/${id}/deactivate`, {});   
+export const deactivateAdmin = (id) => api.patch(`/admin/${id}/deactivate`, {});
 
 // ================= STUDENT MANAGEMENT (Super Admin) =================
 const STUDENT_BASE = "/student/admin/students";
@@ -93,3 +99,12 @@ export const deleteLesson = (lessonId) =>
   api.delete(`/lesson/${lessonId}`);
 export const reorderLessons = (courseId, moduleId, orderArray) =>
   api.put(`/${courseId}/module/${moduleId}/lesson/reorder`, { order: orderArray });
+
+
+
+// ================= ANNOUNCEMENT MANAGEMENT =================
+const ANNOUNCEMENT_BASE = "/announcements";
+
+export const getAnnouncements = () => api.get(ANNOUNCEMENT_BASE);
+export const getAnnouncementById = (id) => api.get(`${ANNOUNCEMENT_BASE}/${id}`);
+export const createAnnouncement = (data) => api.post(ANNOUNCEMENT_BASE, data);
