@@ -6,6 +6,22 @@ export const loginUser = async (data) => {
   return response.data;
 };
 
+// ================= INSTRUCTOR AUTH =================
+export const instructorLogin = async (data) => {
+  const response = await api.post("/instructor/login", data);
+  return response.data;
+};
+// ================= INSTRUCTOR PROFILE =================
+export const getInstructorProfile = async () => {
+  const response = await api.get("/instructor/profile");
+  return response.data;
+};
+
+export const updateInstructorProfile = async (data) => {
+  const response = await api.put("/instructor/profile/update", data);
+  return response.data;
+};
+
 // ================= REGISTER =================
 export const registerUser = async (data) => {
   const response = await api.post("/student/register", data);

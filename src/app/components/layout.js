@@ -1,3 +1,538 @@
+// // // "use client";
+
+// // // import Link from "next/link";
+// // // import { usePathname, useRouter } from "next/navigation";
+// // // import { useState, useEffect, useRef } from "react";
+// // // import { useAuthStore } from "../../../store/login.store";
+
+// // // export default function DashboardLayout({ children }) {
+// // //   const router = useRouter();
+// // //   const pathname = usePathname();
+
+// // //   const loggedInUser = useAuthStore((state) => state.user);
+// // //   const token = useAuthStore((state) => state.token);
+// // //   const getProfile = useAuthStore((state) => state.getProfile);
+// // //   const logout = useAuthStore((state) => state.logout);
+
+// // //   const [showProfileMenu, setShowProfileMenu] = useState(false);
+// // //   const [showNotifications, setShowNotifications] = useState(false);
+// // //   const [openMenus, setOpenMenus] = useState({ userManagement: true, courses: false, assignment: false });
+
+// // //   const profileRef = useRef(null);
+// // //   const notificationRef = useRef(null);
+// // //   const hydrate = useAuthStore((state) => state.hydrate);
+
+// // //   useEffect(() => {
+// // //     hydrate();
+// // //   }, [hydrate]);
+
+// // //   useEffect(() => {
+// // //     if (token && !loggedInUser) {
+// // //       getProfile();
+// // //     }
+// // //   }, [token, loggedInUser, getProfile]);
+
+// // //   useEffect(() => {
+// // //     function handleClickOutside(event) {
+// // //       if (profileRef.current && !profileRef.current.contains(event.target)) {
+// // //         setShowProfileMenu(false);
+// // //       }
+// // //       if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+// // //         setShowNotifications(false);
+// // //       }
+// // //     }
+// // //     document.addEventListener("mousedown", handleClickOutside);
+// // //     return () => document.removeEventListener("mousedown", handleClickOutside);
+// // //   }, []);
+
+// // //   const menuItems = [
+// // //     {
+// // //       name: "Announcements",
+// // //       icon: "📢",
+// // //       path: "/components/announcements",
+// // //     },
+// // //      {
+// // //       name: "Assignment",
+// // //       icon: "🎓",
+// // //       isMaster: true,
+// // //       key: "assignment",
+// // //       subItems: [
+// // //         { name: "All Assignment", path: "/components/assignment", icon: "📝" },
+// // //       ],
+// // //     },
+// // //     {
+// // //       name: "Batches",
+// // //       icon: "📦",
+// // //       isMaster: true,
+// // //       subItems: [
+// // //         { name: "All Batches", path: "/components/batches", icon: "📋" },
+// // //         { name: "Assign Courses to Batch", path: "/components/batches/batch-course-assign", icon: "📋" }
+
+// // //       ],
+// // //     },
+// // //     {
+// // //       name: "Courses",
+// // //       icon: "📚",
+// // //       isMaster: true,
+// // //       key: "courses",
+// // //       subItems: [
+// // //         { name: "All Courses", path: "/components/courses", icon: "📖" },
+// // //       ],
+// // //     },
+// // //     {
+// // //       name: "Live Sessions",
+// // //       icon: "🎥",
+// // //       path: "/components/live-classes",
+// // //     },
+// // //      {
+// // //       name: "User Management",
+// // //       icon: "👤",
+// // //       isMaster: true,
+// // //       key: "userManagement",
+// // //       subItems: [
+// // //         { name: "Users", path: "/components/card", icon: "👥" },
+// // //       ],
+// // //     },
+// // //      {
+// // //       name: "Lessons",
+// // //       icon: "🎥",
+// // //       path: "/components/lessons",
+// // //     },
+// // //   ];
+
+// // //   const toggleMenu = (menuKey) => {
+// // //     setOpenMenus((prev) => ({ ...prev, [menuKey]: !prev[menuKey] }));
+// // //   };
+
+// // //   const displayName = loggedInUser?.fullName || loggedInUser?.name || "User";
+// // //   const displayEmail = loggedInUser?.email || "";
+// // //   const avatarUrl = loggedInUser?.photo
+// // //     ? loggedInUser.photo
+// // //     : `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=3b82f6&color=fff`;
+
+// // //   const [notifications, setNotifications] = useState([
+// // //     { id: 1, message: "New lead assigned to you", time: "5 min ago", read: false },
+// // //     { id: 2, message: "Course completion certificate ready", time: "1 hour ago", read: false },
+// // //     { id: 3, message: "Meeting scheduled for tomorrow", time: "3 hours ago", read: true },
+// // //   ]);
+
+// // //   const unreadCount = notifications.filter((n) => !n.read).length;
+
+// // //   const handleLogout = () => {
+// // //     logout();
+// // //     router.push("/auth/login");
+// // //   };
+
+// // //   const markAsRead = (id) => {
+// // //     setNotifications((prev) =>
+// // //       prev.map((n) => (n.id === id ? { ...n, read: true } : n))
+// // //     );
+// // //   };
+
+// // //   return (
+// // //     <div className="flex h-screen">
+// // //       <aside className="w-64 bg-gray-900 text-white flex flex-col p-5">
+// // //         <h2 className="text-2xl font-bold mb-8">Ethnotech CRM</h2>
+// // //         <nav className="space-y-2 flex-1">
+// // //           {menuItems.map((item) => (
+// // //             <div key={item.name}>
+// // //               {item.isMaster ? (
+// // //                 <div>
+// // //                   <button
+// // //                     onClick={() => toggleMenu(item.key)}
+// // //                     className="w-full flex items-center justify-between px-3 py-2 rounded transition hover:bg-gray-700"
+// // //                   >
+// // //                     <span className="flex items-center gap-2">
+// // //                       <span>{item.icon}</span>
+// // //                       {item.name}
+// // //                     </span>
+// // //                     <svg
+// // //                       className={`w-4 h-4 transition-transform ${openMenus[item.key] ? "rotate-180" : ""}`}
+// // //                       fill="none"
+// // //                       stroke="currentColor"
+// // //                       viewBox="0 0 24 24"
+// // //                     >
+// // //                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+// // //                     </svg>
+// // //                   </button>
+// // //                   {openMenus[item.key] && (
+// // //                     <div className="ml-4 mt-1 space-y-1">
+// // //                       {item.subItems.map((sub) => (
+// // //                         <Link
+// // //                           key={sub.path}
+// // //                           href={sub.path}
+// // //                           className={`flex items-center gap-2 px-3 py-2 rounded transition ${pathname === sub.path ? "bg-blue-600" : "hover:bg-gray-700"
+// // //                             }`}
+// // //                         >
+// // //                           <span>{sub.icon}</span>
+// // //                           {sub.name}
+// // //                         </Link>
+// // //                       ))}
+// // //                     </div>
+// // //                   )}
+// // //                 </div>
+// // //               ) : (
+// // //                 <Link
+// // //                   href={item.path}
+// // //                   className={`flex items-center gap-2 px-3 py-2 rounded transition ${pathname === item.path ? "bg-blue-600" : "hover:bg-gray-700"
+// // //                     }`}
+// // //                 >
+// // //                   <span>{item.icon}</span>
+// // //                   {item.name}
+// // //                 </Link>
+// // //               )}
+// // //             </div>
+// // //           ))}
+// // //         </nav>
+// // //       </aside>
+
+// // //       <div className="flex-1 flex flex-col bg-gray-100">
+// // //         <header className="bg-white shadow-sm px-6 py-3 flex justify-between items-center">
+// // //           <h1 className="font-semibold text-lg capitalize text-gray-800"></h1>
+// // //           <div className="flex items-center gap-5">
+// // //             {/* Notification Bell – unchanged */}
+// // //             <div className="relative" ref={notificationRef}>
+// // //               <button onClick={() => setShowNotifications(!showNotifications)} className="relative p-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400">
+// // //                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+// // //                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+// // //                 </svg>
+// // //                 {unreadCount > 0 && <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></span>}
+// // //               </button>
+// // //               {showNotifications && (
+// // //                 <div className="absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 overflow-hidden transition-all duration-200 ease-out">
+// // //                   <div className="p-4 border-b bg-gray-50">
+// // //                     <div className="flex justify-between items-center">
+// // //                       <h3 className="font-semibold text-gray-800">Notifications</h3>
+// // //                       {unreadCount > 0 && <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">{unreadCount} new</span>}
+// // //                     </div>
+// // //                   </div>
+// // //                   <div className="max-h-96 overflow-y-auto divide-y divide-gray-100">
+// // //                     {notifications.length === 0 ? (
+// // //                       <div className="p-6 text-center text-gray-500 text-sm">No notifications</div>
+// // //                     ) : (
+// // //                       notifications.map((notif) => (
+// // //                         <div key={notif.id} onClick={() => markAsRead(notif.id)} className={`p-4 hover:bg-gray-50 cursor-pointer transition ${!notif.read ? "bg-blue-50" : ""}`}>
+// // //                           <div className="flex items-start gap-3">
+// // //                             <div className={`w-2 h-2 mt-2 rounded-full ${!notif.read ? "bg-blue-500" : "bg-gray-300"}`}></div>
+// // //                             <div className="flex-1">
+// // //                               <p className="text-sm text-gray-800">{notif.message}</p>
+// // //                               <p className="text-xs text-gray-400 mt-1">{notif.time}</p>
+// // //                             </div>
+// // //                           </div>
+// // //                         </div>
+// // //                       ))
+// // //                     )}
+// // //                   </div>
+// // //                   <div className="p-3 text-center border-t bg-gray-50">
+// // //                     <button className="text-sm text-blue-600 hover:text-blue-800 font-medium">View all notifications →</button>
+// // //                   </div>
+// // //                 </div>
+// // //               )}
+// // //             </div>
+
+// // //             {/* User Profile */}
+// // //             <div className="relative" ref={profileRef}>
+// // //               <button onClick={() => setShowProfileMenu(!showProfileMenu)} className="flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-full transition-transform hover:scale-105">
+// // //                 <img src={avatarUrl} alt={displayName} className="w-10 h-10 rounded-full border-2 border-gray-200 shadow-sm" />
+// // //               </button>
+// // //               {showProfileMenu && (
+// // //                 <div className="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 overflow-hidden">
+// // //                   <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b">
+// // //                     <div className="flex items-center gap-3">
+// // //                       <img src={avatarUrl} alt={displayName} className="w-12 h-12 rounded-full border-2 border-white shadow" />
+// // //                       <div>
+// // //                         <p className="font-semibold text-gray-800">{displayName}</p>
+// // //                         <p className="text-xs text-gray-500">{displayEmail}</p>
+// // //                       </div>
+// // //                     </div>
+// // //                   </div>
+// // //                   <div className="py-2">
+// // //                     <Link href="/dashboard/profile" className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition">
+// // //                       <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+// // //                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+// // //                       </svg>
+// // //                       Your Profile
+// // //                     </Link>
+// // //                   </div>
+// // //                   <div className="border-t p-2">
+// // //                     <button onClick={handleLogout} className="flex items-center gap-3 w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition">
+// // //                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+// // //                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+// // //                       </svg>
+// // //                       Logout
+// // //                     </button>
+// // //                   </div>
+// // //                 </div>
+// // //               )}
+// // //             </div>
+
+// // //             <button onClick={handleLogout} className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl transition flex items-center gap-2 shadow-sm">
+// // //               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+// // //                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+// // //               </svg>
+// // //               Logout
+// // //             </button>
+// // //           </div>
+// // //         </header>
+
+// // //         <main className="p-6 overflow-y-auto">{children}</main>
+// // //       </div>
+// // //     </div>
+// // //   );
+// // // }
+
+// // "use client";
+
+// // import Link from "next/link";
+// // import { usePathname, useRouter } from "next/navigation";
+// // import { useState, useEffect, useRef } from "react";
+// // import { useAuthStore } from "../../store/login.store";
+
+// //   export default function DashboardLayout({ children }) {
+// //   const router = useRouter();
+// //   const pathname = usePathname();
+
+// //   const loggedInUser = useAuthStore((state) => state.user);
+// //   const token = useAuthStore((state) => state.token);
+// //   const getProfile = useAuthStore((state) => state.getProfile);
+// //   const logout = useAuthStore((state) => state.logout);
+// //   const hydrate = useAuthStore((state) => state.hydrate);
+
+// //   const [showProfileMenu, setShowProfileMenu] = useState(false);
+// //   const [showNotifications, setShowNotifications] = useState(false);
+// //   const profileRef = useRef(null);
+// //   const notificationRef = useRef(null);
+
+// //   useEffect(() => {
+// //     hydrate();
+// //   }, [hydrate]);
+
+// //   useEffect(() => {
+// //     if (token && !loggedInUser) {
+// //       getProfile();
+// //     }
+// //   }, [token, loggedInUser, getProfile]);
+
+// //   useEffect(() => {
+// //     function handleClickOutside(event) {
+// //       if (profileRef.current && !profileRef.current.contains(event.target))
+// //         setShowProfileMenu(false);
+// //       if (notificationRef.current && !notificationRef.current.contains(event.target))
+// //         setShowNotifications(false);
+// //     }
+// //     document.addEventListener("mousedown", handleClickOutside);
+// //     return () => document.removeEventListener("mousedown", handleClickOutside);
+// //   }, []);
+
+// //   // ================= ROLE‑BASED MENUS =================
+// //   const superadminMenu = [
+// //     { name: "Announcements", icon: "📢", path: "/components/announcements" },
+// //     {
+// //       name: "Assignment",
+// //       icon: "🎓",
+// //       isMaster: true,
+// //       key: "assignment",
+// //       subItems: [{ name: "All Assignment", path: "/components/assignment", icon: "📝" }],
+// //     },
+// //     {
+// //       name: "Batches",
+// //       icon: "📦",
+// //       isMaster: true,
+// //       subItems: [
+// //         { name: "All Batches", path: "/components/batches", icon: "📋" },
+// //         { name: "Assign Courses to Batch", path: "/components/batches/batch-course-assign", icon: "📋" },
+// //       ],
+// //     },
+// //     {
+// //       name: "Courses",
+// //       icon: "📚",
+// //       isMaster: true,
+// //       key: "courses",
+// //       subItems: [{ name: "All Courses", path: "/components/courses", icon: "📖" }],
+// //     },
+// //     { name: "Live Sessions", icon: "🎥", path: "/components/live-classes" },
+// //     {
+// //       name: "User Management",
+// //       icon: "👤",
+// //       isMaster: true,
+// //       key: "userManagement",
+// //       subItems: [{ name: "Users", path: "/components/card", icon: "👥" }],
+// //     },
+// //     { name: "Lessons", icon: "🎥", path: "/components/lessons" },
+// //   ];
+
+// //   const instructorMenu = [
+// //     { name: "Dashboard", icon: "🏠", path: "/instructor/dashboard" },
+// //     { name: "My Courses", icon: "📚", path: "/instructor/courses" },
+// //     { name: "Live Sessions", icon: "🎥", path: "/instructor/live-sessions" },
+// //     { name: "Assignments to Grade", icon: "📝", path: "/instructor/assignments/review" },
+// //     { name: "Student Progress", icon: "📊", path: "/instructor/progress" },
+// //     { name: "Announcements", icon: "📢", path: "/instructor/announcements" },
+// //     { name: "Profile", icon: "👤", path: "/instructor/profile" },
+// //   ];
+
+// //   const studentMenu = [
+// //     { name: "Dashboard", icon: "🏠", path: "/student/dashboard" },
+// //     { name: "My Courses", icon: "📚", path: "/student/courses" },
+// //     { name: "Assignments", icon: "📝", path: "/student/assignments" },
+// //     { name: "Live Sessions", icon: "🎥", path: "/student/live-sessions" },
+// //     { name: "Profile", icon: "👤", path: "/student/profile" },
+// //   ];
+
+// //   const role = loggedInUser?.role?.toLowerCase() || "student";
+// //   let currentMenu = studentMenu;
+// //   if (role === "superadmin") currentMenu = superadminMenu;
+// //   else if (role === "instructor") currentMenu = instructorMenu;
+
+// //   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
+// //   const toggleMenu = (key: string) => setOpenMenus((prev) => ({ ...prev, [key]: !prev[key] }));
+
+// //   const displayName = loggedInUser?.fullName || loggedInUser?.name || "User";
+// //   const displayEmail = loggedInUser?.email || "";
+// //   const avatarUrl = loggedInUser?.photo
+// //     ? loggedInUser.photo
+// //     : `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=3b82f6&color=fff`;
+
+// //   const [notifications] = useState([
+// //     { id: 1, message: "New announcement", time: "5 min ago", read: false },
+// //   ]);
+// //   const unreadCount = notifications.filter((n) => !n.read).length;
+
+// //   const handleLogout = () => {
+// //     logout();
+// //     router.push("/auth/login");
+// //   };
+
+// //   return (
+// //     <div className="flex h-screen">
+// //       {/* Sidebar */}
+// //       <aside className="w-64 bg-gray-900 text-white flex flex-col p-5">
+// //         <h2 className="text-2xl font-bold mb-8">Ethnotech LMS</h2>
+// //         <nav className="space-y-2 flex-1">
+// //           {currentMenu.map((item) => (
+// //             <div key={item.name}>
+// //               {item.isMaster ? (
+// //                 <div>
+// //                   <button
+// //                     onClick={() => toggleMenu(item.key!)}
+// //                     className="w-full flex items-center justify-between px-3 py-2 rounded hover:bg-gray-700"
+// //                   >
+// //                     <span className="flex items-center gap-2">
+// //                       <span>{item.icon}</span> {item.name}
+// //                     </span>
+// //                     <svg
+// //                       className={`w-4 h-4 transition-transform ${openMenus[item.key!] ? "rotate-180" : ""}`}
+// //                       fill="none"
+// //                       stroke="currentColor"
+// //                       viewBox="0 0 24 24"
+// //                     >
+// //                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+// //                     </svg>
+// //                   </button>
+// //                   {openMenus[item.key!] && (
+// //                     <div className="ml-4 mt-1 space-y-1">
+// //                       {item.subItems!.map((sub) => (
+// //                         <Link
+// //                           key={sub.path}
+// //                           href={sub.path}
+// //                           className={`flex items-center gap-2 px-3 py-2 rounded transition ${
+// //                             pathname === sub.path ? "bg-blue-600" : "hover:bg-gray-700"
+// //                           }`}
+// //                         >
+// //                           <span>{sub.icon}</span> {sub.name}
+// //                         </Link>
+// //                       ))}
+// //                     </div>
+// //                   )}
+// //                 </div>
+// //               ) : (
+// //                 <Link
+// //                   href={item.path}
+// //                   className={`flex items-center gap-2 px-3 py-2 rounded transition ${
+// //                     pathname === item.path ? "bg-blue-600" : "hover:bg-gray-700"
+// //                   }`}
+// //                 >
+// //                   <span>{item.icon}</span> {item.name}
+// //                 </Link>
+// //               )}
+// //             </div>
+// //           ))}
+// //         </nav>
+// //       </aside>
+
+// //       {/* Main content */}
+// //       <div className="flex-1 flex flex-col bg-gray-100">
+// //         <header className="bg-white shadow-sm px-6 py-3 flex justify-between items-center">
+// //           <h1 className="font-semibold text-lg capitalize text-gray-800"></h1>
+// //           <div className="flex items-center gap-5">
+// //             {/* Notifications bell */}
+// //             <div className="relative" ref={notificationRef}>
+// //               <button
+// //                 onClick={() => setShowNotifications(!showNotifications)}
+// //                 className="relative p-2 text-gray-600 hover:bg-gray-100 rounded-full"
+// //               >
+// //                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+// //                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+// //                 </svg>
+// //                 {unreadCount > 0 && <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></span>}
+// //               </button>
+// //               {showNotifications && (
+// //                 <div className="absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-xl border z-50">
+// //                   <div className="p-4 border-b bg-gray-50">
+// //                     <h3 className="font-semibold">Notifications</h3>
+// //                   </div>
+// //                   <div className="max-h-96 overflow-y-auto">
+// //                     {notifications.map((n) => (
+// //                       <div key={n.id} className="p-4 hover:bg-gray-50 border-b">
+// //                         <p className="text-sm">{n.message}</p>
+// //                         <p className="text-xs text-gray-400">{n.time}</p>
+// //                       </div>
+// //                     ))}
+// //                   </div>
+// //                 </div>
+// //               )}
+// //             </div>
+
+// //             {/* Profile dropdown */}
+// //             <div className="relative" ref={profileRef}>
+// //               <button onClick={() => setShowProfileMenu(!showProfileMenu)}>
+// //                 <img src={avatarUrl} alt={displayName} className="w-10 h-10 rounded-full border-2 border-gray-200" />
+// //               </button>
+// //               {showProfileMenu && (
+// //                 <div className="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-xl border z-50 overflow-hidden">
+// //                   <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b">
+// //                     <div className="flex items-center gap-3">
+// //                       <img src={avatarUrl} alt={displayName} className="w-12 h-12 rounded-full border-2 border-white" />
+// //                       <div>
+// //                         <p className="font-semibold">{displayName}</p>
+// //                         <p className="text-xs text-gray-500">{displayEmail}</p>
+// //                       </div>
+// //                     </div>
+// //                   </div>
+// //                   <div className="py-2">
+// //                     <Link
+// //                       href={role === "instructor" ? "/instructor/profile" : "/dashboard/profile"}
+// //                       className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
+// //                     >
+// //                       Your Profile
+// //                     </Link>
+// //                   </div>
+// //                   <div className="border-t p-2">
+// //                     <button onClick={handleLogout} className="flex items-center gap-3 w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg">
+// //                       Logout
+// //                     </button>
+// //                   </div>
+// //                 </div>
+// //               )}
+// //             </div>
+// //           </div>
+// //         </header>
+// //         <main className="p-6 overflow-y-auto">{children}</main>
+// //       </div>
+// //     </div>
+// //   );
+// // }
+
 "use client";
 
 import Link from "next/link";
@@ -13,14 +548,12 @@ export default function DashboardLayout({ children }) {
   const token = useAuthStore((state) => state.token);
   const getProfile = useAuthStore((state) => state.getProfile);
   const logout = useAuthStore((state) => state.logout);
+  const hydrate = useAuthStore((state) => state.hydrate);
 
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
-  const [openMenus, setOpenMenus] = useState({ userManagement: true, courses: false, assignment: false });
-
   const profileRef = useRef(null);
   const notificationRef = useRef(null);
-  const hydrate = useAuthStore((state) => state.hydrate);
 
   useEffect(() => {
     hydrate();
@@ -34,44 +567,24 @@ export default function DashboardLayout({ children }) {
 
   useEffect(() => {
     function handleClickOutside(event) {
-      if (profileRef.current && !profileRef.current.contains(event.target)) {
+      if (profileRef.current && !profileRef.current.contains(event.target))
         setShowProfileMenu(false);
-      }
-      if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+      if (notificationRef.current && !notificationRef.current.contains(event.target))
         setShowNotifications(false);
-      }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const menuItems = [
-    {
-      name: "User Management",
-      icon: "👤",
-      isMaster: true,
-      key: "userManagement",
-      subItems: [
-        { name: "Users", path: "/components/card", icon: "👥" },
-      ],
-    },
-    {
-      name: "Courses",
-      icon: "📚",
-      isMaster: true,
-      key: "courses",
-      subItems: [
-        { name: "All Courses", path: "/components/courses", icon: "📖" },
-      ],
-    },
+  // ================= ROLE‑BASED MENUS =================
+  const superadminMenu = [
+    { name: "Announcements", icon: "📢", path: "/components/announcements" },
     {
       name: "Assignment",
       icon: "🎓",
       isMaster: true,
       key: "assignment",
-      subItems: [
-        { name: "All Assignment", path: "/components/assignment", icon: "📝" },
-      ],
+      subItems: [{ name: "All Assignment", path: "/components/assignment", icon: "📝" }],
     },
     {
       name: "Batches",
@@ -79,29 +592,52 @@ export default function DashboardLayout({ children }) {
       isMaster: true,
       subItems: [
         { name: "All Batches", path: "/components/batches", icon: "📋" },
-        { name: "Assign Courses to Batch", path: "/components/batches/batch-course-assign", icon: "📋" }
-
+        { name: "Assign Courses to Batch", path: "/components/batches/batch-course-assign", icon: "📋" },
       ],
     },
-    // {
-    //   name: "Live Classes List",
-    //   icon: "🎓",
-    //   isMaster: true,
-    //   key: "liveClasses List",
-    //   subItems: [
-    //     { name: "All Live Classes", path: "/dashboard/live-classes", icon: "🎓" },
-    //   ],
-    // },
     {
-  name: "Live Sessions",
-  icon: "🎥",
-  path: "/components/live-classes",
-}
+      name: "Courses",
+      icon: "📚",
+      isMaster: true,
+      key: "courses",
+      subItems: [{ name: "All Courses", path: "/components/courses", icon: "📖" }],
+    },
+    { name: "Live Sessions", icon: "🎥", path: "/components/live-classes" },
+    {
+      name: "User Management",
+      icon: "👤",
+      isMaster: true,
+      key: "userManagement",
+      subItems: [{ name: "Users", path: "/components/card", icon: "👥" }],
+    },
+    { name: "Lessons", icon: "🎥", path: "/components/lessons" },
   ];
 
-  const toggleMenu = (menuKey) => {
-    setOpenMenus((prev) => ({ ...prev, [menuKey]: !prev[menuKey] }));
-  };
+  const instructorMenu = [
+    { name: "Dashboard", icon: "🏠", path: "/instructor/dashboard" },
+    { name: "My Courses", icon: "📚", path: "/instructor/courses" },
+    { name: "Live Sessions", icon: "🎥", path: "/instructor/live-sessions" },
+    { name: "Assignments to Grade", icon: "📝", path: "/instructor/assignments/review" },
+    { name: "Student Progress", icon: "📊", path: "/instructor/progress" },
+    { name: "Announcements", icon: "📢", path: "/instructor/announcements" },
+    { name: "Profile", icon: "👤", path: "/instructor/profile" },
+  ];
+
+  const studentMenu = [
+    { name: "Dashboard", icon: "🏠", path: "/student/dashboard" },
+    { name: "My Courses", icon: "📚", path: "/student/courses" },
+    { name: "Assignments", icon: "📝", path: "/student/assignments" },
+    { name: "Live Sessions", icon: "🎥", path: "/student/live-sessions" },
+    { name: "Profile", icon: "👤", path: "/student/profile" },
+  ];
+
+  const role = loggedInUser?.role?.toLowerCase() || "student";
+  let currentMenu = studentMenu;
+  if (role === "superadmin") currentMenu = superadminMenu;
+  else if (role === "instructor") currentMenu = instructorMenu;
+
+  const [openMenus, setOpenMenus] = useState({});
+  const toggleMenu = (key) => setOpenMenus((prev) => ({ ...prev, [key]: !prev[key] }));
 
   const displayName = loggedInUser?.fullName || loggedInUser?.name || "User";
   const displayEmail = loggedInUser?.email || "";
@@ -109,12 +645,9 @@ export default function DashboardLayout({ children }) {
     ? loggedInUser.photo
     : `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=3b82f6&color=fff`;
 
-  const [notifications, setNotifications] = useState([
-    { id: 1, message: "New lead assigned to you", time: "5 min ago", read: false },
-    { id: 2, message: "Course completion certificate ready", time: "1 hour ago", read: false },
-    { id: 3, message: "Meeting scheduled for tomorrow", time: "3 hours ago", read: true },
+  const [notifications] = useState([
+    { id: 1, message: "New announcement", time: "5 min ago", read: false },
   ]);
-
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   const handleLogout = () => {
@@ -122,28 +655,22 @@ export default function DashboardLayout({ children }) {
     router.push("/auth/login");
   };
 
-  const markAsRead = (id) => {
-    setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, read: true } : n))
-    );
-  };
-
   return (
     <div className="flex h-screen">
+      {/* Sidebar */}
       <aside className="w-64 bg-gray-900 text-white flex flex-col p-5">
-        <h2 className="text-2xl font-bold mb-8">Ethnotech CRM</h2>
+        <h2 className="text-2xl font-bold mb-8">Ethnotech LMS</h2>
         <nav className="space-y-2 flex-1">
-          {menuItems.map((item) => (
+          {currentMenu.map((item) => (
             <div key={item.name}>
               {item.isMaster ? (
                 <div>
                   <button
                     onClick={() => toggleMenu(item.key)}
-                    className="w-full flex items-center justify-between px-3 py-2 rounded transition hover:bg-gray-700"
+                    className="w-full flex items-center justify-between px-3 py-2 rounded hover:bg-gray-700"
                   >
                     <span className="flex items-center gap-2">
-                      <span>{item.icon}</span>
-                      {item.name}
+                      <span>{item.icon}</span> {item.name}
                     </span>
                     <svg
                       className={`w-4 h-4 transition-transform ${openMenus[item.key] ? "rotate-180" : ""}`}
@@ -160,11 +687,11 @@ export default function DashboardLayout({ children }) {
                         <Link
                           key={sub.path}
                           href={sub.path}
-                          className={`flex items-center gap-2 px-3 py-2 rounded transition ${pathname === sub.path ? "bg-blue-600" : "hover:bg-gray-700"
-                            }`}
+                          className={`flex items-center gap-2 px-3 py-2 rounded transition ${
+                            pathname === sub.path ? "bg-blue-600" : "hover:bg-gray-700"
+                          }`}
                         >
-                          <span>{sub.icon}</span>
-                          {sub.name}
+                          <span>{sub.icon}</span> {sub.name}
                         </Link>
                       ))}
                     </div>
@@ -173,11 +700,11 @@ export default function DashboardLayout({ children }) {
               ) : (
                 <Link
                   href={item.path}
-                  className={`flex items-center gap-2 px-3 py-2 rounded transition ${pathname === item.path ? "bg-blue-600" : "hover:bg-gray-700"
-                    }`}
+                  className={`flex items-center gap-2 px-3 py-2 rounded transition ${
+                    pathname === item.path ? "bg-blue-600" : "hover:bg-gray-700"
+                  }`}
                 >
-                  <span>{item.icon}</span>
-                  {item.name}
+                  <span>{item.icon}</span> {item.name}
                 </Link>
               )}
             </div>
@@ -185,68 +712,60 @@ export default function DashboardLayout({ children }) {
         </nav>
       </aside>
 
+      {/* Main content */}
       <div className="flex-1 flex flex-col bg-gray-100">
         <header className="bg-white shadow-sm px-6 py-3 flex justify-between items-center">
           <h1 className="font-semibold text-lg capitalize text-gray-800"></h1>
           <div className="flex items-center gap-5">
-            {/* Notification Bell – unchanged */}
+            {/* Notifications bell */}
             <div className="relative" ref={notificationRef}>
-              <button onClick={() => setShowNotifications(!showNotifications)} className="relative p-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <button
+                onClick={() => setShowNotifications(!showNotifications)}
+                className="relative p-2 text-gray-600 hover:bg-gray-100 rounded-full"
+              >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                 </svg>
                 {unreadCount > 0 && <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></span>}
               </button>
               {showNotifications && (
-                <div className="absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 overflow-hidden transition-all duration-200 ease-out">
+                <div className="absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-xl border z-50">
                   <div className="p-4 border-b bg-gray-50">
-                    <div className="flex justify-between items-center">
-                      <h3 className="font-semibold text-gray-800">Notifications</h3>
-                      {unreadCount > 0 && <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">{unreadCount} new</span>}
-                    </div>
+                    <h3 className="font-semibold">Notifications</h3>
                   </div>
-                  <div className="max-h-96 overflow-y-auto divide-y divide-gray-100">
-                    {notifications.length === 0 ? (
-                      <div className="p-6 text-center text-gray-500 text-sm">No notifications</div>
-                    ) : (
-                      notifications.map((notif) => (
-                        <div key={notif.id} onClick={() => markAsRead(notif.id)} className={`p-4 hover:bg-gray-50 cursor-pointer transition ${!notif.read ? "bg-blue-50" : ""}`}>
-                          <div className="flex items-start gap-3">
-                            <div className={`w-2 h-2 mt-2 rounded-full ${!notif.read ? "bg-blue-500" : "bg-gray-300"}`}></div>
-                            <div className="flex-1">
-                              <p className="text-sm text-gray-800">{notif.message}</p>
-                              <p className="text-xs text-gray-400 mt-1">{notif.time}</p>
-                            </div>
-                          </div>
-                        </div>
-                      ))
-                    )}
-                  </div>
-                  <div className="p-3 text-center border-t bg-gray-50">
-                    <button className="text-sm text-blue-600 hover:text-blue-800 font-medium">View all notifications →</button>
+                  <div className="max-h-96 overflow-y-auto">
+                    {notifications.map((n) => (
+                      <div key={n.id} className="p-4 hover:bg-gray-50 border-b">
+                        <p className="text-sm">{n.message}</p>
+                        <p className="text-xs text-gray-400">{n.time}</p>
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}
             </div>
 
-            {/* User Profile */}
+            {/* Profile dropdown */}
             <div className="relative" ref={profileRef}>
-              <button onClick={() => setShowProfileMenu(!showProfileMenu)} className="flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-full transition-transform hover:scale-105">
-                <img src={avatarUrl} alt={displayName} className="w-10 h-10 rounded-full border-2 border-gray-200 shadow-sm" />
+              <button onClick={() => setShowProfileMenu(!showProfileMenu)}>
+                <img src={avatarUrl} alt={displayName} className="w-10 h-10 rounded-full border-2 border-gray-200" />
               </button>
               {showProfileMenu && (
-                <div className="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 overflow-hidden">
+                <div className="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-xl border z-50 overflow-hidden">
                   <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b">
                     <div className="flex items-center gap-3">
-                      <img src={avatarUrl} alt={displayName} className="w-12 h-12 rounded-full border-2 border-white shadow" />
+                      <img src={avatarUrl} alt={displayName} className="w-12 h-12 rounded-full border-2 border-white" />
                       <div>
-                        <p className="font-semibold text-gray-800">{displayName}</p>
+                        <p className="font-semibold">{displayName}</p>
                         <p className="text-xs text-gray-500">{displayEmail}</p>
                       </div>
                     </div>
                   </div>
                   <div className="py-2">
-                    <Link href="/dashboard/profile" className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition">
+                    <Link
+                      href={role === "instructor" ? "/instructor/profile" : "/dashboard/profile"}
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
+                    >
                       <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                       </svg>
@@ -264,18 +783,238 @@ export default function DashboardLayout({ children }) {
                 </div>
               )}
             </div>
-
-            <button onClick={handleLogout} className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl transition flex items-center gap-2 shadow-sm">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-              </svg>
-              Logout
-            </button>
           </div>
         </header>
-
         <main className="p-6 overflow-y-auto">{children}</main>
       </div>
     </div>
   );
 }
+
+
+
+
+
+
+
+// "use client";
+
+// import Link from "next/link";
+// import { usePathname, useRouter } from "next/navigation";
+// import { useState, useEffect, useRef } from "react";
+//   import { useAuthStore } from "../../../store/login.store";
+
+// export default function DashboardLayout({ children }) {
+//   const router = useRouter();
+//   const pathname = usePathname();
+
+//   // Auth store
+//   const loggedInUser = useAuthStore((state) => state.user);
+//   const token = useAuthStore((state) => state.token);
+//   const loading = useAuthStore((state) => state.loading);
+//   const getProfile = useAuthStore((state) => state.getProfile);
+//   const fetchInstructorProfile = useAuthStore((state) => state.fetchInstructorProfile);
+//   const logout = useAuthStore((state) => state.logout);
+//   const hydrate = useAuthStore((state) => state.hydrate);
+
+//   const [showProfileMenu, setShowProfileMenu] = useState(false);
+//   const [showNotifications, setShowNotifications] = useState(false);
+//   const profileRef = useRef(null);
+//   const notificationRef = useRef(null);
+//   const [isHydrated, setIsHydrated] = useState(false);
+
+//   // 1. Hydrate on mount
+//   useEffect(() => {
+//     hydrate();
+//     setIsHydrated(true);
+//   }, [hydrate]);
+
+//   // 2. Once hydrated and token exists, fetch the correct profile
+//   useEffect(() => {
+//     if (!isHydrated) return;
+//     if (!token) return;
+//     if (loading) return;
+//     if (loggedInUser) return; // already have user
+
+//     const role = loggedInUser?.role?.toLowerCase() || "";
+//     if (role === "instructor") {
+//       fetchInstructorProfile();
+//     } else if (role === "student") {
+//       getProfile();
+//     } else {
+//       // SuperAdmin or unknown – try student profile as fallback
+//       getProfile();
+//     }
+//   }, [isHydrated, token, loading, loggedInUser, fetchInstructorProfile, getProfile]);
+
+//   // Close dropdowns on outside click
+//   useEffect(() => {
+//     function handleClickOutside(event) {
+//       if (profileRef.current && !profileRef.current.contains(event.target))
+//         setShowProfileMenu(false);
+//       if (notificationRef.current && !notificationRef.current.contains(event.target))
+//         setShowNotifications(false);
+//     }
+//     document.addEventListener("mousedown", handleClickOutside);
+//     return () => document.removeEventListener("mousedown", handleClickOutside);
+//   }, []);
+
+//   // ================= ROLE‑BASED MENUS =================
+//   const superadminMenu = [
+//     { name: "Users", icon: "👥", path: "/superadmin/users" },
+//     { name: "Batches", icon: "📦", path: "/superadmin/batches" },
+//     { name: "Courses", icon: "📚", path: "/superadmin/courses" },
+//     { name: "Payments", icon: "💰", path: "/superadmin/payments" },
+//     { name: "Reports", icon: "📈", path: "/superadmin/reports" },
+//     { name: "Announcements", icon: "📢", path: "/superadmin/announcements" },
+//     { name: "Live Sessions", icon: "🎥", path: "/superadmin/live-sessions" },
+//   ];
+
+//   const instructorMenu = [
+//     { name: "Dashboard", icon: "🏠", path: "/instructor/dashboard" },
+//     { name: "My Courses", icon: "📚", path: "/instructor/courses" },
+//     { name: "Live Sessions", icon: "🎥", path: "/instructor/live-sessions" },
+//     { name: "Assignments to Grade", icon: "📝", path: "/instructor/assignments/review" },
+//     { name: "Student Progress", icon: "📊", path: "/instructor/progress" },
+//     { name: "Announcements", icon: "📢", path: "/instructor/announcements" },
+//     { name: "Profile", icon: "👤", path: "/instructor/profile" },
+//   ];
+
+//   const studentMenu = [
+//     { name: "Dashboard", icon: "🏠", path: "/student/dashboard" },
+//     { name: "My Courses", icon: "📚", path: "/student/courses" },
+//     { name: "Assignments", icon: "📝", path: "/student/assignments" },
+//     { name: "Submit Score", icon: "📊", path: "/student/submit-score" },
+//     { name: "Certificate", icon: "🎓", path: "/student/certificate" },
+//     { name: "Live Sessions", icon: "🎥", path: "/student/live-sessions" },
+//     { name: "Profile", icon: "👤", path: "/student/profile" },
+//   ];
+
+//   // Determine role from user (normalise to lowercase)
+//   const role = loggedInUser?.role?.toLowerCase() || "";
+//   let currentMenu = studentMenu;
+//   if (role === "superadmin") currentMenu = superadminMenu;
+//   else if (role === "instructor") currentMenu = instructorMenu;
+
+//   // Loading state: wait for hydration, token present, and user loaded (or no token)
+//   const isLoading = !isHydrated || (token && !loggedInUser && loading);
+
+//   if (isLoading) {
+//     return (
+//       <div className="flex justify-center items-center h-screen text-gray-500">
+//         Loading dashboard...
+//       </div>
+//     );
+//   }
+
+//   // If token missing, redirect to login (outside of render, but we can show message)
+//   if (!token) {
+//     return (
+//       <div className="flex justify-center items-center h-screen text-red-500">
+//         No session. Please <Link href="/auth/login" className="underline">login</Link>.
+//       </div>
+//     );
+//   }
+
+//   const displayName = loggedInUser?.fullName || loggedInUser?.name || "User";
+//   const displayEmail = loggedInUser?.email || "";
+//   const avatarUrl = loggedInUser?.photo
+//     ? loggedInUser.photo
+//     : `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=3b82f6&color=fff`;
+
+//   const handleLogout = () => {
+//     logout();
+//     router.push("/auth/login");
+//   };
+
+//   return (
+//     <div className="flex h-screen">
+//       {/* SIDEBAR */}
+//       <aside className="w-64 bg-gray-900 text-white flex flex-col p-5">
+//         <h2 className="text-2xl font-bold mb-8">Ethnotech LMS</h2>
+//         <nav className="space-y-2 flex-1">
+//           {currentMenu.map((item) => (
+//             <Link
+//               key={item.path}
+//               href={item.path}
+//               className={`flex items-center gap-2 px-3 py-2 rounded transition ${
+//                 pathname === item.path ? "bg-blue-600" : "hover:bg-gray-700"
+//               }`}
+//             >
+//               <span>{item.icon}</span> {item.name}
+//             </Link>
+//           ))}
+//         </nav>
+//       </aside>
+
+//       {/* MAIN CONTENT */}
+//       <div className="flex-1 flex flex-col bg-gray-100">
+//         {/* Header */}
+//         <header className="bg-white shadow-sm px-6 py-3 flex justify-end items-center gap-5">
+//           {/* Notification bell */}
+//           <div className="relative" ref={notificationRef}>
+//             <button
+//               onClick={() => setShowNotifications(!showNotifications)}
+//               className="relative p-2 text-gray-600 hover:bg-gray-100 rounded-full"
+//             >
+//               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+//                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+//               </svg>
+//             </button>
+//             {showNotifications && (
+//               <div className="absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-xl border z-50">
+//                 <div className="p-4 border-b bg-gray-50">
+//                   <h3 className="font-semibold">Notifications</h3>
+//                 </div>
+//                 <div className="p-4 text-center text-gray-500 text-sm">
+//                   No new notifications
+//                 </div>
+//               </div>
+//             )}
+//           </div>
+
+//           {/* Profile dropdown */}
+//           <div className="relative" ref={profileRef}>
+//             <button onClick={() => setShowProfileMenu(!showProfileMenu)}>
+//               <img src={avatarUrl} alt={displayName} className="w-10 h-10 rounded-full border-2 border-gray-200" />
+//             </button>
+//             {showProfileMenu && (
+//               <div className="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-xl border z-50 overflow-hidden">
+//                 <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b">
+//                   <div className="flex items-center gap-3">
+//                     <img src={avatarUrl} alt={displayName} className="w-12 h-12 rounded-full border-2 border-white" />
+//                     <div>
+//                       <p className="font-semibold">{displayName}</p>
+//                       <p className="text-xs text-gray-500">{displayEmail}</p>
+//                     </div>
+//                   </div>
+//                 </div>
+//                 <div className="py-2">
+//                   <Link
+//                     href={role === "instructor" ? "/instructor/profile" : `/${role}/profile`}
+//                     className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
+//                   >
+//                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+//                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+//                     </svg>
+//                     Your Profile
+//                   </Link>
+//                 </div>
+//                 <div className="border-t p-2">
+//                   <button onClick={handleLogout} className="flex items-center gap-3 w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg">
+//                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+//                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+//                     </svg>
+//                     Logout
+//                   </button>
+//                 </div>
+//               </div>
+//             )}
+//           </div>
+//         </header>
+
+//         <main className="p-6 overflow-y-auto">{children}</main>
+//       </div>
+//     </div>
+//   );
+// }
