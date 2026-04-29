@@ -63,8 +63,8 @@ export default function LoginPage() {
         toast.success(`Welcome ${userRole}! 🎉`);
 
         // Role-based redirect
-        if (userRole === "superadmin") {
-          router.push("/superadmin/dashboard");
+        if (userRole === "SuperAdmin") {
+          router.push("/components/dashboard");
         } else if (userRole === "Instructor") {
           router.push("/instructor/dashboard");
         } else {
