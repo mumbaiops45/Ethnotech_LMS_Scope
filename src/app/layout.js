@@ -55,7 +55,7 @@ export default function RootLayout({ children }) {
   const pathname = usePathname();
 
   // ❌ pages where sidebar should NOT show
-  const noSidebarRoutes = ["/auth/login"];
+  const noSidebarRoutes = ["/auth/login","/auth/register", "/auth/resetPass",];
 
   const isDashboard = !noSidebarRoutes.includes(pathname);
 

@@ -13,7 +13,7 @@ export default function DashboardLayout({ children }) {
   const token = useAuthStore((state) => state.token);
   const getProfile = useAuthStore((state) => state.getProfile);
   const logout = useAuthStore((state) => state.logout);
-  const hydrate = useAuthStore((state) => state.hydrate);
+  // ❌ removed: const hydrate = useAuthStore((state) => state.hydrate);
 
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -21,9 +21,7 @@ export default function DashboardLayout({ children }) {
   const notificationRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    hydrate();
-  }, [hydrate]);
+  // ❌ removed the useEffect that called hydrate()
 
   useEffect(() => {
     if (token && !loggedInUser) {
@@ -50,7 +48,7 @@ export default function DashboardLayout({ children }) {
   const superadminMenu = [
     { name: "Users", icon: "👥", path: "/components/users" },
     { name: "Batches", icon: "📦", path: "/components/batches" },
-    // Add more as needed
+    { name: "courses", icon: "📦", path: "/components/courses" },
   ];
 
   const instructorMenu = [
@@ -61,6 +59,8 @@ export default function DashboardLayout({ children }) {
     { name: "Student Progress", icon: "📊", path: "/instructor/progress" },
     { name: "Announcements", icon: "📢", path: "/instructor/announcements" },
     { name: "Profile", icon: "👤", path: "/instructor/profile" },
+    { name: "User", icon: "👤", path: "/components/user" },
+    { name: "courses", icon: "📦", path: "/components/courses" },
   ];
 
   const studentMenu = [
@@ -72,7 +72,6 @@ export default function DashboardLayout({ children }) {
     { name: "Profile", icon: "👤", path: "/student/profile" },
   ];
 
-  // Role is already normalised in the store, but we ensure lowercase here
   const role = loggedInUser?.role?.toLowerCase() || "student";
   let currentMenu = studentMenu;
   if (role === "superadmin") currentMenu = superadminMenu;
@@ -99,7 +98,7 @@ export default function DashboardLayout({ children }) {
 
   const getProfileLink = () => {
     if (role === "instructor") return "/instructor/profile";
-    if (role === "superadmin") return "/components/profile"; // change to your actual route
+    if (role === "superadmin") return "/components/profile";
     return "/student/profile";
   };
 
