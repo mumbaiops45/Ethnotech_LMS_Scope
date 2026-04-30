@@ -1,6 +1,6 @@
 import api from "../utils/axios";
 import {
-  loginUser,
+  authLogin,          
   registerUser,
   getProfile,
   createProfile,
@@ -10,19 +10,23 @@ import {
   verifyOtpApi,
   sendResetOtp,
   resetPassword,
-  adminLogin,
+  adminLogin,          
   instructorLogin,
   getInstructorProfile,
   updateInstructorProfile
-} from "../api/auth/api";
+} from "../api/auth/api";       
 
-// ================= LOGIN =================
-export const loginService = async (data) => loginUser(data);
+// ================= UNIFIED LOGIN (new) =================
+export const authLoginService = async (data) => authLogin(data);
+
+// ================= LEGACY LOGIN (keep only if used elsewhere) =================
 export const adminLoginService = async (data) => adminLogin(data);
-// ================= INSTRUCTOR PROFILE =================
 export const instructorLoginService = async (data) => instructorLogin(data);
+
+// ================= INSTRUCTOR PROFILE =================
 export const getInstructorProfileService = async () => getInstructorProfile();
 export const updateInstructorProfileService = async (data) => updateInstructorProfile(data);
+
 // ================= OTP =================
 export const sendOtpService = async (data) => sendOtpApi(data);
 export const verifyOtpService = async (data) => verifyOtpApi(data);
@@ -49,7 +53,7 @@ export const updateAdmin = (id, data) => api.put(`${ADMIN_BASE}/${id}`, data);
 export const deleteAdmin = (id) => api.delete(`${ADMIN_BASE}/${id}`);
 export const deactivateAdmin = (id) => api.patch(`/admin/${id}/deactivate`, {});
 
-// ================= STUDENT MANAGEMENT (Super Admin) =================
+// ================= STUDENT MANAGEMENT =================
 const STUDENT_BASE = "/student/admin/students";
 export const getStudents = () => api.get(STUDENT_BASE);
 export const getStudentById = (id) => api.get(`${STUDENT_BASE}/${id}`);
@@ -70,15 +74,11 @@ export const assignInstructorToBatch = (batchId, instructorId) =>
 export const assignCoursesToBatch = (batchId, courseIds) =>
   api.put(`/batches/${batchId}/assign-courses`, { courseIds });
 
-
-
 // ================= LIVE SESSIONS =================
 export const getSessions = () => api.get("/live-sessions");
 export const createSession = (data) => api.post("/live-sessions", data);
 export const updateSession = (id, data) => api.put(`/live-sessions/${id}`, data);
 export const cancelSession = (id) => api.patch(`/live-sessions/${id}/cancel`, {});
-
-
 
 // ================= COURSE MANAGEMENT =================
 const COURSE_BASE = "/courses";
@@ -90,7 +90,8 @@ export const updateCourse = (id, data) => api.put(`${COURSE_BASE}/${id}`, data);
 export const deleteCourse = (id) => api.delete(`${COURSE_BASE}/${id}`);
 export const addModule = (courseId, moduleData) => api.post(`${COURSE_BASE}/${courseId}/module`, moduleData);
 export const reorderModules = (courseId, orderArray) => api.put(`${COURSE_BASE}/${courseId}/module/reorder`, { order: orderArray });
-// ================= LESSON MANAGEMENT (no /courses prefix) =================
+
+// ================= LESSON MANAGEMENT =================
 export const createLesson = (courseId, moduleId, data) =>
   api.post(`/${courseId}/module/${moduleId}/lesson`, data);
 export const updateLesson = (lessonId, data) =>
@@ -99,8 +100,6 @@ export const deleteLesson = (lessonId) =>
   api.delete(`/lesson/${lessonId}`);
 export const reorderLessons = (courseId, moduleId, orderArray) =>
   api.put(`/${courseId}/module/${moduleId}/lesson/reorder`, { order: orderArray });
-
-
 
 // ================= ANNOUNCEMENT MANAGEMENT =================
 const ANNOUNCEMENT_BASE = "/announcements";
