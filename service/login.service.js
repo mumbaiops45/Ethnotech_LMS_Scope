@@ -71,8 +71,15 @@ export const deleteBatch = (id) => api.delete(`${BATCH_BASE}/${id}`);
 export const assignInstructorToBatch = (batchId, instructorId) =>
   api.put(`/batches/${batchId}/assign-instructor`, { instructorId });
 
+// ✅ ADD THIS LINE
+export const addStudentsToBatch = (batchId, studentIds) =>
+  api.put(`/batches/${batchId}/add-students`, { studentIds });
+
 export const assignCoursesToBatch = (batchId, courseIds) =>
   api.put(`/batches/${batchId}/assign-courses`, { courseIds });
+
+// ✅ If you need to fetch instructors (optional, for batch wizard)
+export const getInstructors = () => api.get("/instructors");
 
 // ================= LIVE SESSIONS =================
 export const getSessions = () => api.get("/live-sessions");
@@ -100,10 +107,57 @@ export const deleteLesson = (lessonId) =>
   api.delete(`/lesson/${lessonId}`);
 export const reorderLessons = (courseId, moduleId, orderArray) =>
   api.put(`/${courseId}/module/${moduleId}/lesson/reorder`, { order: orderArray });
-
+  
 // ================= ANNOUNCEMENT MANAGEMENT =================
 const ANNOUNCEMENT_BASE = "/announcements";
 
 export const getAnnouncements = () => api.get(ANNOUNCEMENT_BASE);
 export const getAnnouncementById = (id) => api.get(`${ANNOUNCEMENT_BASE}/${id}`);
 export const createAnnouncement = (data) => api.post(ANNOUNCEMENT_BASE, data);
+// ================= QUESTION BANK MANAGEMENT =================
+const QUESTION_BASE = "/questions";
+
+export const getQuestions = async () => {
+  try {
+    const res = await api.get(QUESTION_BASE);
+    console.log("Raw response:", res.data);
+    
+    // Try to extract array from known patterns
+    if (Array.isArray(res.data)) return res.data;
+    if (res.data?.data && Array.isArray(res.data.data)) return res.data.data;
+    if (res.data?.questions && Array.isArray(res.data.questions)) return res.data.questions;
+    if (res.data?.data?.questions && Array.isArray(res.data.data.questions)) return res.data.data.questions;
+    if (res.data?.data?.data && Array.isArray(res.data.data.data)) return res.data.data.data;
+    
+    console.warn("Could not extract question array from:", res.data);
+    return [];
+  } catch (error) {
+    console.error("Failed to fetch questions:", error);
+    throw error;
+  }
+};
+
+export const getQuestionById = async (id) => {
+  const res = await api.get(`${QUESTION_BASE}/${id}`);
+  return res.data?.data ? res.data.data : res.data;
+};
+
+export const createQuestion = async (data) => {
+  const res = await api.post(QUESTION_BASE, data);
+  return res.data;
+};
+
+export const updateQuestion = async (id, data) => {
+  const res = await api.put(`${QUESTION_BASE}/${id}`, data);
+  return res.data;
+};
+
+export const deleteQuestion = async (id) => {
+  const res = await api.delete(`${QUESTION_BASE}/${id}`);
+  return res.data;
+};
+
+export const getRandomQuestions = async (params) => {
+  const res = await api.get(`${QUESTION_BASE}/random/pull`, { params });
+  return res.data;
+};
