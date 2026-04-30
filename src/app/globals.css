@@ -1,1 +1,33 @@
 @import "tailwindcss";
+
+:root {
+  --primary: #132765;   /* Blue */
+  --secondary: #159096; /* Green */
+  --background: #f8fafc;
+  --text: #000000;
+}
+
+
+/* Primary Button */
+.btn-primary {
+  @apply inline-block px-4 py-2 rounded-md shadow-md text-white 
+         transition-all duration-200 no-underline;
+  background-color: var(--primary);
+}
+
+.btn-primary:hover {
+  filter: brightness(0.85); /* dull effect like /80 */
+  @apply shadow-lg;
+}
+
+/* Secondary Button */
+.btn-secondary {
+  @apply inline-block px-4 py-2 rounded-md shadow-md text-white 
+         transition-all duration-200 no-underline;
+  background-color: var(--secondary);
+}
+
+.btn-secondary:hover {
+  filter: brightness(0.85);
+  @apply shadow-lg;
+}

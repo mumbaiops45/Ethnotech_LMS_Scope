@@ -83,7 +83,7 @@ export default function LoginPage() {
         const user = useAuthStore.getState().user;
         const userRole = user?.role;
         toast.success(`Welcome! 🎉`);
-        if (userRole === "SuperAdmin") router.push("/components/dashboard");
+        if (userRole === "SuperAdmin") router.push("/components/user");
         else if (userRole === "Instructor") router.push("/instructor/dashboard");
         else router.push("/student/dashboard");
       } catch (error) {

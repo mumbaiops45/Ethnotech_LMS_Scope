@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { FaEdit, FaTrash, FaArrowLeft, FaSearch, FaPlus } from "react-icons/fa";
+import { FaEdit, FaTrash, FaArrowLeft, FaSearch, FaPlus, FaFolder, FaGraduationCap, FaCheckCircle } from "react-icons/fa";
 import {
   getCourses,
   createCourse,
@@ -181,7 +181,7 @@ export default function CoursesPage() {
   return (
     <div className="p-6">
       {/* Back Button */}
-     
+
 
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h1 className="text-2xl font-bold text-gray-800">My Courses</h1>
@@ -198,7 +198,7 @@ export default function CoursesPage() {
           </div>
           <button
             onClick={openAddModal}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+            className="bg-[var(--primary)] hover:bg-[var(--primary)]/80 text-white px-4 py-2 rounded-lg flex items-center gap-2"
           >
             <FaPlus className="text-sm" />
             New Course
@@ -216,7 +216,7 @@ export default function CoursesPage() {
             {paginatedCourses.map((course) => (
               <div
                 key={course._id}
-                className="bg-white rounded-xl shadow-md hover:shadow-lg transition cursor-pointer overflow-hidden"
+                className="bg-[var(--primary)]/10 rounded-xl shadow-md hover:shadow-lg transition cursor-pointer overflow-hidden"
                 onClick={() => router.push(`/dashboard/courses/${course._id}`)}
               >
                 {course.coverImage && (
@@ -231,22 +231,48 @@ export default function CoursesPage() {
                 <div className="p-5">
                   <h3 className="text-lg font-semibold text-gray-800">{course.title}</h3>
                   <p className="text-gray-600 text-sm mt-1 line-clamp-2">{course.description}</p>
-                  <div className="mt-3 flex flex-wrap gap-2 text-xs text-gray-500">
-                    {course.category && <span>📁 {course.category}</span>}
-                    {course.program && <span>🎓 {course.program}</span>}
-                    <span>{course.isPublished ? "✅ Published" : "📝 Draft"}</span>
+                  <div className="mt-3 flex flex-wrap justify-between gap-2 text-xs text-gray-500">
+
+                    {course.category && (
+                      <span className="flex items-center gap-1">
+                        <FaFolder className="text-[var(--primary)]" />
+                        {course.category}
+                      </span>
+                    )}
+
+                    {course.program && (
+                      <span className="flex items-center gap-1">
+                        <FaGraduationCap className="text-[var(--primary)]" />
+                        {course.program}
+                      </span>
+                    )}
+
+                    <span className="flex items-center gap-1">
+                      {course.isPublished ? (
+                        <>
+                          <FaCheckCircle className="text-[var(--primary)]" />
+                          Published
+                        </>
+                      ) : (
+                        <>
+                          <FaEdit className="text-[var(--primary)]" />
+                          Draft
+                        </>
+                      )}
+                    </span>
+
                   </div>
-                  <div className="mt-4 flex justify-end gap-3" onClick={(e) => e.stopPropagation()}>
+                  <div className="mt-4 flex justify-between gap-3" onClick={(e) => e.stopPropagation()}>
                     <button
                       onClick={() => openEditModal(course)}
-                      className="text-blue-600 hover:text-blue-800 transition"
+                      className="text-[var(--primary)] hover:text-[var(--primary)]/80 transition"
                       title="Edit Course"
                     >
                       <FaEdit className="text-lg" />
                     </button>
                     <button
                       onClick={() => handleDelete(course._id)}
-                      className="text-red-600 hover:text-red-800 transition"
+                      className="text-red-500 hover:text-red-600 transition"
                       title="Delete Course"
                     >
                       <FaTrash className="text-lg" />
@@ -271,9 +297,8 @@ export default function CoursesPage() {
                 <button
                   key={page}
                   onClick={() => setCurrentPage(page)}
-                  className={`px-3 py-1 border rounded-lg transition ${
-                    currentPage === page ? "bg-blue-600 text-white" : "hover:bg-gray-50"
-                  }`}
+                  className={`px-3 py-1 border rounded-lg transition ${currentPage === page ? "bg-blue-600 text-white" : "hover:bg-gray-50"
+                    }`}
                 >
                   {page}
                 </button>
@@ -327,7 +352,7 @@ export default function CoursesPage() {
                       type="button"
                       onClick={triggerFileInput}
                       disabled={uploadingImage}
-                        className="px-4 py-2 border rounded-lg hover:bg-gray-50 disabled:opacity-50"
+                      className="px-4 py-2 border rounded-lg hover:bg-gray-50 disabled:opacity-50"
                     >
                       {uploadingImage ? "Uploading..." : "Upload Image"}
                     </button>
