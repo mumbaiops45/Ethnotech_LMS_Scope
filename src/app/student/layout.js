@@ -48,8 +48,8 @@ export default function DashboardLayout({ children }) {
     { name: "Courses", icon: "📚", path: "/instructor/courses" },
     { name: "Add Students to Batch", icon: "👨‍🎓", path: "/instructor/batch/add-students" },
     { name: "Assign Courses to Batch", icon: "📘", path: "/instructor/batch/assign-courses" },
-  ];
-
+  ];    
+      
   const instructorMenu = [
     { name: "Dashboard", icon: "🏠", path: "/instructor/dashboard" },
     { name: "My Courses", icon: "📚", path: "/instructor/courses" },
@@ -59,7 +59,7 @@ export default function DashboardLayout({ children }) {
     { name: "Student Progress", icon: "📊", path: "/instructor/progress" },
     { name: "Announcements", icon: "📢", path: "/instructor/announcements" },
     { name: "Profile", icon: "👤", path: "/instructor/profile" },
-    { name: "User", icon: "👤", path: "/components/user" },
+    { name: "User", icon: "👤", path: "/components/user" },  
     // { name: "Courses", icon: "📦", path: "/components/courses" },
   ];
 
