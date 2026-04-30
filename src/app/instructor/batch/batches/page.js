@@ -18,8 +18,8 @@ import {
   updateBatch,
   deleteBatch,
   assignInstructorToBatch,
-} from "../../../../service/login.service";
-import { getAdmins } from "../../../../service/login.service";
+} from "../../../../../service/login.service";
+import { getAdmins } from "../../../../../service/login.service";
 
 export default function BatchesPage() {
   const router = useRouter();

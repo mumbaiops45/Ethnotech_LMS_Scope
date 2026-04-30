@@ -14,22 +14,27 @@ export const useAuthStore = create(
       token: null,
       isAuthenticated: false,
 
-      login: async (credentials) => {
-        const res = await authLoginService(credentials);
-        if (res.success) {
-          set({
-            user: res.user,
-            token: res.token,
-            isAuthenticated: true,
-          });
-          const api = (await import('../utils/axios')).default;
-          api.defaults.headers.common['Authorization'] = `Bearer ${res.token}`;
-          return res;
-        } else {
-          throw new Error(res.message || 'Login failed');
-        }
-      },
-
+     login: async (credentials) => {
+  const res = await authLoginService(credentials);
+  if (res && res.success === false) {
+    throw new Error(res.message || 'Login failed');
+  }
+  if (res && res.success === true) {
+    set({
+      user: res.user,
+      token: res.token,
+      isAuthenticated: true,
+    });
+    // ✅ Store token in localStorage for axios interceptor
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('token', res.token);
+    }
+    const api = (await import('../utils/axios')).default;
+    api.defaults.headers.common['Authorization'] = `Bearer ${res.token}`;
+    return res;
+  }
+  throw new Error('Unexpected response');
+},
       sendOtp: async (data) => {
         const res = await sendOtpService(data);
         return res;

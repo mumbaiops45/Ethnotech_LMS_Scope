@@ -19,7 +19,6 @@ export default function BatchCourseAssignPage() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
-  // Fetch batches and courses on mount
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -39,7 +38,6 @@ export default function BatchCourseAssignPage() {
     fetchData();
   }, []);
 
-  // When batch changes, load its currently assigned courses
   const handleBatchChange = (batchId) => {
     setSelectedBatchId(batchId);
     if (!batchId) {
@@ -76,11 +74,9 @@ export default function BatchCourseAssignPage() {
       await assignCoursesToBatch(selectedBatchId, selectedCourseIds);
       toast.success("Courses assigned successfully");
 
-      // Refresh batch list to reflect updated courses
       const batchesRes = await getBatches();
       setBatches(batchesRes.data || []);
 
-      // Update the selected batch's course selection in the UI
       const updatedBatch = batchesRes.data.find((b) => b._id === selectedBatchId);
       if (updatedBatch && updatedBatch.courses) {
         setSelectedCourseIds(updatedBatch.courses.map((c) => c._id));
@@ -99,11 +95,16 @@ export default function BatchCourseAssignPage() {
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <div className="bg-white rounded-xl shadow-md p-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">
-          Assign Courses to Batch
-        </h1>
+        <div className="flex items-center gap-3 mb-6">
+          <button
+            onClick={() => router.back()}
+            className="p-2 hover:bg-gray-100 rounded-full transition"
+          >
+            <FaArrowLeft />
+          </button>
+          <h1 className="text-2xl font-bold text-gray-800">Assign Courses to Batch</h1>
+        </div>
 
-        {/* Batch selector */}
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Select Batch
