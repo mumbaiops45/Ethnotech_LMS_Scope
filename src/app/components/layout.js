@@ -17,7 +17,8 @@ import {
   FaUsers,
   FaBox,
   FaUpload,
-  FaPlus,            // ✅ added for "Create Batch" if needed
+  FaPlus, 
+  FaAward ,           // ✅ added for "Create Batch" if needed
 } from "react-icons/fa";
 
 export default function DashboardLayout({ children }) {
@@ -71,7 +72,7 @@ export default function DashboardLayout({ children }) {
         // { name: "Assign Courses to Batch", icon: <FaBook />, path: "/instructor/batch/assign-courses" },
       ],
     },
-    { name: "Users", icon: <FaUsers />, path: "/components/card" },
+    { name: "Certificates", icon: <FaAward />, path: "/components/certificate-templates" },
 
   ];
 
