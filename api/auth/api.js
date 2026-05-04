@@ -1,6 +1,6 @@
 import api from "../../utils/axios";
 
-// ================= UNIFIED LOGIN =================
+
 export const authLogin = async (data) => {
   try {
     const response = await api.post("/student/authlogin", data);
