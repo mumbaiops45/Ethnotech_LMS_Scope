@@ -4,12 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { FaEdit, FaTrash, FaSearch, FaPlus } from "react-icons/fa";
-import {
-  getCourses,
-  createCourse,
+import { getCourses ,createCourse,
   updateCourse,
-  deleteCourse,
-} from "../../../service/login.service";
+  deleteCourse,} from "../../../../service/login.service";
 
 export default function InstructorCoursesPage() {
   const router = useRouter();
