@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { useAuthStore } from "../../../store/login.store";
+import { FiMenu } from "react-icons/fi";
+
 
 // ✅ React Icons
 import {
@@ -32,6 +34,7 @@ export default function DashboardLayout({ children }) {
   const profileRef = useRef(null);
   const notificationRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isOpen, setisOpen] = useState(false);
 
   useEffect(() => {
     if (token && !loggedInUser) {
@@ -126,19 +129,36 @@ export default function DashboardLayout({ children }) {
     <div className="flex h-screen">
 
       {/* ✅ SIDEBAR */}
-      <aside className="w-64 bg-[var(--primary)] text-white flex flex-col p-5">
-        <h2 className="text-2xl font-bold mb-8">Ethnotech LMS</h2>
+      <aside
+        className={`
+    fixed top-0 left-0 z-50 h-screen w-64
+    bg-[var(--primary)] text-white flex flex-col p-5
+    transition-transform duration-300
+    ${isOpen ? "translate-x-0" : "-translate-x-full"}
+    md:translate-x-0 md:static
+  `}
+      >
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-bold mb-8">Ethnotech LMS</h2>
+
+          <button
+            onClick={() => setisOpen(false)}
+            className="text-white text-2xl self-start md:hidden"
+          >
+            ✕
+          </button>
+        </div>
 
         <nav className="space-y-2 flex-1">
           {currentMenu.map((item) => (
             <div key={item.name}>
               <Link
                 href={item.path}
-                className={`flex items-center gap-3 px-3 py-2 rounded transition ${
-                  pathname === item.path
-                    ? "bg-white/20"
-                    : "hover:bg-white/10"
-                }`}
+                onClick={setisOpen(false)}
+                className={`flex items-center gap-3 px-3 py-2 rounded transition ${pathname === item.path
+                  ? "bg-white/20"
+                  : "hover:bg-white/10"
+                  }`}
               >
                 {item.icon}
                 {item.name}
@@ -152,8 +172,11 @@ export default function DashboardLayout({ children }) {
       <div className="flex-1 flex flex-col bg-gray-100">
 
         {/* ✅ HEADER UPDATED */}
-        <header className="bg-[var(--primary)] shadow-sm px-6 py-3 flex justify-end items-center">
-
+        <header className="bg-[var(--primary)] shadow-sm px-6 py-3 flex justify-between md:justify-end items-center">
+          <FiMenu
+            onClick={() => setisOpen(!isOpen)}
+            className="text-white text-2xl cursor-pointer block md:hidden"
+          />
           <div className="flex items-center gap-5">
 
             {/* Notifications */}

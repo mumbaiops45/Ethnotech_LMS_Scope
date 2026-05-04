@@ -184,7 +184,7 @@ export default function CoursesPage() {
 
 
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">My Courses</h1>
+        <h1 className="text-2xl font-bold text-[var(--primary)]">My Courses</h1>
         <div className="flex gap-3">
           <div className="relative">
             <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -317,117 +317,173 @@ export default function CoursesPage() {
 
       {/* Add/Edit Course Modal – unchanged */}
       {modalOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
-            <h2 className="text-xl font-bold mb-4">
-              {editingCourse ? "Edit Course" : "Create Course"}
-            </h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium mb-1">Title *</label>
-                  <input
-                    type="text"
-                    name="title"
-                    value={formData.title}
-                    onChange={handleChange}
-                    className="w-full border rounded-lg px-3 py-2"
-                    required
+  <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-2 sm:p-4">
+    
+    <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[95vh] overflow-y-auto shadow-2xl border border-slate-100">
+
+      {/* Header */}
+      <div className="sticky top-0 bg-white border-b border-slate-100 px-4 sm:px-6 py-4 flex justify-between items-center z-10">
+        <h2 className="text-xl sm:text-2xl font-bold bg-[var(--primary)] bg-clip-text text-transparent">
+          {editingCourse ? "Edit Course" : "Create Course"}
+        </h2>
+
+        <button
+          type="button"
+          onClick={() => setModalOpen(false)}
+          className="text-[var(--primary)] text-2xl leading-none"
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* Form */}
+      <form
+        onSubmit={handleSubmit}
+        className="p-4 sm:p-6 space-y-5"
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+
+          {/* Title */}
+          <div className="md:col-span-2">
+            <label className="block text-sm font-semibold text-slate-700 mb-1">
+              Title <span className="text-red-500">*</span>
+            </label>
+
+            <input
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              className="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+              required
+            />
+          </div>
+
+          {/* Description */}
+          <div className="md:col-span-2">
+            <label className="block text-sm font-semibold text-slate-700 mb-1">
+              Description
+            </label>
+
+            <textarea
+              name="description"
+              rows="3"
+              value={formData.description}
+              onChange={handleChange}
+              className="w-full border border-slate-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+            />
+          </div>
+
+          {/* Cover Image */}
+          <div className="md:col-span-2">
+            <label className="block text-sm font-semibold text-slate-700 mb-2">
+              Cover Image
+            </label>
+
+            <div className="flex items-start gap-4 flex-wrap">
+              <button
+                type="button"
+                onClick={triggerFileInput}
+                disabled={uploadingImage}
+                className="px-4 py-2 border border-slate-200 rounded-xl hover:bg-slate-50 transition disabled:opacity-50"
+              >
+                {uploadingImage ? "Uploading..." : "Upload Image"}
+              </button>
+
+              <input
+                type="file"
+                ref={fileInputRef}
+                accept="image/jpeg,image/png,image/jpg"
+                onChange={handleImageChange}
+                className="hidden"
+              />
+
+              {formData.coverImage && (
+                <div className="relative w-14 h-14 rounded-xl overflow-hidden border border-slate-200 shadow-sm">
+                  <img
+                    src={formData.coverImage}
+                    alt="Preview"
+                    className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium mb-1">Description</label>
-                  <textarea
-                    name="description"
-                    rows="3"
-                    value={formData.description}
-                    onChange={handleChange}
-                    className="w-full border rounded-lg px-3 py-2"
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium mb-1">Cover Image</label>
-                  <div className="flex items-start gap-4 flex-wrap">
-                    <button
-                      type="button"
-                      onClick={triggerFileInput}
-                      disabled={uploadingImage}
-                      className="px-4 py-2 border rounded-lg hover:bg-gray-50 disabled:opacity-50"
-                    >
-                      {uploadingImage ? "Uploading..." : "Upload Image"}
-                    </button>
-                    <input
-                      type="file"
-                      ref={fileInputRef}
-                      accept="image/jpeg,image/png,image/jpg"
-                      onChange={handleImageChange}
-                      className="hidden"
-                    />
-                    {formData.coverImage && (
-                      <div className="relative w-12 h-12 rounded overflow-hidden border">
-                        <img
-                          src={formData.coverImage}
-                          alt="Preview"
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    )}
-                  </div>
-                  <p className="text-xs text-gray-500 mt-2">
-                    Or enter a direct image URL below:
-                  </p>
-                </div>
-                <div className="md:col-span-2">
-                  <input
-                    type="text"
-                    name="coverImage"
-                    value={formData.coverImage}
-                    onChange={handleChange}
-                    placeholder="https://example.com/course-cover.jpg"
-                    className="w-full border rounded-lg px-3 py-2"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">Category</label>
-                  <input
-                    type="text"
-                    name="category"
-                    value={formData.category}
-                    onChange={handleChange}
-                    className="w-full border rounded-lg px-3 py-2"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">Program</label>
-                  <input
-                    type="text"
-                    name="program"
-                    value={formData.program}
-                    onChange={handleChange}
-                    className="w-full border rounded-lg px-3 py-2"
-                  />
-                </div>
-              </div>
-              <div className="flex justify-end gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setModalOpen(false)}
-                  className="px-4 py-2 border rounded-lg hover:bg-gray-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={submitting || uploadingImage}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
-                >
-                  {submitting ? "Saving..." : editingCourse ? "Update" : "Create"}
-                </button>
-              </div>
-            </form>
+              )}
+            </div>
+
+            <p className="text-xs text-slate-500 mt-2">
+              Or enter a direct image URL below:
+            </p>
+          </div>
+
+          {/* Cover Image URL */}
+          <div className="md:col-span-2">
+            <input
+              type="text"
+              name="coverImage"
+              value={formData.coverImage}
+              onChange={handleChange}
+              placeholder="https://example.com/course-cover.jpg"
+              className="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+            />
+          </div>
+
+          {/* Category */}
+          <div>
+            <label className="block text-sm font-semibold text-slate-700 mb-1">
+              Category
+            </label>
+
+            <input
+              type="text"
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              className="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+            />
+          </div>
+
+          {/* Program */}
+          <div>
+            <label className="block text-sm font-semibold text-slate-700 mb-1">
+              Program
+            </label>
+
+            <input
+              type="text"
+              name="program"
+              value={formData.program}
+              onChange={handleChange}
+              className="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+            />
           </div>
         </div>
-      )}
+
+        {/* Buttons */}
+        <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-slate-100">
+          
+          <button
+            type="button"
+            onClick={() => setModalOpen(false)}
+            className="w-full sm:w-auto px-5 py-2.5 border border-slate-200 rounded-xl hover:bg-slate-50 transition"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            disabled={submitting || uploadingImage}
+            className="w-full sm:w-auto px-5 py-2.5 bg-[var(--primary)] text-white rounded-xl hover:opacity-90 transition flex items-center justify-center gap-2 shadow-md disabled:opacity-50"
+          >
+            {submitting
+              ? "Saving..."
+              : editingCourse
+              ? "Update"
+              : "Create"}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
     </div>
   );
 }

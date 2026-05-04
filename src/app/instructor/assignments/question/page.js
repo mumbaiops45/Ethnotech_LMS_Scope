@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { 
-  FiSearch, FiTrash2, FiEdit2, FiPlus, FiX, FiSave, 
-  FiChevronLeft, FiChevronRight, FiHelpCircle, FiCheckCircle, 
+import {
+  FiSearch, FiTrash2, FiEdit2, FiPlus, FiX, FiSave,
+  FiChevronLeft, FiChevronRight, FiHelpCircle, FiCheckCircle,
   FiBookOpen, FiTag, FiStar, FiAward
 } from "react-icons/fi";
+
 import { getQuestions, createQuestion, updateQuestion, deleteQuestion } from "../../../../../service/login.service";
 
 export default function QuestionsPage() {
@@ -79,14 +80,14 @@ export default function QuestionsPage() {
         topic: question.topic || "",
         difficulty: question.difficulty || "easy",
         marks: question.marks || 2,
-        options: question.options?.length === 4 
-          ? [...question.options] 
+        options: question.options?.length === 4
+          ? [...question.options]
           : [
-              { text: "", isCorrect: false },
-              { text: "", isCorrect: false },
-              { text: "", isCorrect: false },
-              { text: "", isCorrect: false },
-            ],
+            { text: "", isCorrect: false },
+            { text: "", isCorrect: false },
+            { text: "", isCorrect: false },
+            { text: "", isCorrect: false },
+          ],
         explanation: question.explanation || "",
       });
     } else {
@@ -190,7 +191,7 @@ export default function QuestionsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex justify-center items-center">
+      <div className="min-h-screen flex justify-center items-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-3 border-indigo-600 mx-auto"></div>
           <p className="mt-4 text-slate-600 font-medium">Loading questions...</p>
@@ -200,28 +201,35 @@ export default function QuestionsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/30 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/30 p-3 sm:p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header with gradient accent */}
-        <div className="mb-10 text-center md:text-left md:flex md:justify-between md:items-center gap-4">
+
+        {/* Header */}
+        <div className="mb-6 md:mb-10 flex flex-col md:flex-row md:justify-between md:items-center gap-4 text-center md:text-left">
           <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-700 to-purple-700 bg-clip-text text-transparent">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-[var(--primary)] bg-clip-text text-transparent">
               Question Bank
             </h1>
-            <p className="text-slate-500 mt-2">Create, edit, and manage your MCQ questions</p>
+
+            <p className="text-slate-500 mt-2 text-sm sm:text-base">
+              Create, edit, and manage your MCQ questions
+            </p>
           </div>
+
           <button
             onClick={() => openModal()}
-            className="mt-4 md:mt-0 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl flex items-center gap-2 transition-all shadow-lg hover:shadow-xl"
+            className="w-full sm:w-auto justify-center mt-2 md:mt-0 bg-[var(--primary)] text-white px-5 py-3 rounded-xl flex items-center gap-2 transition-all shadow-lg hover:shadow-xl"
           >
             <FiPlus size={20} /> New Question
           </button>
         </div>
 
-        {/* Search bar with stats */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-slate-200 p-5 mb-8 flex flex-wrap justify-between items-center gap-4">
-          <div className="relative flex-1 max-w-md">
+        {/* Search */}
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-5 mb-6 md:mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+
+          <div className="relative w-full md:flex-1 md:max-w-md">
             <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+
             <input
               type="text"
               placeholder="Search by text, subject, or topic..."
@@ -230,68 +238,102 @@ export default function QuestionsPage() {
               className="w-full pl-11 pr-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition bg-white"
             />
           </div>
-          <div className="text-sm font-medium text-slate-600 bg-slate-100 px-4 py-2 rounded-full">
-            📚 Total: {filteredQuestions.length} questions
+
+          <div className="w-full md:w-auto text-sm font-medium text-slate-600 bg-slate-100 px-4 py-2 rounded-full flex items-center justify-center gap-2">
+            <FiHelpCircle className="text-[var(--primary)]" />
+            <span>Total: {filteredQuestions.length} questions</span>
           </div>
         </div>
 
-        {/* Question Cards Grid */}
+        {/* Question Cards */}
         {filteredQuestions.length === 0 ? (
-          <div className="bg-white rounded-2xl shadow-sm p-16 text-center border border-slate-100">
-            <FiHelpCircle className="text-6xl text-slate-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-slate-700">No questions yet</h3>
-            <p className="text-slate-500 mt-2">Click "New Question" to build your question bank.</p>
+          <div className="bg-white rounded-2xl shadow-sm p-8 sm:p-12 md:p-16 text-center border border-slate-100">
+            <FiHelpCircle className="text-5xl md:text-6xl text-slate-300 mx-auto mb-4" />
+
+            <h3 className="text-lg md:text-xl font-semibold text-slate-700">
+              No questions yet
+            </h3>
+
+            <p className="text-slate-500 mt-2 text-sm md:text-base">
+              Click "New Question" to build your question bank.
+            </p>
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="flex flex-col gap-4">
               {paginatedQuestions.map((q) => (
                 <div
                   key={q._id}
-                  className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 overflow-hidden"
+                  className="group bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 border border-slate-100 overflow-hidden"
                 >
-                  {/* Card header: difficulty & marks */}
-                  <div className="flex justify-between items-center px-5 pt-4 pb-2 border-b border-slate-50">
-                    <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${difficultyColors[q.difficulty]}`}>
-                      {difficultyIcons[q.difficulty]}
-                      <span className="capitalize">{q.difficulty}</span>
+
+                  {/* Card Header */}
+                  <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 px-4 sm:px-5 pt-4 pb-3 border-b border-slate-50">
+
+                    <div className="flex flex-wrap gap-2 sm:gap-3">
+
+                      <div
+                        className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium ${difficultyColors[q.difficulty]}`}
+                      >
+                        {difficultyIcons[q.difficulty]}
+                        <span className="capitalize">{q.difficulty}</span>
+                      </div>
+
+                      <span className="capitalize px-2.5 py-1 rounded-md text-xs font-medium bg-[var(--primary)]/10">
+                        {q.type}
+                      </span>
+
+                      <span className="flex items-center gap-1 text-xs">
+                        <FiBookOpen size={12} /> {q.subject}
+                      </span>
+
+                      <span className="flex items-center gap-1 text-xs">
+                        <FiTag size={12} /> {q.topic}
+                      </span>
+
+                      <span className="text-xs bg-[var(--primary)]/10 px-2 py-0.5 rounded-md">
+                        {q.marks} marks
+                      </span>
                     </div>
-                    <div className="flex gap-2">
+
+                    <div className="flex gap-2 self-end lg:self-auto">
                       <button
                         onClick={() => openModal(q)}
-                        className="p-1.5 rounded-full text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition"
+                        className="p-1.5 rounded-full text-[var(--primary)] hover:bg-[var(--primary)]/10 transition"
                       >
                         <FiEdit2 size={16} />
                       </button>
+
                       <button
                         onClick={() => handleDelete(q._id)}
-                        className="p-1.5 rounded-full text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition"
+                        className="p-1.5 rounded-full text-rose-600 hover:bg-rose-50 transition"
                       >
                         <FiTrash2 size={16} />
                       </button>
                     </div>
                   </div>
 
-                  {/* Card body: question text, subject, topic */}
-                  <div className="p-5">
-                    <p className="font-medium text-slate-800 line-clamp-3 mb-3">
+                  {/* Card Body */}
+                  <div className="p-4 sm:p-5 pt-3">
+                    <p className="font-medium text-slate-800 mb-4 text-sm sm:text-base break-words">
                       {q.text}
                     </p>
-                    <div className="flex items-center gap-3 text-xs text-slate-500">
-                      <span className="flex items-center gap-1">
-                        <FiBookOpen size={12} /> {q.subject}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <FiTag size={12} /> {q.topic}
-                      </span>
-                    </div>
-                    <div className="mt-3 flex items-center justify-between">
-                      <span className="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full">
-                        {q.marks} marks
-                      </span>
-                      <span className="text-xs text-slate-400">
-                        {q.options?.filter(o => o.isCorrect).length} correct answer
-                      </span>
+
+                    <div className="flex justify-between gap-2">
+                      {q.options.map((option, index) => (
+                        <div
+                          key={index}
+                          className="flex items-start gap-3 w-full bg-slate-50 border border-slate-200 px-3 py-2 rounded-lg"
+                        >
+                          <span className="min-w-6 w-6 h-6 flex items-center justify-center rounded-full bg-[var(--primary)] text-white text-xs font-semibold">
+                            {String.fromCharCode(65 + index)}
+                          </span>
+
+                          <p className="text-sm text-slate-700 break-words">
+                            {option.text}
+                          </p>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -300,19 +342,23 @@ export default function QuestionsPage() {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex justify-center items-center gap-3 mt-10">
+              <div className="flex flex-wrap justify-center items-center gap-3 mt-8 md:mt-10">
                 <button
-                  onClick={() => setCurrentPage(p => Math.max(1, p-1))}
+                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
                   className="p-2 rounded-lg border border-slate-200 disabled:opacity-40 hover:bg-slate-50 transition"
                 >
                   <FiChevronLeft />
                 </button>
-                <span className="text-sm text-slate-600">
+
+                <span className="text-sm text-slate-600 text-center">
                   Page {currentPage} of {totalPages}
                 </span>
+
                 <button
-                  onClick={() => setCurrentPage(p => Math.min(totalPages, p+1))}
+                  onClick={() =>
+                    setCurrentPage((p) => Math.min(totalPages, p + 1))
+                  }
                   disabled={currentPage === totalPages}
                   className="p-2 rounded-lg border border-slate-200 disabled:opacity-40 hover:bg-slate-50 transition"
                 >
@@ -323,23 +369,38 @@ export default function QuestionsPage() {
           </>
         )}
 
-        {/* Modal – Create/Edit (only MCQ, no type selector) */}
+        {/* Modal */}
         {showModal && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-            <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-              <div className="sticky top-0 bg-white border-b border-slate-100 px-6 py-4 flex justify-between items-center">
-                <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-700 to-purple-700 bg-clip-text text-transparent">
-                  {editingQuestion ? "Edit Question" : "Create New MCQ Question"}
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-2 sm:p-4 backdrop-blur-sm">
+
+            <div className="bg-white rounded-2xl w-full max-w-3xl max-h-[95vh] overflow-y-auto shadow-2xl">
+
+              <div className="sticky top-0 bg-white border-b border-slate-100 px-4 sm:px-6 py-4 flex justify-between items-center z-10">
+                <h2 className="text-lg sm:text-2xl font-bold bg-[var(--primary)] bg-clip-text text-transparent">
+                  {editingQuestion
+                    ? "Edit Question"
+                    : "Create New MCQ Question"}
                 </h2>
-                <button onClick={closeModal} className="text-slate-400 hover:text-slate-600 transition">
+
+                <button
+                  onClick={closeModal}
+                  className="text-[var(--primary)] transition"
+                >
                   <FiX size={24} />
                 </button>
               </div>
 
-              <form onSubmit={handleSubmit} className="p-6 space-y-6">
-                {/* Question Text */}
+              <form
+                onSubmit={handleSubmit}
+                className="p-4 sm:p-6 space-y-5 sm:space-y-6"
+              >
+
+                {/* Question */}
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-1">Question Text *</label>
+                  <label className="block text-sm font-semibold text-slate-700 mb-1">
+                    Question Text <span className="text-red-500">*</span>
+                  </label>
+
                   <textarea
                     name="text"
                     rows="3"
@@ -352,9 +413,13 @@ export default function QuestionsPage() {
                 </div>
 
                 {/* Subject & Topic */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-1">Subject *</label>
+                    <label className="block text-sm font-semibold text-slate-700 mb-1">
+                      Subject <span className="text-red-500">*</span>
+                    </label>
+
                     <input
                       type="text"
                       name="subject"
@@ -365,8 +430,12 @@ export default function QuestionsPage() {
                       required
                     />
                   </div>
+
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-1">Topic *</label>
+                    <label className="block text-sm font-semibold text-slate-700 mb-1">
+                      Topic <span className="text-red-500">*</span>
+                    </label>
+
                     <input
                       type="text"
                       name="topic"
@@ -380,9 +449,13 @@ export default function QuestionsPage() {
                 </div>
 
                 {/* Difficulty & Marks */}
-                <div className="grid grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-1">Difficulty</label>
+                    <label className="block text-sm font-semibold text-slate-700 mb-1">
+                      Difficulty
+                    </label>
+
                     <select
                       name="difficulty"
                       value={formData.difficulty}
@@ -394,8 +467,12 @@ export default function QuestionsPage() {
                       <option value="hard">Hard</option>
                     </select>
                   </div>
+
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-1">Marks</label>
+                    <label className="block text-sm font-semibold text-slate-700 mb-1">
+                      Marks
+                    </label>
+
                     <input
                       type="number"
                       name="marks"
@@ -408,31 +485,58 @@ export default function QuestionsPage() {
                   </div>
                 </div>
 
-                {/* Options – improved styling */}
+                {/* Options */}
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">Options (4 options, one correct) *</label>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    Options (4 options, one correct)
+                    <span className="text-red-500">*</span>
+                  </label>
+
                   <div className="space-y-3">
                     {formData.options.map((opt, idx) => (
-                      <div key={idx} className="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-100">
-                        <span className="font-medium text-slate-500 w-7">{String.fromCharCode(65+idx)}.</span>
-                        <input
-                          type="text"
-                          placeholder={`Option ${idx + 1}`}
-                          value={opt.text}
-                          onChange={(e) => handleOptionChange(idx, "text", e.target.value)}
-                          className="flex-1 border border-slate-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 bg-white"
-                          required
-                        />
-                        <label className="flex items-center gap-1.5 cursor-pointer text-sm text-slate-600">
+                      <div
+                        key={idx}
+                        className="flex flex-col sm:flex-row sm:items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200"
+                      >
+
+                        <div className="flex items-center gap-3 flex-1">
+                          <span className="w-7 h-7 flex items-center justify-center rounded-full bg-[var(--primary)] text-white text-xs font-semibold">
+                            {String.fromCharCode(65 + idx)}
+                          </span>
+
                           <input
-                            type="radio"
-                            name="correctOption"
-                            checked={opt.isCorrect}
-                            onChange={() => handleCorrectToggle(idx)}
-                            className="w-4 h-4 text-indigo-600"
+                            type="text"
+                            placeholder={`Option ${idx + 1}`}
+                            value={opt.text}
+                            onChange={(e) =>
+                              handleOptionChange(idx, "text", e.target.value)
+                            }
+                            className="flex-1 border border-slate-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 bg-white"
+                            required
                           />
-                          <FiCheckCircle className={opt.isCorrect ? "text-indigo-600" : "text-slate-300"} />
-                          Correct
+                        </div>
+
+                        <label
+                          className="flex items-center gap-1.5 cursor-pointer text-sm text-slate-600 self-end sm:self-auto"
+                          onClick={() => handleCorrectToggle(idx)}
+                        >
+                          <div className="text-lg">
+                            {opt.isCorrect ? (
+                              <FiCheckCircle className="text-green-500" />
+                            ) : (
+                              <FiCheckCircle className="text-slate-300" />
+                            )}
+                          </div>
+
+                          <span
+                            className={
+                              opt.isCorrect
+                                ? "text-[var(--primary)] font-medium"
+                                : ""
+                            }
+                          >
+                            Correct
+                          </span>
                         </label>
                       </div>
                     ))}
@@ -441,7 +545,10 @@ export default function QuestionsPage() {
 
                 {/* Explanation */}
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-1">Explanation (optional)</label>
+                  <label className="block text-sm font-semibold text-slate-700 mb-1">
+                    Explanation (optional)
+                  </label>
+
                   <textarea
                     name="explanation"
                     rows="2"
@@ -452,19 +559,23 @@ export default function QuestionsPage() {
                   />
                 </div>
 
-                <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                {/* Buttons */}
+                <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-slate-100">
+
                   <button
                     type="button"
                     onClick={closeModal}
-                    className="px-5 py-2.5 border border-slate-200 rounded-xl hover:bg-slate-50 transition"
+                    className="w-full sm:w-auto px-5 py-2.5 border border-slate-200 rounded-xl hover:bg-slate-50 transition"
                   >
                     Cancel
                   </button>
+
                   <button
                     type="submit"
-                    className="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 transition flex items-center gap-2 shadow-md"
+                    className="w-full sm:w-auto px-5 py-2.5 bg-[var(--primary)] text-white rounded-xl hover:opacity-90 transition flex items-center justify-center gap-2 shadow-md"
                   >
-                    <FiSave /> {editingQuestion ? "Update" : "Create"}
+                    <FiSave />
+                    {editingQuestion ? "Update" : "Create"}
                   </button>
                 </div>
               </form>
