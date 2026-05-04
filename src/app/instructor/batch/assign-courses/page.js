@@ -19,17 +19,31 @@ export default function BatchCourseAssignPage() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
+  // Helper: extract array from possible wrapper
+  const extractData = (response) => {
+    if (Array.isArray(response)) return response;
+    if (response?.data && Array.isArray(response.data)) return response.data;
+    if (response?.data?.data && Array.isArray(response.data.data)) return response.data.data;
+    return [];
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const [batchesRes, coursesRes] = await Promise.all([
-          getBatches(),
-          getCourses(),
-        ]);
-        setBatches(batchesRes.data || []);
-        setAllCourses(coursesRes.data || []);
+        const batchesRes = await getBatches();
+        const coursesRes = await getCourses();
+        
+        console.log("Batches raw response:", batchesRes);
+        console.log("Courses raw response:", coursesRes);
+        
+        const batchesList = extractData(batchesRes);
+        const coursesList = extractData(coursesRes);
+        
+        setBatches(batchesList);
+        setAllCourses(coursesList);
       } catch (error) {
+        console.error("Fetch error:", error);
         toast.error("Failed to load data");
       } finally {
         setLoading(false);
@@ -74,14 +88,17 @@ export default function BatchCourseAssignPage() {
       await assignCoursesToBatch(selectedBatchId, selectedCourseIds);
       toast.success("Courses assigned successfully");
 
+      // Refresh batches to get updated course list
       const batchesRes = await getBatches();
-      setBatches(batchesRes.data || []);
+      const batchesList = extractData(batchesRes);
+      setBatches(batchesList);
 
-      const updatedBatch = batchesRes.data.find((b) => b._id === selectedBatchId);
+      const updatedBatch = batchesList.find((b) => b._id === selectedBatchId);
       if (updatedBatch && updatedBatch.courses) {
         setSelectedCourseIds(updatedBatch.courses.map((c) => c._id));
       }
     } catch (error) {
+      console.error("Assignment error:", error);
       toast.error(error?.response?.data?.message || "Assignment failed");
     } finally {
       setSubmitting(false);

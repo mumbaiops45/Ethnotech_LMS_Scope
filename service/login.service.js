@@ -161,3 +161,10 @@ export const getRandomQuestions = async (params) => {
   const res = await api.get(`${QUESTION_BASE}/random/pull`, { params });
   return res.data;
 };
+
+export const bulkImportStudents = async (formData) => {
+  const res = await api.post("/student/admin/bulk-import", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return res.data; // Should return { created: number, failed: number, errors: [{ row?: number, message: string }] }
+};
