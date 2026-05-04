@@ -15,7 +15,7 @@ export const useInstructor = () => {
     } = useInstructorStore();
 
 
-     return {
+    return {
     courses,
     batches,
     students,
