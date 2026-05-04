@@ -651,7 +651,7 @@ export default function StudentsPage() {
       </div>
 
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Student Management</h1>
+        <h1 className="text-2xl font-bold text-[var(--primary)]">Student Management</h1>
         <div className="flex gap-3 w-full sm:w-auto">
           <input
             type="text"
@@ -663,7 +663,7 @@ export default function StudentsPage() {
           {/* ✅ Bulk Import Button */}
           <button
             onClick={() => setBulkModalOpen(true)}
-            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+            className="bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 cursor-pointer"
           >
             <FaUpload /> Bulk Import
           </button>
@@ -678,7 +678,7 @@ export default function StudentsPage() {
         <>
           <div className="overflow-x-auto bg-white rounded-xl shadow-md">
             <table className="min-w-full text-sm text-left">
-              <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
+              <thead className="bg-[var(--primary)] text-white uppercase text-xs">
                 <tr>
                   <th className="px-4 py-3">#</th>
                   <th className="px-4 py-3">Full Name</th>
@@ -704,16 +704,32 @@ export default function StudentsPage() {
                       <td className="px-4 py-3">{profile.education || "—"}</td>
                       <td className="px-4 py-3">{profile.program || "—"}</td>
                       <td className="px-4 py-3">{profile.branch || "—"}</td>
-                      <td className="px-4 py-3 text-center space-x-3">
-                        <button onClick={() => openViewModal(student)} className="text-gray-600 hover:text-gray-800" title="View Details">
-                          <FaEye className="inline" />
-                        </button>
-                        <button onClick={() => openEditModal(student)} className="text-blue-600 hover:text-blue-800" title="Edit">
-                          <FaEdit className="inline" />
-                        </button>
-                        <button onClick={() => handleDelete(student._id)} className="text-red-600 hover:text-red-800" title="Delete">
-                          <FaTrash className="inline" />
-                        </button>
+                      <td className="px-4 py-3">
+                        <div className="flex justify-center items-center gap-3 h-full">
+                          <button
+                            onClick={() => openViewModal(student)}
+                            className="text-gray-600 hover:text-gray-800"
+                            title="View Details"
+                          >
+                            <FaEye />
+                          </button>
+
+                          <button
+                            onClick={() => openEditModal(student)}
+                            className="text-[var(--primary)] hover:text-[var(--primary)]/80"
+                            title="Edit"
+                          >
+                            <FaEdit />
+                          </button>
+
+                          <button
+                            onClick={() => handleDelete(student._id)}
+                            className="text-red-500 hover:text-red-700"
+                            title="Delete"
+                          >
+                            <FaTrash />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );
@@ -736,7 +752,7 @@ export default function StudentsPage() {
                 <button
                   key={page}
                   onClick={() => setCurrentPage(page)}
-                  className={`px-3 py-1 border rounded-lg transition ${currentPage === page ? "bg-blue-600 text-white" : "hover:bg-gray-50"}`}
+                  className={`px-3 py-1 border rounded-lg transition ${currentPage === page ? "bg-[var(--primary)] text-white" : "hover:bg-gray-50"}`}
                 >
                   {page}
                 </button>
@@ -867,10 +883,10 @@ export default function StudentsPage() {
 
       {/* Bulk Import Modal */}
       {bulkModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl p-6">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">Bulk Import Students</h2>
+              <h2 className="text-[var(--primary)] font-bold">Bulk Import Students</h2>
               <button
                 onClick={() => {
                   setBulkModalOpen(false);
@@ -885,7 +901,7 @@ export default function StudentsPage() {
             <div className="space-y-4">
               <button
                 onClick={downloadCSVTemplate}
-                className="text-blue-600 flex items-center gap-1 hover:underline"
+                className="text-gray-500 flex items-center gap-1 hover:underline"
               >
                 <FaDownload /> Download CSV Template
               </button>
@@ -903,15 +919,14 @@ export default function StudentsPage() {
               <button
                 onClick={handleBulkImport}
                 disabled={!csvFile || importing}
-                className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 disabled:opacity-50"
+                className="w-full bg-[var(--primary)] text-white py-2 rounded-lg hover:bg-green-700 disabled:opacity-50"
               >
                 {importing ? "Importing..." : "Upload & Import"}
               </button>
               {importResults && (
                 <div
-                  className={`mt-4 p-3 rounded-lg ${
-                    importResults.errors?.length ? "bg-red-50 border border-red-200" : "bg-green-50 border border-green-200"
-                  }`}
+                  className={`mt-4 p-3 rounded-lg ${importResults.errors?.length ? "bg-red-50 border border-red-200" : "bg-green-50 border border-green-200"
+                    }`}
                 >
                   <p className="font-semibold">
                     Summary: {importResults.created} created, {importResults.failed} failed

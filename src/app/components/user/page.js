@@ -759,18 +759,18 @@ export default function UsersPage() {
       </div>
 
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Admin Management</h1>
+       <h1 className="text-2xl font-bold text-[var(--primary)]">Admin Management</h1>
         <div className="flex gap-3 w-full sm:w-auto">
           <input
             type="text"
             placeholder="Search by name, email or mobile..."
-            className="border rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 w-full sm:w-64"
+           className="border rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-[var(--primary)] w-full sm:w-64" 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <button
             onClick={openAddModal}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+           className="bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-white px-4 py-2 rounded-lg flex items-center gap-2"
           >
             + Add Admin
           </button>
@@ -785,7 +785,7 @@ export default function UsersPage() {
         <>
           <div className="overflow-x-auto bg-white rounded-xl shadow-md">
             <table className="min-w-full text-sm text-left">
-              <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
+              <thead className="bg-[var(--primary)] text-white uppercase text-xs">
                 <tr>
                   <th className="px-4 py-3">#</th>
                   <th className="px-4 py-3">Full Name</th>
@@ -817,7 +817,7 @@ export default function UsersPage() {
                       <button onClick={() => openViewModal(admin)} className="text-gray-600 hover:text-gray-800" title="View Details">
                         <FaEye className="inline" />
                       </button>
-                      <button onClick={() => openEditModal(admin)} className="text-blue-600 hover:text-blue-800" title="Edit">
+                      <button onClick={() => openEditModal(admin)} className="text-[var(--primary)] hover:text-[var(--primary)]/80" title="Edit">
                         <FaEdit className="inline" />
                       </button>
                       {/* <button onClick={() => handleDeactivate(admin._id, admin.isActive)} className={admin.isActive ? "text-orange-600" : "text-green-600"} title={admin.isActive ? "Deactivate" : "Activate"}>
@@ -847,7 +847,7 @@ export default function UsersPage() {
                 <button
                   key={page}
                   onClick={() => setCurrentPage(page)}
-                  className={`px-3 py-1 border rounded-lg transition ${currentPage === page ? "bg-blue-600 text-white" : "hover:bg-gray-50"}`}
+                  className={`px-3 py-1 border rounded-lg transition ${currentPage === page ? "bg-[var(--primary)] text-white" : "hover:bg-gray-50"} cursor-pointer`}
                 >
                   {page}
                 </button>
@@ -866,9 +866,9 @@ export default function UsersPage() {
 
       {/* Add/Edit Modal (unchanged) */}
       {modalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl p-6 max-h-[90vh] overflow-y-auto">
-            <h2 className="text-xl font-bold mb-4">{isAddMode ? "Add New Admin" : "Edit Admin"}</h2>
+            <h2 className="text-[var(--primary)] font-bold mb-4">{isAddMode ? "Add New Admin" : "Edit Admin"}</h2>
             <form onSubmit={isAddMode ? handleCreate : handleUpdate} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -913,7 +913,7 @@ export default function UsersPage() {
               </div>
               <div className="flex justify-end gap-3 pt-2">
                 <button type="button" onClick={closeModal} className="px-4 py-2 border rounded-lg hover:bg-gray-50">Cancel</button>
-                <button type="submit" disabled={submitting} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">
+                <button type="submit" disabled={submitting} className="px-4 py-2 bg-[var(--primary)] text-white rounded-lg hover:bg-[var(--primary)]/80 disabled:opacity-50 cursor-pointer">
                   {submitting ? "Saving..." : isAddMode ? "Create" : "Update"}
                 </button>
               </div>
