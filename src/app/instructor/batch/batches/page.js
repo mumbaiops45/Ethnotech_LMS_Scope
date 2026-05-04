@@ -238,24 +238,37 @@ export default function BatchesPage() {
   return (
     <div className="p-6">
       {/* Back Button */}
-     
+      <div className="mb-4">
+        <button
+          onClick={() => router.push("/components/card")}
+          className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-800 transition"
+        >
+          <FaArrowLeft className="text-sm" />
+          Back to Dashboard
+        </button>
+      </div>
 
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Batch Management</h1>
+        <h1 className="text-2xl font-bold text-[var(--primary)]">
+          Batch Management
+        </h1>
+
         <div className="flex gap-3 w-full sm:w-auto">
           <div className="relative">
             <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+
             <input
               type="text"
               placeholder="Search by name, program or branch..."
-              className="pl-9 border rounded-lg px-4 py-2 text-sm w-full sm:w-64"
+              className="pl-9 border rounded-lg px-4 py-2 text-sm w-full sm:w-64 focus:ring-2 focus:ring-[var(--primary)]"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
+
           <button
             onClick={openAddModal}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+            className="bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-white px-4 py-2 rounded-lg flex items-center gap-2"
           >
             <FaPlus /> Add Batch
           </button>
@@ -263,14 +276,18 @@ export default function BatchesPage() {
       </div>
 
       {loading ? (
-        <div className="text-center py-10">Loading batches...</div>
+        <div className="text-center py-10 text-gray-500">
+          Loading batches...
+        </div>
       ) : paginatedBatches.length === 0 ? (
-        <div className="text-center py-10 text-gray-500">No batches found</div>
+        <div className="text-center py-10 text-gray-500">
+          No batches found
+        </div>
       ) : (
         <>
           <div className="overflow-x-auto bg-white rounded-xl shadow-md">
             <table className="min-w-full text-sm text-left">
-              <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
+              <thead className="bg-[var(--primary)] text-white uppercase text-xs">
                 <tr>
                   <th className="px-4 py-3">#</th>
                   <th className="px-4 py-3">Name</th>
@@ -282,47 +299,76 @@ export default function BatchesPage() {
                   <th className="px-4 py-3 text-center">Actions</th>
                 </tr>
               </thead>
+
               <tbody className="divide-y divide-gray-100">
                 {paginatedBatches.map((batch, idx) => (
                   <tr key={batch._id} className="hover:bg-gray-50">
                     <td className="px-4 py-3">{startIndex + idx + 1}</td>
-                    <td className="px-4 py-3 font-medium">{batch.name}</td>
-                    <td className="px-4 py-3">{batch.program || "—"}</td>
-                    <td className="px-4 py-3">{batch.branch || "—"}</td>
-                    <td className="px-4 py-3">
-                      {batch.instructor ? batch.instructor.fullName : "—"}
+
+                    <td className="px-4 py-3 font-medium">
+                      {batch.name}
                     </td>
-                    <td className="px-4 py-3">{batch.startDate ? new Date(batch.startDate).toLocaleDateString() : "—"}</td>
-                    <td className="px-4 py-3">{batch.endDate ? new Date(batch.endDate).toLocaleDateString() : "—"}</td>
-                    <td className="px-4 py-3 text-center space-x-2">
-                      <button
-                        onClick={() => openViewModal(batch)}
-                        className="text-gray-600 hover:text-gray-800"
-                        title="View Details"
-                      >
-                        <FaEye />
-                      </button>
-                      <button
-                        onClick={() => openEditModal(batch)}
-                        className="text-blue-600 hover:text-blue-800"
-                        title="Edit"
-                      >
-                        <FaEdit />
-                      </button>
-                      <button
-                        onClick={() => openAssignModal(batch._id)}
-                        className="text-green-600 hover:text-green-800"
-                        title="Assign Instructor"
-                      >
-                        <FaUserPlus />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(batch._id)}
-                        className="text-red-600 hover:text-red-800"
-                        title="Delete"
-                      >
-                        <FaTrash />
-                      </button>
+
+                    <td className="px-4 py-3">
+                      {batch.program || "—"}
+                    </td>
+
+                    <td className="px-4 py-3">
+                      {batch.branch || "—"}
+                    </td>
+
+                    <td className="px-4 py-3">
+                      {batch.instructor
+                        ? batch.instructor.fullName
+                        : "—"}
+                    </td>
+
+                    <td className="px-4 py-3">
+                      {batch.startDate
+                        ? new Date(batch.startDate).toLocaleDateString()
+                        : "—"}
+                    </td>
+
+                    <td className="px-4 py-3">
+                      {batch.endDate
+                        ? new Date(batch.endDate).toLocaleDateString()
+                        : "—"}
+                    </td>
+
+                    <td className="px-4 py-3">
+                      <div className="flex justify-center items-center gap-3">
+                        <button
+                          onClick={() => openViewModal(batch)}
+                          className="text-gray-600 hover:text-gray-800"
+                          title="View Details"
+                        >
+                          <FaEye />
+                        </button>
+
+                        <button
+                          onClick={() => openEditModal(batch)}
+                          className="text-[var(--primary)] hover:text-[var(--primary)]/80"
+                          title="Edit"
+                        >
+                          <FaEdit />
+                        </button>
+
+                        <button
+                          onClick={() => openAssignModal(batch._id)}
+                          className="text-green-600 hover:text-green-800"
+                          title="Assign Instructor"
+                        >
+                          <FaUserPlus />
+                        </button>
+
+                        <button
+                          onClick={() => handleDelete(batch._id)}
+                          className="text-red-500 hover:text-red-700"
+                          title="Delete"
+                        >
+                          <FaTrash />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -334,25 +380,38 @@ export default function BatchesPage() {
           {totalPages > 1 && (
             <div className="flex justify-center items-center gap-2 mt-6">
               <button
-                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                onClick={() =>
+                  setCurrentPage((p) => Math.max(1, p - 1))
+                }
                 disabled={currentPage === 1}
                 className="px-3 py-1 border rounded-lg hover:bg-gray-50 disabled:opacity-50"
               >
                 Previous
               </button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+
+              {Array.from(
+                { length: totalPages },
+                (_, i) => i + 1
+              ).map((page) => (
                 <button
                   key={page}
                   onClick={() => setCurrentPage(page)}
                   className={`px-3 py-1 border rounded-lg transition ${
-                    currentPage === page ? "bg-blue-600 text-white" : "hover:bg-gray-50"
+                    currentPage === page
+                      ? "bg-[var(--primary)] text-white"
+                      : "hover:bg-gray-50"
                   }`}
                 >
                   {page}
                 </button>
               ))}
+
               <button
-                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                onClick={() =>
+                  setCurrentPage((p) =>
+                    Math.min(totalPages, p + 1)
+                  )
+                }
                 disabled={currentPage === totalPages}
                 className="px-3 py-1 border rounded-lg hover:bg-gray-50 disabled:opacity-50"
               >
@@ -363,123 +422,190 @@ export default function BatchesPage() {
         </>
       )}
 
-      {/* Add/Edit Modal – unchanged */}
+      {/* Add/Edit Modal */}
       {modalOpen && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl max-w-md w-full p-6">
-            <h2 className="text-xl font-bold mb-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6">
+            <h2 className="text-xl font-bold text-[var(--primary)] mb-4">
               {isAddMode ? "Add New Batch" : "Edit Batch"}
             </h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">Name *</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="w-full border rounded-lg px-3 py-2"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Program</label>
-                <input
-                  type="text"
-                  name="program"
-                  value={formData.program}
-                  onChange={handleChange}
-                  className="w-full border rounded-lg px-3 py-2"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Branch</label>
-                <input
-                  type="text"
-                  name="branch"
-                  value={formData.branch}
-                  onChange={handleChange}
-                  className="w-full border rounded-lg px-3 py-2"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Start Date</label>
-                <input
-                  type="date"
-                  name="startDate"
-                  value={formData.startDate}
-                  onChange={handleChange}
-                  className="w-full border rounded-lg px-3 py-2"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">End Date</label>
-                <input
-                  type="date"
-                  name="endDate"
-                  value={formData.endDate}
-                  onChange={handleChange}
-                  className="w-full border rounded-lg px-3 py-2"
-                />
-              </div>
-              <div className="flex justify-end gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={closeModal}
-                  className="px-4 py-2 border rounded-lg hover:bg-gray-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
-                >
-                  {submitting ? "Saving..." : isAddMode ? "Create" : "Update"}
-                </button>
-              </div>
-            </form>
+
+           <form onSubmit={handleSubmit} className="space-y-4">
+  <div>
+    <label className="block text-sm font-medium mb-1">
+      Name <span className="text-red-500">*</span>
+    </label>
+
+    <input
+      type="text"
+      name="name"
+      value={formData.name}
+      onChange={handleChange}
+      required
+      className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[var(--primary)]"
+    />
+  </div>
+
+  <div>
+    <label className="block text-sm font-medium mb-1">
+      Program <span className="text-red-500">*</span>
+    </label>
+
+    <input
+      type="text"
+      name="program"
+      value={formData.program}
+      onChange={handleChange}
+      required
+      className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[var(--primary)]"
+    />
+  </div>
+
+  <div>
+    <label className="block text-sm font-medium mb-1">
+      Branch <span className="text-red-500">*</span>
+    </label>
+
+    <input
+      type="text"
+      name="branch"
+      value={formData.branch}
+      onChange={handleChange}
+      required
+      className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[var(--primary)]"
+    />
+  </div>
+
+  <div>
+    <label className="block text-sm font-medium mb-1">
+      Start Date <span className="text-red-500">*</span>
+    </label>
+
+    <input
+      type="date"
+      name="startDate"
+      value={formData.startDate}
+      onChange={handleChange}
+      required
+      className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[var(--primary)]"
+    />
+  </div>
+
+  <div>
+    <label className="block text-sm font-medium mb-1">
+      End Date <span className="text-red-500">*</span>
+    </label>
+
+    <input
+      type="date"
+      name="endDate"
+      value={formData.endDate}
+      onChange={handleChange}
+      required
+      className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[var(--primary)]"
+    />
+  </div>
+
+  <div className="flex justify-end gap-3 pt-2">
+    <button
+      type="button"
+      onClick={closeModal}
+      className="px-4 py-2 border rounded-lg hover:bg-gray-50"
+    >
+      Cancel
+    </button>
+
+    <button
+      type="submit"
+      disabled={submitting}
+      className="px-4 py-2 bg-[var(--primary)] text-white rounded-lg hover:bg-[var(--primary)]/90 disabled:opacity-50"
+    >
+      {submitting
+        ? "Saving..."
+        : isAddMode
+        ? "Create"
+        : "Update"}
+    </button>
+  </div>
+</form>
           </div>
         </div>
       )}
 
-      {/* View Modal with Instructor field */}
+      {/* View Modal */}
       {viewingBatch && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl max-w-md w-full p-6">
-            <h2 className="text-xl font-bold mb-4">Batch Details</h2>
+          <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6">
+            <h2 className="text-xl font-bold text-[var(--primary)] mb-4">
+              Batch Details
+            </h2>
+
             <div className="space-y-3">
               <div>
-                <label className="text-sm font-medium text-gray-500">Name</label>
-                <p className="text-gray-800">{viewingBatch.name || "—"}</p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-500">Program</label>
-                <p className="text-gray-800">{viewingBatch.program || "—"}</p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-500">Branch</label>
-                <p className="text-gray-800">{viewingBatch.branch || "—"}</p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-500">Instructor</label>
+                <label className="text-sm font-medium text-gray-500">
+                  Name
+                </label>
                 <p className="text-gray-800">
-                  {viewingBatch.instructor ? viewingBatch.instructor.fullName : "—"}
+                  {viewingBatch.name || "—"}
                 </p>
               </div>
+
               <div>
-                <label className="text-sm font-medium text-gray-500">Start Date</label>
+                <label className="text-sm font-medium text-gray-500">
+                  Program
+                </label>
                 <p className="text-gray-800">
-                  {viewingBatch.startDate ? new Date(viewingBatch.startDate).toLocaleDateString() : "—"}
+                  {viewingBatch.program || "—"}
                 </p>
               </div>
+
               <div>
-                <label className="text-sm font-medium text-gray-500">End Date</label>
+                <label className="text-sm font-medium text-gray-500">
+                  Branch
+                </label>
                 <p className="text-gray-800">
-                  {viewingBatch.endDate ? new Date(viewingBatch.endDate).toLocaleDateString() : "—"}
+                  {viewingBatch.branch || "—"}
+                </p>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-gray-500">
+                  Instructor
+                </label>
+                <p className="text-gray-800">
+                  {viewingBatch.instructor
+                    ? viewingBatch.instructor.fullName
+                    : "—"}
+                </p>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-gray-500">
+                  Start Date
+                </label>
+                <p className="text-gray-800">
+                  {viewingBatch.startDate
+                    ? new Date(
+                        viewingBatch.startDate
+                      ).toLocaleDateString()
+                    : "—"}
+                </p>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-gray-500">
+                  End Date
+                </label>
+                <p className="text-gray-800">
+                  {viewingBatch.endDate
+                    ? new Date(
+                        viewingBatch.endDate
+                      ).toLocaleDateString()
+                    : "—"}
                 </p>
               </div>
             </div>
+
             <div className="flex justify-end mt-6">
               <button
                 onClick={closeViewModal}
@@ -492,20 +618,31 @@ export default function BatchesPage() {
         </div>
       )}
 
-      {/* Assign Instructor Modal (unchanged) */}
+      {/* Assign Instructor Modal */}
       {assignModalOpen && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl max-w-md w-full p-6">
-            <h2 className="text-xl font-bold mb-4">Assign Instructor</h2>
+          <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6">
+            <h2 className="text-xl font-bold text-[var(--primary)] mb-4">
+              Assign Instructor
+            </h2>
+
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1">Select Instructor</label>
+                <label className="block text-sm font-medium mb-1">
+                  Select Instructor
+                </label>
+
                 <select
                   value={selectedInstructorId}
-                  onChange={(e) => setSelectedInstructorId(e.target.value)}
-                  className="w-full border rounded-lg px-3 py-2"
+                  onChange={(e) =>
+                    setSelectedInstructorId(e.target.value)
+                  }
+                  className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[var(--primary)]"
                 >
-                  <option value="">-- Select an instructor --</option>
+                  <option value="">
+                    -- Select an instructor --
+                  </option>
+
                   {instructors.map((inst) => (
                     <option key={inst._id} value={inst._id}>
                       {inst.fullName}
@@ -513,6 +650,7 @@ export default function BatchesPage() {
                   ))}
                 </select>
               </div>
+
               <div className="flex justify-end gap-3 pt-2">
                 <button
                   type="button"
@@ -521,11 +659,12 @@ export default function BatchesPage() {
                 >
                   Cancel
                 </button>
+
                 <button
                   type="button"
                   onClick={handleAssignSubmit}
                   disabled={assigning}
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
+                  className="px-4 py-2 bg-[var(--primary)] text-white rounded-lg hover:bg-[var(--primary)]/90 disabled:opacity-50"
                 >
                   {assigning ? "Assigning..." : "Assign"}
                 </button>
@@ -539,8 +678,14 @@ export default function BatchesPage() {
       {confirmDialog.open && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-sm w-full mx-4">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">{confirmDialog.title}</h3>
-            <p className="text-gray-600 mb-6">{confirmDialog.message}</p>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              {confirmDialog.title}
+            </h3>
+
+            <p className="text-gray-600 mb-6">
+              {confirmDialog.message}
+            </p>
+
             <div className="flex justify-end gap-3">
               <button
                 onClick={closeConfirmDialog}
@@ -548,6 +693,7 @@ export default function BatchesPage() {
               >
                 Cancel
               </button>
+
               <button
                 onClick={confirmDialog.onConfirm}
                 className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
