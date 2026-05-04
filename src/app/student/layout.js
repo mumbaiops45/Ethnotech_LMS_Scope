@@ -60,21 +60,46 @@ export default function DashboardLayout({ children }) {
 
   // ================= ROLE-BASED MENUS =================
   const superadminMenu = [
-    { name: "Users", icon: <FaUsers />, path: "/components/card" },
-    {
-      name: "Batch Management",
-      icon: <FaBox />,
-      isMaster: true,
-      key: "batch",
-      subItems: [
-        { name: "All Batches", icon: <FaBox />, path: "/instructor/batch/batches" },
-        { name: "Add Students to Batch", icon: <FaUser />, path: "/instructor/batch/add-students" },
-        // { name: "Assign Courses to Batch", icon: <FaBook />, path: "/instructor/batch/assign-courses" },
-      ],
-    },
-    { name: "Certificates", icon: <FaAward />, path: "/components/certificate-templates" },
+  { name: "Users", icon: <FaUsers />, path: "/components/card" },
 
-  ];
+  {
+    name: "Batch Management",
+    icon: <FaBox />,
+    isMaster: true,
+    key: "batch",
+    subItems: [
+      {
+        name: "All Batches",
+        icon: <FaBox />,
+        path: "/instructor/batch/batches",
+      },
+      {
+        name: "Add Students to Batch",
+        icon: <FaUser />,
+        path: "/instructor/batch/add-students",
+      },
+    ],
+  },
+
+  {
+    name: "Certificates",
+    icon: <FaAward />,
+    isMaster: true,
+    key: "certificate",
+    subItems: [
+      {
+        name: "Certificate Templates",
+        icon: <FaAward />,
+        path: "/components/certificate-templates",
+      },
+      {
+        name: "Certificate Management",
+        icon: <FaAward />,
+        path: "/components/certificates",
+      },
+    ],
+  },
+];
 
   const instructorMenu = [
     { name: "Dashboard", icon: <FaHome />, path: "/instructor/dashboard" },

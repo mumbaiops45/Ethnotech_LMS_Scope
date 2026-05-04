@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { getCertificateTemplates,createCertificateTemplate,updateCertificateTemplate,
-  deleteCertificateTemplate
- } from "../../../../api/auth/certificate-templates";
+
+import { getCertificateTemplates,createCertificateTemplate,
+  updateCertificateTemplate,
+  deleteCertificateTemplate, } from "../../../../service/certificate-templates.service";
 import {
   FiPlus,
   FiEdit2,
@@ -16,6 +17,7 @@ import {
   FiAward,
   FiHome,
   FiUser,
+  FiHelpCircle,
 } from "react-icons/fi";
 
 export default function CertificateTemplatesPage() {
@@ -163,6 +165,10 @@ export default function CertificateTemplatesPage() {
             <p className="text-slate-500 mt-2">
               Design and manage professional certificates for your programs
             </p>
+            <p className="text-xs text-slate-400 mt-1">
+              Use <code className="bg-gray-100 px-1 rounded">{"{{student_name}}"}</code> and{" "}
+              <code className="bg-gray-100 px-1 rounded">{"{{completion_date}}"}</code> as dynamic placeholders.
+            </p>
           </div>
           <button
             onClick={openCreateModal}
@@ -179,9 +185,7 @@ export default function CertificateTemplatesPage() {
               <FiAward className="text-indigo-400" size={40} />
             </div>
             <h3 className="text-xl font-semibold text-slate-700">No templates yet</h3>
-            <p className="text-slate-500 mt-2">
-              Create your first certificate template to get started.
-            </p>
+            <p className="text-slate-500 mt-2">Create your first certificate template to get started.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -190,7 +194,6 @@ export default function CertificateTemplatesPage() {
                 key={template._id}
                 className="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
               >
-                {/* Card header with gradient bar */}
                 <div className="h-2 bg-gradient-to-r from-indigo-500 to-purple-500"></div>
                 <div className="p-5">
                   <div className="flex justify-between items-start gap-2">
@@ -221,14 +224,9 @@ export default function CertificateTemplatesPage() {
                     </div>
                   </div>
 
-                  {/* Logo preview (if available) */}
                   {template.logoUrl && (
                     <div className="mt-3 flex justify-center">
-                      <img
-                        src={template.logoUrl}
-                        alt="logo"
-                        className="h-12 object-contain opacity-80 group-hover:opacity-100 transition"
-                      />
+                      <img src={template.logoUrl} alt="logo" className="h-12 object-contain opacity-80 group-hover:opacity-100 transition" />
                     </div>
                   )}
 
@@ -247,6 +245,7 @@ export default function CertificateTemplatesPage() {
                         {template.signatoryName || "—"}
                       </span>
                     </div>
+                   
                     {template.isDefault && (
                       <div className="mt-2">
                         <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium bg-emerald-50 text-emerald-700 rounded-full">
@@ -261,7 +260,7 @@ export default function CertificateTemplatesPage() {
           </div>
         )}
 
-        {/* Modal – Professional redesigned */}
+        {/* Modal – Create/Edit */}
         {modalOpen && (
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
@@ -269,53 +268,25 @@ export default function CertificateTemplatesPage() {
                 <h2 className="text-2xl font-semibold bg-gradient-to-r from-indigo-700 to-purple-700 bg-clip-text text-transparent">
                   {editingTemplate ? "Edit Template" : "Create New Template"}
                 </h2>
-                <button
-                  onClick={() => setModalOpen(false)}
-                  className="text-gray-400 hover:text-gray-600 transition"
-                >
+                <button onClick={() => setModalOpen(false)} className="text-gray-400 hover:text-gray-600 transition">
                   <FiX size={24} />
                 </button>
               </div>
               <form onSubmit={handleSubmit} className="p-6 space-y-5">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Template Name *
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      className="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
-                      required
-                    />
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Template Name *</label>
+                    <input type="text" name="name" value={formData.name} onChange={handleChange} className="w-full border border-gray-300 rounded-xl px-4 py-2.5" required />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Institution Name *
-                    </label>
-                    <input
-                      type="text"
-                      name="institutionName"
-                      value={formData.institutionName}
-                      onChange={handleChange}
-                      className="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-indigo-500"
-                      required
-                    />
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Institution Name *</label>
+                    <input type="text" name="institutionName" value={formData.institutionName} onChange={handleChange} className="w-full border border-gray-300 rounded-xl px-4 py-2.5" required />
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Logo URL</label>
-                  <input
-                    type="url"
-                    name="logoUrl"
-                    value={formData.logoUrl}
-                    onChange={handleChange}
-                    placeholder="https://example.com/logo.png"
-                    className="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-indigo-500"
-                  />
+                  <input type="url" name="logoUrl" value={formData.logoUrl} onChange={handleChange} placeholder="https://example.com/logo.png" className="w-full border border-gray-300 rounded-xl px-4 py-2.5" />
                   {formData.logoUrl && (
                     <div className="mt-2 p-2 bg-gray-50 rounded-lg inline-block">
                       <img src={formData.logoUrl} alt="preview" className="h-12 object-contain" />
@@ -323,31 +294,15 @@ export default function CertificateTemplatesPage() {
                   )}
                 </div>
 
+               
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Signatory Name
-                    </label>
-                    <input
-                      type="text"
-                      name="signatoryName"
-                      value={formData.signatoryName}
-                      onChange={handleChange}
-                      className="w-full border border-gray-300 rounded-xl px-4 py-2.5"
-                    />
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Signatory Name</label>
+                    <input type="text" name="signatoryName" value={formData.signatoryName} onChange={handleChange} className="w-full border border-gray-300 rounded-xl px-4 py-2.5" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Signature Image URL
-                    </label>
-                    <input
-                      type="url"
-                      name="signatureImageUrl"
-                      value={formData.signatureImageUrl}
-                      onChange={handleChange}
-                      placeholder="https://example.com/signature.png"
-                      className="w-full border border-gray-300 rounded-xl px-4 py-2.5"
-                    />
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Signature Image URL</label>
+                    <input type="url" name="signatureImageUrl" value={formData.signatureImageUrl} onChange={handleChange} placeholder="https://example.com/signature.png" className="w-full border border-gray-300 rounded-xl px-4 py-2.5" />
                     {formData.signatureImageUrl && (
                       <div className="mt-2 p-2 bg-gray-50 rounded-lg inline-block">
                         <img src={formData.signatureImageUrl} alt="signature preview" className="h-8 object-contain" />
@@ -357,48 +312,19 @@ export default function CertificateTemplatesPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Program (leave blank for all)
-                  </label>
-                  <input
-                    type="text"
-                    name="program"
-                    value={formData.program}
-                    onChange={handleChange}
-                    placeholder="e.g., B.Tech Computer Science"
-                    className="w-full border border-gray-300 rounded-xl px-4 py-2.5"
-                  />
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Program (leave blank for all)</label>
+                  <input type="text" name="program" value={formData.program} onChange={handleChange} placeholder="e.g., B.Tech Computer Science" className="w-full border border-gray-300 rounded-xl px-4 py-2.5" />
                 </div>
 
                 <div className="flex items-center gap-3 p-3 bg-indigo-50/30 rounded-xl">
-                  <input
-                    type="checkbox"
-                    name="isDefault"
-                    id="isDefault"
-                    checked={formData.isDefault}
-                    onChange={handleChange}
-                    className="w-5 h-5 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500"
-                  />
-                  <label htmlFor="isDefault" className="text-sm font-medium text-gray-700">
-                    Set as default template (used when no program‑specific template exists)
-                  </label>
+                  <input type="checkbox" name="isDefault" id="isDefault" checked={formData.isDefault} onChange={handleChange} className="w-5 h-5 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500" />
+                  <label htmlFor="isDefault" className="text-sm font-medium text-gray-700">Set as default template (used when no program‑specific template exists)</label>
                 </div>
 
                 <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
-                  <button
-                    type="button"
-                    onClick={() => setModalOpen(false)}
-                    className="px-5 py-2.5 border border-gray-300 rounded-xl hover:bg-gray-50 transition"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    className="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl flex items-center gap-2 shadow-md transition disabled:opacity-50"
-                  >
-                    <FiSave />
-                    {submitting ? "Saving..." : editingTemplate ? "Update" : "Create"}
+                  <button type="button" onClick={() => setModalOpen(false)} className="px-5 py-2.5 border border-gray-300 rounded-xl hover:bg-gray-50 transition">Cancel</button>
+                  <button type="submit" disabled={submitting} className="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl flex items-center gap-2 shadow-md transition disabled:opacity-50">
+                    <FiSave /> {submitting ? "Saving..." : editingTemplate ? "Update" : "Create"}
                   </button>
                 </div>
               </form>
@@ -413,18 +339,8 @@ export default function CertificateTemplatesPage() {
               <h3 className="text-lg font-semibold text-gray-800">{confirmDialog.title}</h3>
               <p className="text-gray-600 my-4">{confirmDialog.message}</p>
               <div className="flex justify-end gap-3">
-                <button
-                  onClick={() => setConfirmDialog({ open: false })}
-                  className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={confirmDialog.onConfirm}
-                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
-                >
-                  Confirm
-                </button>
+                <button onClick={() => setConfirmDialog({ open: false })} className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">Cancel</button>
+                <button onClick={confirmDialog.onConfirm} className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">Confirm</button>
               </div>
             </div>
           </div>
