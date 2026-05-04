@@ -17,8 +17,8 @@ import {
   FaUsers,
   FaBox,
   FaUpload,
-  FaPlus, 
-  FaAward ,           // ✅ added for "Create Batch" if needed
+  FaPlus,
+  FaAward,           // ✅ added for "Create Batch" if needed
 } from "react-icons/fa";
 
 export default function DashboardLayout({ children }) {
@@ -61,19 +61,44 @@ export default function DashboardLayout({ children }) {
   // ================= ROLE-BASED MENUS =================
   const superadminMenu = [
     { name: "Users", icon: <FaUsers />, path: "/components/card" },
+
     {
       name: "Batch Management",
       icon: <FaBox />,
       isMaster: true,
       key: "batch",
       subItems: [
-        { name: "All Batches", icon: <FaBox />, path: "/instructor/batch/batches" },
-        { name: "Add Students to Batch", icon: <FaUser />, path: "/instructor/batch/add-students" },
-        // { name: "Assign Courses to Batch", icon: <FaBook />, path: "/instructor/batch/assign-courses" },
+        {
+          name: "All Batches",
+          icon: <FaBox />,
+          path: "/instructor/batch/batches",
+        },
+        {
+          name: "Add Students to Batch",
+          icon: <FaUser />,
+          path: "/instructor/batch/add-students",
+        },
       ],
     },
-    { name: "Certificates", icon: <FaAward />, path: "/components/certificate-templates" },
 
+    {
+      name: "Certificates",
+      icon: <FaAward />,
+      isMaster: true,
+      key: "certificate",
+      subItems: [
+        {
+          name: "Certificate Templates",
+          icon: <FaAward />,
+          path: "/components/certificate-templates",
+        },
+        {
+          name: "Certificate Management",
+          icon: <FaAward />,
+          path: "/components/certificates",
+        },
+      ],
+    },
   ];
 
   const instructorMenu = [
@@ -167,9 +192,8 @@ export default function DashboardLayout({ children }) {
                         <Link
                           key={sub.path}
                           href={sub.path}
-                          className={`flex items-center gap-3 px-3 py-2 rounded transition ${
-                            pathname === sub.path ? "bg-white/20" : "hover:bg-white/10"
-                          }`}
+                          className={`flex items-center gap-3 px-3 py-2 rounded transition ${pathname === sub.path ? "bg-white/20" : "hover:bg-white/10"
+                            }`}
                         >
                           {sub.icon}
                           {sub.name}
@@ -183,9 +207,8 @@ export default function DashboardLayout({ children }) {
                 item.path && (
                   <Link
                     href={item.path}
-                    className={`flex items-center gap-3 px-3 py-2 rounded transition ${
-                      pathname === item.path ? "bg-white/20" : "hover:bg-white/10"
-                    }`}
+                    className={`flex items-center gap-3 px-3 py-2 rounded transition ${pathname === item.path ? "bg-white/20" : "hover:bg-white/10"
+                      }`}
                   >
                     {item.icon}
                     {item.name}
