@@ -318,6 +318,7 @@ import {
   FaClipboardList,
   FaUsers,
   FaBox,
+  FaAward,
 } from "react-icons/fa";
 
 export default function DashboardLayout({ children }) {
@@ -372,6 +373,8 @@ export default function DashboardLayout({ children }) {
         // { name: "Assign Courses to Batch", icon: <FaBook />, path: "/instructor/batch/assign-courses" },
       ],
     },
+    { name: "Certificates", icon: <FaAward />, path: "/components/certificate-templates" },
+
   ];
 
   const instructorMenu = [
@@ -489,9 +492,8 @@ export default function DashboardLayout({ children }) {
                           key={sub.path}
                           href={sub.path}
                           onClick={() => setSidebarOpen(false)}
-                          className={`flex items-center gap-3 px-3 py-2 rounded transition ${
-                            pathname === sub.path ? "bg-white/20" : "hover:bg-white/10"
-                          }`}
+                          className={`flex items-center gap-3 px-3 py-2 rounded transition ${pathname === sub.path ? "bg-white/20" : "hover:bg-white/10"
+                            }`}
                         >
                           {sub.icon}
                           {sub.name}
@@ -505,9 +507,8 @@ export default function DashboardLayout({ children }) {
                   <Link
                     href={item.path}
                     onClick={() => setSidebarOpen(false)}
-                    className={`flex items-center gap-3 px-3 py-2 rounded transition ${
-                      pathname === item.path ? "bg-white/20" : "hover:bg-white/10"
-                    }`}
+                    className={`flex items-center gap-3 px-3 py-2 rounded transition ${pathname === item.path ? "bg-white/20" : "hover:bg-white/10"
+                      }`}
                   >
                     {item.icon}
                     {item.name}

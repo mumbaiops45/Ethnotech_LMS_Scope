@@ -17,7 +17,8 @@ import {
   FaUsers,
   FaBox,
   FaUpload,
-  FaPlus,            // ✅ added for "Create Batch" if needed
+  FaPlus,  
+  FaAward,          // ✅ added for "Create Batch" if needed
 } from "react-icons/fa";
 
 export default function DashboardLayout({ children }) {
@@ -71,6 +72,8 @@ export default function DashboardLayout({ children }) {
         // { name: "Assign Courses to Batch", icon: <FaBook />, path: "/instructor/batch/assign-courses" },
       ],
     },
+    { name: "Certificates", icon: <FaAward />, path: "/components/certificate-templates" },
+
   ];
 
   const instructorMenu = [
@@ -164,9 +167,8 @@ export default function DashboardLayout({ children }) {
                         <Link
                           key={sub.path}
                           href={sub.path}
-                          className={`flex items-center gap-3 px-3 py-2 rounded transition ${
-                            pathname === sub.path ? "bg-white/20" : "hover:bg-white/10"
-                          }`}
+                          className={`flex items-center gap-3 px-3 py-2 rounded transition ${pathname === sub.path ? "bg-white/20" : "hover:bg-white/10"
+                            }`}
                         >
                           {sub.icon}
                           {sub.name}
@@ -180,9 +182,8 @@ export default function DashboardLayout({ children }) {
                 item.path && (
                   <Link
                     href={item.path}
-                    className={`flex items-center gap-3 px-3 py-2 rounded transition ${
-                      pathname === item.path ? "bg-white/20" : "hover:bg-white/10"
-                    }`}
+                    className={`flex items-center gap-3 px-3 py-2 rounded transition ${pathname === item.path ? "bg-white/20" : "hover:bg-white/10"
+                      }`}
                   >
                     {item.icon}
                     {item.name}
