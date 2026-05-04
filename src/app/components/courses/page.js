@@ -3,15 +3,15 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { FaEdit, FaTrash, FaArrowLeft, FaSearch, FaPlus } from "react-icons/fa";
+import { FaEdit, FaTrash, FaSearch, FaPlus } from "react-icons/fa";
 import {
   getCourses,
   createCourse,
   updateCourse,
   deleteCourse,
-} from "../../../../service/login.service";
+} from "../../../service/login.service";
 
-export default function CoursesPage() {
+export default function InstructorCoursesPage() {
   const router = useRouter();
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -39,7 +39,6 @@ export default function CoursesPage() {
       const response = await getCourses();
       const list = response.data || [];
       setCourses(list);
-      setCurrentPage(1);
     } catch (error) {
       toast.error(error?.response?.data?.message || "Failed to load courses");
     } finally {
@@ -51,21 +50,24 @@ export default function CoursesPage() {
     fetchCourses();
   }, []);
 
-  // Filter by search term
+  // Filter & pagination
   const filteredCourses = courses.filter((course) =>
     course.title?.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  // Pagination logic
   const totalPages = Math.ceil(filteredCourses.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedCourses = filteredCourses.slice(startIndex, startIndex + itemsPerPage);
 
-  // Reset page when search changes
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm]);
 
+  // ✅ Navigation to course detail (uses dynamic URL)
+  const openCourseDetail = (courseId) => {
+    router.push(`/components/courses/${courseId}`);
+  };
+
+  // Add/Edit modal handlers
   const openAddModal = () => {
     setEditingCourse(null);
     setFormData({
@@ -167,8 +169,7 @@ export default function CoursesPage() {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm("Delete this course? This will also delete all modules and lessons."))
-      return;
+    if (!confirm("Delete this course? This will also delete all modules and lessons.")) return;
     try {
       await deleteCourse(id);
       toast.success("Course deleted");
@@ -180,9 +181,6 @@ export default function CoursesPage() {
 
   return (
     <div className="p-6">
-      {/* Back Button */}
-     
-
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h1 className="text-2xl font-bold text-gray-800">My Courses</h1>
         <div className="flex gap-3">
@@ -217,7 +215,7 @@ export default function CoursesPage() {
               <div
                 key={course._id}
                 className="bg-white rounded-xl shadow-md hover:shadow-lg transition cursor-pointer overflow-hidden"
-                onClick={() => router.push(`/dashboard/courses/${course._id}`)}
+                onClick={() => openCourseDetail(course._id)}
               >
                 {course.coverImage && (
                   <div className="h-32 overflow-hidden">
@@ -257,13 +255,12 @@ export default function CoursesPage() {
             ))}
           </div>
 
-          {/* Pagination */}
           {totalPages > 1 && (
             <div className="flex justify-center items-center gap-2 mt-8">
               <button
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
-                className="px-3 py-1 border rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-3 py-1 border rounded-lg hover:bg-gray-50 disabled:opacity-50"
               >
                 Previous
               </button>
@@ -281,7 +278,7 @@ export default function CoursesPage() {
               <button
                 onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
-                className="px-3 py-1 border rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-3 py-1 border rounded-lg hover:bg-gray-50 disabled:opacity-50"
               >
                 Next
               </button>
@@ -290,7 +287,7 @@ export default function CoursesPage() {
         </>
       )}
 
-      {/* Add/Edit Course Modal – unchanged */}
+      {/* Add/Edit Course Modal */}
       {modalOpen && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
@@ -327,7 +324,7 @@ export default function CoursesPage() {
                       type="button"
                       onClick={triggerFileInput}
                       disabled={uploadingImage}
-                        className="px-4 py-2 border rounded-lg hover:bg-gray-50 disabled:opacity-50"
+                      className="px-4 py-2 border rounded-lg hover:bg-gray-50 disabled:opacity-50"
                     >
                       {uploadingImage ? "Uploading..." : "Upload Image"}
                     </button>
