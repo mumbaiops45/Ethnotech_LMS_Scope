@@ -4,6 +4,15 @@ import React, {useEffect} from 'react';
 import { useParams } from 'next/navigation';
 import { useLiveSession } from '../../../../../hooks/useLiveSession';
 
+const cardColors = [
+  "from-[var(--primary)]/10 to-blue-100 border-blue-200",
+  "from-[var(--primary)]/10 to-green-100 border-green-200",
+  "from-[var(--primary)]/10 to-purple-100 border-purple-200",
+  "from-[var(--primary)]/10 to-orange-100 border-orange-200",
+  "from-[var(--primary)]/10 to-pink-100 border-pink-200",
+  "from-[var(--primary)]/10 to-cyan-100 border-cyan-200",
+];
+
 const page = () => {
     const {id} = useParams();
 

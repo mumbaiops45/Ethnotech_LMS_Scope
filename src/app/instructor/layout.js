@@ -520,7 +520,7 @@ const instructorMenu = [
       {/* Sidebar - responsive */}
       <aside
         className={`
-          fixed top-0 left-0 z-50 h-[100%] w-80 md:w-64
+          fixed top-0 left-0 z-50 h-[100%] w-80 md:w-64 
           bg-[var(--primary)] text-white flex flex-col p-5
           transition-transform duration-300
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}

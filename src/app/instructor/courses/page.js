@@ -20,6 +20,15 @@ import {
   deleteCourse,
 } from "../../../../service/login.service";
 
+const cardColors = [
+  "from-blue-100 to-blue-50 border-blue-200",
+  "from-green-100 to-green-50 border-green-200",
+  "from-purple-100 to-purple-50 border-purple-200",
+  "from-orange-100 to-orange-50 border-orange-200",
+  "from-pink-100 to-pink-50 border-pink-200",
+  "from-cyan-100 to-cyan-50 border-cyan-200",
+];
+
 export default function InstructorCoursesPage() {
   const router = useRouter();
 
@@ -304,108 +313,113 @@ export default function InstructorCoursesPage() {
       ) : (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-            {paginatedCourses.map((course) => (
-              <div
-                key={course._id}
-                className="bg-gradient-to-br from-[var(--primary)]/10 to-gray-100 border border-[var(--primary)]/20 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden"
-                onClick={() => openCourseDetail(course._id)}
-              >
-                {/* Image */}
-                {course.coverImage && (
-                  <div className="relative h-28 overflow-hidden">
-                    <Image
-                      src={course.coverImage}
-                      alt={course.title}
-                      fill
-                      className=" object-cover hover:scale-105 transition duration-300"
-                    />
-                  </div>
-                )}
+            {paginatedCourses.map((course, index) => {
+              const cardStyle =
+                cardColors[index % cardColors.length];
 
-                <div className="p-3">
-                  {/* Top Section */}
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex-1 min-w-0">
-                      {/* Title */}
-                      <h3 className="text-base font-bold text-gray-800 line-clamp-1">
-                        {course.title}
-                      </h3>
-
-                      {/* Description */}
-                      <p className="text-[11px] text-gray-600 mt-1 line-clamp-2">
-                        {course.description || "No description available"}
-                      </p>
+              return (
+                <div
+                  key={course._id}
+                  className={`bg-gradient-to-br ${cardStyle} rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden border`}
+                  onClick={() => openCourseDetail(course._id)}
+                >
+                  {/* Image */}
+                  {course.coverImage && (
+                    <div className="relative h-28 overflow-hidden">
+                      <Image
+                        src={course.coverImage}
+                        alt={course.title}
+                        fill
+                        className=" object-cover hover:scale-105 transition duration-300"
+                      />
                     </div>
+                  )}
 
-                    {/* Actions */}
-                    <div
-                      className="flex items-center gap-2 shrink-0"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <button
-                        onClick={() => openEditModal(course)}
-                        className="w-8 h-8 rounded-lg bg-[var(--primary)]/10 text-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition flex items-center justify-center"
-                        title="Edit"
+                  <div className="p-3">
+                    {/* Top Section */}
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        {/* Title */}
+                        <h3 className="text-base font-bold text-gray-800 line-clamp-1">
+                          {course.title}
+                        </h3>
+
+                        {/* Description */}
+                        <p className="text-[11px] text-gray-600 mt-1 line-clamp-2">
+                          {course.description || "No description available"}
+                        </p>
+                      </div>
+
+                      {/* Actions */}
+                      <div
+                        className="flex items-center gap-2 shrink-0"
+                        onClick={(e) => e.stopPropagation()}
                       >
-                        <FaEdit className="text-xs" />
-                      </button>
+                        <button
+                          onClick={() => openEditModal(course)}
+                          className="w-8 h-8 rounded-lg bg-[var(--primary)]/10 text-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition flex items-center justify-center"
+                          title="Edit"
+                        >
+                          <FaEdit className="text-xs" />
+                        </button>
 
-                      <button
-                        onClick={() => handleDelete(course._id)}
-                        className="w-8 h-8 rounded-lg bg-red-100 text-red-500 hover:bg-red-500 hover:text-white transition flex items-center justify-center"
-                        title="Delete"
-                      >
-                        <FaTrash className="text-xs" />
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Details */}
-                  <div className="mt-3 space-y-2 border-t border-gray-200 pt-3">
-                    {/* Category */}
-                    <div className="flex items-center justify-between text-[11px]">
-                      <div className="flex items-center gap-2 text-gray-700">
-                        <FaFolder className="text-[var(--primary)] text-[10px]" />
-                        <span>Category</span>
+                        <button
+                          onClick={() => handleDelete(course._id)}
+                          className="w-8 h-8 rounded-lg bg-red-100 text-red-500 hover:bg-red-500 hover:text-white transition flex items-center justify-center"
+                          title="Delete"
+                        >
+                          <FaTrash className="text-xs" />
+                        </button>
                       </div>
-
-                      <span className="text-gray-600 font-medium">
-                        {course.category || "NA"}
-                      </span>
                     </div>
 
-                    {/* Program */}
-                    <div className="flex items-center justify-between text-[11px]">
-                      <div className="flex items-center gap-2 text-gray-700">
-                        <FaGraduationCap className="text-[var(--primary)] text-[10px]" />
-                        <span>Program</span>
+                    {/* Details */}
+                    <div className="mt-3 space-y-2 border-t border-gray-200 pt-3">
+                      {/* Category */}
+                      <div className="flex items-center justify-between text-[11px]">
+                        <div className="flex items-center gap-2 text-gray-700">
+                          <FaFolder className="text-[var(--primary)] text-[10px]" />
+                          <span>Category</span>
+                        </div>
+
+                        <span className="text-gray-600 font-medium">
+                          {course.category || "NA"}
+                        </span>
                       </div>
 
-                      <span className="text-gray-600 font-medium">
-                        {course.program || "NA"}
-                      </span>
-                    </div>
+                      {/* Program */}
+                      <div className="flex items-center justify-between text-[11px]">
+                        <div className="flex items-center gap-2 text-gray-700">
+                          <FaGraduationCap className="text-[var(--primary)] text-[10px]" />
+                          <span>Program</span>
+                        </div>
 
-                    {/* Status */}
-                    <div className="flex items-center justify-between text-[11px]">
-                      <div className="flex items-center gap-2 text-gray-700">
-                        <FaClipboardCheck className="text-[var(--primary)] text-[10px]" />
-                        <span>Status</span>
+                        <span className="text-gray-600 font-medium">
+                          {course.program || "NA"}
+                        </span>
                       </div>
 
-                      <span
-                        className={`font-semibold ${course.isPublished
+                      {/* Status */}
+                      <div className="flex items-center justify-between text-[11px]">
+                        <div className="flex items-center gap-2 text-gray-700">
+                          <FaClipboardCheck className="text-[var(--primary)] text-[10px]" />
+                          <span>Status</span>
+                        </div>
+
+                        <span
+                          className={`font-semibold ${course.isPublished
                             ? "text-green-600"
                             : "text-orange-500"
-                          }`}
-                      >
-                        {course.isPublished ? "Published" : "Draft"}
-                      </span>
+                            }`}
+                        >
+                          {course.isPublished ? "Published" : "Draft"}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* Pagination */}
@@ -431,8 +445,8 @@ export default function InstructorCoursesPage() {
                   key={page}
                   onClick={() => setCurrentPage(page)}
                   className={`px-3 py-1 border rounded-lg transition text-sm ${currentPage === page
-                      ? "bg-[var(--primary)] text-white"
-                      : "hover:bg-gray-50"
+                    ? "bg-[var(--primary)] text-white"
+                    : "hover:bg-gray-50"
                     }`}
                 >
                   {page}
