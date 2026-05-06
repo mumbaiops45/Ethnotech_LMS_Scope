@@ -1,45 +1,66 @@
 import api from "../../utils/axios";
 
-// ================= INSTRUCTOR COURSE MANAGEMENT =================
+/* =========================================================
+   COURSE SERVICES
+========================================================= */
 
-// Get all courses for the logged‑in instructor
-export const getMyCourses = async () => {
-    const response = await api.get("/courses");
-    return response.data;
-};
-
-// Get a single course by ID
-export const getCourseById = async (courseId) => {
-    const response = await api.get(`/courses/${courseId}`);
-    return response.data;
-};
-
-// Create a new course
+// Create Course
 export const createCourse = async (courseData) => {
-    const response = await api.post("/courses", courseData);
-    return response.data;
+  const response = await api.post("/courses", courseData);
+  return response.data;
 };
 
-// Update an existing course
+// Get Logged-in Instructor Courses
+export const getMyCourses = async () => {
+  const response = await api.get("/courses");
+  return response.data;
+};
+
+// Get All Courses (Admin)
+export const getAllCoursesAdmin = async () => {
+  const response = await api.get("/courses/admin/all");
+  return response.data;
+};
+
+// Get Single Course By ID
+export const getCourseById = async (courseId) => {
+  const response = await api.get(`/courses/${courseId}`);
+  return response.data;
+};
+
+// Update Course
 export const updateCourse = async (courseId, courseData) => {
-    const response = await api.put(`/courses/${courseId}`, courseData);
-    return response.data;
+  const response = await api.put(`/courses/${courseId}`, courseData);
+  return response.data;
 };
 
-// Delete a course
+// Delete Course
 export const deleteCourse = async (courseId) => {
-    const response = await api.delete(`/courses/${courseId}`);
-    return response.data;
+  const response = await api.delete(`/courses/${courseId}`);
+  return response.data;
 };
 
-// Add a module to a course
+/* =========================================================
+   MODULE SERVICES
+========================================================= */
+
+// Add Module To Course
 export const addModule = async (courseId, moduleData) => {
-    const response = await api.post(`/courses/${courseId}/module`, moduleData);
-    return response.data;
+  const response = await api.post(
+    `/courses/${courseId}/module`,
+    moduleData
+  );
+  return response.data;
 };
 
-// Reorder modules inside a course
+// Reorder Modules
 export const reorderModules = async (courseId, orderArray) => {
-    const response = await api.put(`/courses/${courseId}/module/reorder`, { order: orderArray });
-    return response.data;
+  const response = await api.put(
+    `/courses/${courseId}/module/reorder`,
+    {
+      order: orderArray,
+    }
+  );
+
+  return response.data;
 };
