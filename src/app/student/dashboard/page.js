@@ -1,522 +1,610 @@
 "use client";
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
-/* ---------------- DATA ---------------- */
-const studentData = [
-  {
-    progress: 65,
+import {
+  FaBookOpen,
+  FaClipboardList,
+  FaBullhorn,
+  FaChartLine,
+  FaPlayCircle,
+  FaArrowRight,
+  FaCalendarAlt,
+  FaFire,
+  FaMedal,
+} from "react-icons/fa";
 
-    stats: [
-      { label: "Progress", value: "65%" },
-      { label: "Courses", value: 3 },
-      { label: "Live Classes", value: 2 },
-      { label: "Assignments", value: 2 },
-      { label: "Activity", value: "3 logs" },
-      { label: "Announcements", value: 3 }
-    ],
+import { useDashboard } from "../../../../hooks/useDashboard";
 
-    enrolledCourses: [
-      {
-        id: "course1",
-        programId: "program1",
-        name: "Full Stack Development",
-        instructor: "Rahul Sharma",
-        totalLessons: 32,
-        duration: "12h 45m",
-        progress: 70,
-        coverImage: "/student cource.jpg",
-        program: "Tech",
-      },
-      {
-        id: "course2",
-        programId: "program1",
-        name: "Frontend Mastery",
-        instructor: "Priya Verma",
-        totalLessons: 24,
-        duration: "8h 20m",
-        progress: 50,
-        coverImage: "/Frontend Mastery.jpg",
-        program: "Tech",
-      },
-      {
-        id: "course3",
-        programId: "program1",
-        name: "Backend Essentials",
-        instructor: "Amit Patel",
-        totalLessons: 28,
-        duration: "10h 15m",
-        progress: 40,
-        coverImage: "/Backend Essentials.jpg",
-        program: "Tech",
-      },
-
-      {
-        id: "course4",
-        programId: "program2",
-        name: "UI/UX Design Fundamentals",
-        instructor: "Neha Kapoor",
-        totalLessons: 20,
-        duration: "6h 30m",
-        progress: 60,
-        coverImage: "/UIUX Design Fundamentals.jpg",
-        program: "Design",
-      },
-      {
-        id: "course5",
-        programId: "program2",
-        name: "Figma Masterclass",
-        instructor: "Arjun Mehta",
-        totalLessons: 18,
-        duration: "5h 10m",
-        progress: 30,
-        coverImage: "/Figma Masterclass.jpg",
-        program: "Design",
-      },
-
-      {
-        id: "course6",
-        programId: "program3",
-        name: "Startup Basics",
-        instructor: "Rohit Agarwal",
-        totalLessons: 22,
-        duration: "7h 15m",
-        progress: 80,
-        coverImage: "/Startup Basics.jpg",
-        program: "Business",
-      },
-      {
-        id: "course7",
-        programId: "program3",
-        name: "Digital Marketing",
-        instructor: "Sneha Iyer",
-        totalLessons: 26,
-        duration: "9h 40m",
-        progress: 45,
-        coverImage: "/Digital Marketing.jpg",
-        program: "Business",
-      },
-    ],
-
-    liveClasses: [
-      { title: "React Advanced Session", time: "Tomorrow 10:00 AM" },
-      { title: "Node.js Workshop", time: "Friday 2:00 PM" }
-    ],
-
-    assignments: [
-      { title: "React Project", status: "Pending" },
-      { title: "API Design Task", status: "Pending" }
-    ],
-
-    activity: [
-      "Completed HTML module",
-      "Watched React Intro",
-      "Attempted Quiz: JavaScript Basics"
-    ],
-
-    announcements: [
-      "New batch starts Monday",
-      "Assignment deadline extended",
-      "Live class schedule updated"
-    ],
-
-    quickAccess: [
-      "Join Class",
-      "Assignments",
-      "Ask Doubt",
-      "Certificates"
-    ]
-  }
-];
-
-const programs = [
-  ...new Set(studentData[0].enrolledCourses.map((item) => item.program))
-];
-
-export default function StudentClint() {
-
+export default function StudentDashboard() {
   const router = useRouter();
 
-  const [student, setStudent] = useState(studentData[0]);
-  const [tab, setTab] = useState("overview");
-  const [showEdit, setShowEdit] = useState(false);
+  const {
+    student,
+    stats,
+    enrolledCourses,
+    upcomingClasses,
+    pendingAssignments,
+    recentActivity,
+    announcements,
+    loading,
+    error,
+    fetchDashboard,
+  } = useDashboard();
 
-  const [form, setForm] = useState(
-    JSON.parse(JSON.stringify(studentData[0]))
-  );
+  const [tab, setTab] = useState("overview");
 
   const tabs = ["overview", "courses", "progress"];
 
-  function handleUpdate() {
-    setStudent(form);
-    setShowEdit(false);
+  useEffect(() => {
+    fetchDashboard().catch(console.error);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="h-14 w-14 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+
+          <h2 className="text-2xl font-bold text-gray-800">
+            Loading Dashboard...
+          </h2>
+
+          <p className="text-gray-500 mt-2">
+            Please wait while we fetch your data
+          </p>
+        </div>
+      </div>
+    );
   }
 
-  return (
-    <div className="min-h-screen gap-6 relative p-2 sm:p-4">
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+        <div className="bg-white shadow-xl rounded-3xl p-8 max-w-md w-full text-center border border-red-100">
+          <div className="text-red-500 text-5xl mb-4">⚠</div>
 
-      {/* TOP SECTION */}
-      <div
-        className={`${
-          tab === "courses" ? "hidden" : "block"
-        } bg-gray-100 rounded-2xl py-4 sm:py-6 px-3 sm:px-6 shadow-md space-y-6`}
-      >
+          <h2 className="text-2xl font-bold text-gray-800">
+            Failed to Load Dashboard
+          </h2>
 
-        {/* HEADER */}
-        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-3">
+          <p className="text-gray-500 mt-3">{error}</p>
 
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 leading-tight">
-            Student
-            <span className="text-[var(--primary)]"> Dashboard</span>
-          </h1>
+          <button
+            onClick={() => fetchDashboard()}
+            className="mt-6 bg-[var(--primary)] hover:opacity-90 text-white px-6 py-3 rounded-2xl font-medium transition"
+          >
+            Retry Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
-          <p className="text-gray-500 text-sm sm:text-base max-w-xl">
-            Welcome back! Here's an overview of your learning activity.
+  if (!student) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+        <div className="bg-white shadow-xl rounded-3xl p-8 max-w-md w-full text-center">
+          <h2 className="text-2xl font-bold text-gray-800">
+            No Dashboard Data
+          </h2>
+
+          <p className="text-gray-500 mt-2">
+            Please login again or refresh dashboard
           </p>
 
-        </div>
-
-        {/* STATS */}
-        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
-
-          {student.stats.map((s, i) => (
-            <div
-              key={i}
-              className="flex flex-col xl:flex-row xl:justify-between xl:items-center rounded-xl shadow bg-gradient-to-r from-[var(--primary)] to-green-500 px-3 py-3 border-l-4 text-white gap-2 min-h-[90px]"
-            >
-
-              <p className="text-xs sm:text-sm">
-                {s.label}
-              </p>
-
-              <p className="text-xl sm:text-2xl font-bold">
-                {s.value}
-              </p>
-
-            </div>
-          ))}
+          <button
+            onClick={() => fetchDashboard()}
+            className="mt-5 bg-[var(--primary)] text-white px-6 py-3 rounded-2xl"
+          >
+            Refresh
+          </button>
         </div>
       </div>
+    );
+  }
 
-      {/* MAIN SECTION */}
-      <div className="w-full bg-gray-100 rounded-2xl p-3 sm:p-6 shadow-md mt-4">
+  const overallProgress = student?.completenessPercent || 0;
 
-        {/* TABS */}
-        <div className="flex flex-wrap gap-2 mb-4">
+  const statsCards = [
+    {
+      title: "Overall Progress",
+      value: `${overallProgress}%`,
+      icon: <FaChartLine />,
+      bg: "from-indigo-500 to-purple-500",
+    },
+    {
+      title: "Enrolled Courses",
+      value:
+        stats?.totalEnrolledCourses || enrolledCourses.length,
+      icon: <FaBookOpen />,
+      bg: "from-emerald-500 to-green-500",
+    },
+    {
+      title: "Upcoming Classes",
+      value: upcomingClasses.length,
+      icon: <FaPlayCircle />,
+      bg: "from-orange-500 to-red-500",
+    },
+    {
+      title: "Assignments",
+      value: pendingAssignments.length,
+      icon: <FaClipboardList />,
+      bg: "from-pink-500 to-rose-500",
+    },
+  ];
 
-          {tabs.map((t) => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              className={`px-3 sm:px-5 py-2 text-xs sm:text-sm font-semibold rounded-lg ${
-                tab === t
-                  ? "bg-white shadow-md text-black"
-                  : "text-gray-600 hover:bg-gray-100"
-              }`}
-            >
-              {t.toUpperCase()}
-            </button>
-          ))}
-        </div>
+  const programs = [
+    ...new Set(
+      enrolledCourses
+        .map((course) => course.program)
+        .filter(Boolean)
+    ),
+  ];
 
-        {/* CONTENT */}
-        <div className="bg-white rounded-2xl">
+  return (
+    <div className="min-h-screen bg-gray-50 p-3 sm:p-6">
+      {/* HERO */}
+      <div className="relative overflow-hidden rounded-[30px] bg-gradient-to-r from-[var(--primary)] to-indigo-700 text-white p-6 sm:p-10 shadow-xl">
+        <div className="absolute top-0 right-0 w-72 h-72 bg-white/10 rounded-full blur-3xl" />
 
-          {/* OVERVIEW */}
-          {tab === "overview" && (
+        <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+          <div>
+            <p className="text-sm uppercase tracking-widest text-white/70">
+              Student Portal
+            </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 p-3 sm:p-5">
+            <h1 className="text-3xl sm:text-5xl font-bold mt-2 leading-tight">
+              Welcome Back,
+              <br />
+              {student.fullName}
+            </h1>
 
-              {/* COURSES */}
+            <p className="mt-4 text-white/80 max-w-2xl text-sm sm:text-base">
+              Continue your learning journey and track your
+              progress in real time.
+            </p>
+
+            <div className="flex flex-wrap gap-3 mt-6">
+              <button className="bg-white text-black px-5 py-3 rounded-2xl font-semibold hover:scale-105 transition">
+                Continue Learning
+              </button>
+
+              <button className="border border-white/40 px-5 py-3 rounded-2xl hover:bg-white/10 transition">
+                View Certificates
+              </button>
+            </div>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-5 min-w-[250px] border border-white/20">
+            <div className="flex items-center gap-3 mb-4">
+              <FaFire className="text-yellow-300 text-2xl" />
+
               <div>
+                <p className="text-sm text-white/70">
+                  Learning Streak
+                </p>
 
-                <h2 className="font-semibold mb-3">
-                  Courses
-                </h2>
+                <h3 className="text-2xl font-bold">12 Days</h3>
+              </div>
+            </div>
 
-                {student.enrolledCourses.map((c, i) => (
+            <div className="space-y-3">
+              <div>
+                <div className="flex justify-between text-sm mb-1">
+                  <span>Profile Completion</span>
+                  <span>{overallProgress}%</span>
+                </div>
+
+                <div className="w-full bg-white/20 h-3 rounded-full overflow-hidden">
                   <div
-                    key={i}
-                    className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-3"
-                  >
-
-                    <p className="text-sm break-words">
-                      • {c.name}
-                    </p>
-
-                    <button
-                      onClick={() =>
-                        router.push(
-                          `/components/dashboard/programs/${c.programId}/courses/${c.id}`
-                        )
-                      }
-                      className="text-xs bg-black text-white px-3 py-2 rounded w-full sm:w-fit"
-                    >
-                      View
-                    </button>
-
-                  </div>
-                ))}
-              </div>
-
-              {/* LIVE CLASSES */}
-              <div>
-
-                <h2 className="font-semibold mb-3">
-                  Live Classes
-                </h2>
-
-                {student.liveClasses.map((l, i) => (
-                  <p
-                    key={i}
-                    className="text-sm mb-2 break-words"
-                  >
-                    {l.title}
-                  </p>
-                ))}
-              </div>
-
-              {/* ASSIGNMENTS */}
-              <div>
-
-                <h2 className="font-semibold mb-3">
-                  Assignments
-                </h2>
-
-                {student.assignments.map((a, i) => (
-                  <p
-                    key={i}
-                    className="text-sm mb-2 break-words"
-                  >
-                    • {a.title} -{" "}
-                    <span className="text-red-500">
-                      {a.status}
-                    </span>
-                  </p>
-                ))}
-              </div>
-
-              {/* ACTIVITY */}
-              <div>
-
-                <h2 className="font-semibold mb-3">
-                  Activity
-                </h2>
-
-                {student.activity.map((a, i) => (
-                  <p
-                    key={i}
-                    className="text-sm mb-2 break-words"
-                  >
-                    ✔ {a}
-                  </p>
-                ))}
-              </div>
-
-              {/* ANNOUNCEMENTS */}
-              <div className="md:col-span-2">
-
-                <h2 className="font-semibold mb-3">
-                  Announcements
-                </h2>
-
-                {student.announcements.map((a, i) => (
-                  <p
-                    key={i}
-                    className="bg-gray-100 p-3 rounded mb-2 text-sm"
-                  >
-                    {a}
-                  </p>
-                ))}
-              </div>
-
-              {/* QUICK ACCESS */}
-              <div className="md:col-span-2">
-
-                <h2 className="font-semibold mb-3">
-                  Quick Access
-                </h2>
-
-                <div className="flex gap-2 flex-wrap">
-
-                  {student.quickAccess.map((q, i) => (
-                    <button
-                      key={i}
-                      className="px-3 py-2 bg-gray-100 rounded text-sm"
-                    >
-                      {q}
-                    </button>
-                  ))}
+                    className="bg-white h-3 rounded-full"
+                    style={{
+                      width: `${overallProgress}%`,
+                    }}
+                  />
                 </div>
               </div>
-            </div>
-          )}
 
-          {/* COURSES TAB */}
-          {tab === "courses" && (
+              <div className="flex items-center gap-2 pt-2">
+                <FaMedal className="text-yellow-300" />
 
-            <div className="flex flex-col gap-3">
-
-              {programs.map((item, index) => {
-                return (
-                  <div key={index} className="rounded-3xl">
-
-                    <h2 className="bg-gray-200 px-5 py-3 font-semibold">
-                      {item}
-                    </h2>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 p-5">
-
-                      {student.enrolledCourses
-                        .filter((course) => course.program === item)
-                        .map((c, i) => (
-
-                          <div
-                            key={i}
-                            className="bg-gray-50 rounded-xl shadow-md overflow-hidden flex flex-col"
-                          >
-
-                            {/* IMAGE */}
-                            <div className="relative h-[220px] md:h-[25vh]">
-
-                              <Image
-                                fill
-                                src={c.coverImage || "/student cource.jpg"}
-                                alt={c.name}
-                                className="w-full object-cover"
-                              />
-                            </div>
-
-                            <div className="p-4 flex flex-col justify-between flex-1">
-
-                              {/* TITLE */}
-                              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
-
-                                <h3 className="text-sm font-semibold">
-                                  {c.name}
-                                </h3>
-
-                                <p className="px-3 py-1 bg-gray-200 rounded-xl text-xs w-fit">
-                                  {c.program}
-                                </p>
-                              </div>
-
-                              {/* INSTRUCTOR */}
-                              <p className="text-xs text-gray-600 mb-1 mt-2">
-                                Instructor: {c.instructor}
-                              </p>
-
-                              {/* DETAILS */}
-                              <div className="flex justify-between text-xs text-gray-500 mb-2">
-                                <span>{c.totalLessons} Lessons</span>
-                                <span>{c.duration}</span>
-                              </div>
-
-                              {/* PROGRESS */}
-                              <div className="w-full bg-gray-200 h-2 rounded-full mb-2">
-
-                                <div
-                                  className="bg-black h-2 rounded-full"
-                                  style={{ width: c.progress + "%" }}
-                                />
-                              </div>
-
-                              {/* STATUS */}
-                              <p className="text-xs mb-3">
-                                Status:{" "}
-
-                                <span className="font-medium">
-                                  {c.progress === 100
-                                    ? "Completed"
-                                    : c.progress > 0
-                                    ? "In Progress"
-                                    : "Not Started"}
-                                </span>
-                              </p>
-
-                              {/* BUTTON */}
-                              <button
-                                onClick={() =>
-                                  router.push(
-                                    `/components/dashboard/programs/${c.programId}/courses/${c.id}`
-                                  )
-                                }
-                                className="text-xs bg-black text-white px-3 py-2 rounded w-full"
-                              >
-                                View Course
-                              </button>
-
-                            </div>
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
-          {/* PROGRESS */}
-          {tab === "progress" && (
-
-            <div className="p-5">
-
-              <h2 className="font-semibold mb-4">
-                Overall Progress
-              </h2>
-
-              <div className="w-full bg-gray-200 h-3 rounded-full">
-
-                <div
-                  className="bg-black h-3 rounded-full"
-                  style={{ width: student.progress + "%" }}
-                />
+                <span className="text-sm">
+                  Keep going! You're doing great.
+                </span>
               </div>
-
-              <p className="mt-2 text-sm">
-                {student.progress}% Completed
-              </p>
             </div>
-          )}
+          </div>
         </div>
       </div>
 
-      {/* EDIT MODAL */}
-      {showEdit && (
+      {/* STATS */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mt-6">
+        {statsCards.map((card, index) => (
+          <div
+            key={index}
+            className={`bg-gradient-to-r ${card.bg} rounded-3xl p-5 text-white shadow-lg hover:scale-[1.02] transition duration-300`}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-white/80">
+                  {card.title}
+                </p>
 
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-3">
+                <h2 className="text-3xl font-bold mt-2">
+                  {card.value}
+                </h2>
+              </div>
 
-          <div className="bg-white p-6 rounded-2xl w-full max-w-[600px]">
+              <div className="text-4xl opacity-80">
+                {card.icon}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
 
-            <h2 className="font-bold mb-4">
-              Edit Data
-            </h2>
+      {/* TABS */}
+      <div className="flex flex-wrap gap-3 mt-8">
+        {tabs.map((item) => (
+          <button
+            key={item}
+            onClick={() => setTab(item)}
+            className={`px-5 py-3 rounded-2xl font-semibold transition ${
+              tab === item
+                ? "bg-[var(--primary)] text-white shadow-lg"
+                : "bg-white text-gray-600 hover:bg-gray-100"
+            }`}
+          >
+            {item.toUpperCase()}
+          </button>
+        ))}
+      </div>
 
-            {form.enrolledCourses.map((c, i) => (
-              <input
-                key={i}
-                value={c.name}
-                onChange={(e) => {
-                  const newData = [...form.enrolledCourses];
-                  newData[i].name = e.target.value;
+      {/* OVERVIEW */}
+      {tab === "overview" && (
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mt-6">
+          {/* LEFT */}
+          <div className="xl:col-span-2 space-y-6">
+            {/* COURSES */}
+            <div className="bg-white rounded-3xl p-6 shadow-sm">
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="text-xl font-bold text-gray-800">
+                  My Courses
+                </h2>
 
-                  setForm({
-                    ...form,
-                    enrolledCourses: newData
-                  });
-                }}
-                className="border p-2 w-full mb-2 rounded"
-              />
-            ))}
+                <button
+                  onClick={() => setTab("courses")}
+                  className="text-[var(--primary)] text-sm font-semibold flex items-center gap-2"
+                >
+                  View All <FaArrowRight />
+                </button>
+              </div>
 
-            <button
-              onClick={handleUpdate}
-              className="bg-black text-white px-4 py-2 w-full rounded"
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {enrolledCourses.slice(0, 4).map((course, index) => (
+                  <div
+                    key={index}
+                    className="border border-gray-100 rounded-3xl overflow-hidden hover:shadow-lg transition"
+                  >
+                    <div className="relative h-44">
+                      <Image
+                        fill
+                        src={
+                          course.coverImage ||
+                          "/student cource.jpg"
+                        }
+                        alt={course.name}
+                        className="object-cover"
+                      />
+                    </div>
+
+                    <div className="p-4">
+                      <div className="flex justify-between items-start gap-3">
+                        <h3 className="font-semibold text-gray-800 line-clamp-2">
+                          {course.name}
+                        </h3>
+
+                        <span className="text-xs bg-[var(--primary)]/10 text-[var(--primary)] px-2 py-1 rounded-xl whitespace-nowrap">
+                          {course.program}
+                        </span>
+                      </div>
+
+                      <p className="text-sm text-gray-500 mt-2">
+                        {course.instructor}
+                      </p>
+
+                      <div className="mt-4">
+                        <div className="flex justify-between text-xs mb-1">
+                          <span>Progress</span>
+                          <span>{course.progress || 0}%</span>
+                        </div>
+
+                        <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                          <div
+                            className="h-2 bg-[var(--primary)] rounded-full"
+                            style={{
+                              width: `${course.progress || 0}%`,
+                            }}
+                          />
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() =>
+                          router.push(
+                            `/components/dashboard/programs/${course.programId}/courses/${course.id}`
+                          )
+                        }
+                        className="w-full mt-4 bg-black hover:bg-gray-800 text-white py-3 rounded-2xl text-sm font-medium transition"
+                      >
+                        Continue Course
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* ANNOUNCEMENTS */}
+            <div className="bg-white rounded-3xl p-6 shadow-sm">
+              <div className="flex items-center gap-3 mb-5">
+                <FaBullhorn className="text-[var(--primary)]" />
+
+                <h2 className="text-xl font-bold">
+                  Announcements
+                </h2>
+              </div>
+
+              <div className="space-y-4">
+                {announcements.length === 0 ? (
+                  <p className="text-gray-500 text-sm">
+                    No announcements available
+                  </p>
+                ) : (
+                  announcements.map((item, index) => (
+                    <div
+                      key={index}
+                      className="border border-gray-100 rounded-2xl p-4 hover:bg-gray-50 transition"
+                    >
+                      <h3 className="font-semibold text-gray-800">
+                        {item.title}
+                      </h3>
+
+                      <p className="text-sm text-gray-600 mt-1">
+                        {item.message}
+                      </p>
+
+                      <p className="text-xs text-gray-400 mt-3">
+                        {new Date(
+                          item.createdAt
+                        ).toLocaleDateString()}
+                      </p>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT */}
+          <div className="space-y-6">
+            {/* LIVE CLASSES */}
+            <div className="bg-white rounded-3xl p-6 shadow-sm">
+              <div className="flex items-center gap-3 mb-5">
+                <FaCalendarAlt className="text-[var(--primary)]" />
+
+                <h2 className="text-xl font-bold">
+                  Upcoming Classes
+                </h2>
+              </div>
+
+              <div className="space-y-4">
+                {upcomingClasses.length === 0 ? (
+                  <p className="text-gray-500 text-sm">
+                    No upcoming classes
+                  </p>
+                ) : (
+                  upcomingClasses.map((item, index) => (
+                    <div
+                      key={index}
+                      className="border border-gray-100 rounded-2xl p-4"
+                    >
+                      <h3 className="font-semibold text-sm">
+                        {item.title}
+                      </h3>
+
+                      <p className="text-xs text-gray-500 mt-1">
+                        {new Date(
+                          item.scheduledAt
+                        ).toLocaleString()}
+                      </p>
+
+                      <button className="mt-3 bg-[var(--primary)] text-white px-4 py-2 rounded-xl text-xs">
+                        Join Class
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+
+            {/* ASSIGNMENTS */}
+            <div className="bg-white rounded-3xl p-6 shadow-sm">
+              <h2 className="text-xl font-bold mb-5">
+                Pending Assignments
+              </h2>
+
+              <div className="space-y-3">
+                {pendingAssignments.length === 0 ? (
+                  <p className="text-sm text-gray-500">
+                    No pending assignments
+                  </p>
+                ) : (
+                  pendingAssignments.map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between bg-red-50 rounded-2xl p-4"
+                    >
+                      <div>
+                        <h3 className="text-sm font-semibold">
+                          {item.title}
+                        </h3>
+
+                        <p className="text-xs text-red-500 mt-1">
+                          Pending Submission
+                        </p>
+                      </div>
+
+                      <button className="text-xs bg-red-500 text-white px-3 py-2 rounded-xl">
+                        Submit
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* COURSES */}
+      {tab === "courses" && (
+        <div className="mt-6 space-y-8">
+          {programs.map((program, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-3xl p-6 shadow-sm"
             >
-              Update
-            </button>
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">
+                {program}
+              </h2>
 
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {enrolledCourses
+                  .filter((course) => course.program === program)
+                  .map((course, i) => (
+                    <div
+                      key={i}
+                      className="rounded-3xl overflow-hidden bg-gray-50 hover:shadow-xl transition"
+                    >
+                      <div className="relative h-52">
+                        <Image
+                          fill
+                          src={
+                            course.coverImage ||
+                            "/student cource.jpg"
+                          }
+                          alt={course.name}
+                          className="object-cover"
+                        />
+                      </div>
+
+                      <div className="p-5">
+                        <div className="flex justify-between items-start gap-3">
+                          <h3 className="font-bold text-gray-800">
+                            {course.name}
+                          </h3>
+
+                          <span className="bg-[var(--primary)]/10 text-[var(--primary)] text-xs px-2 py-1 rounded-xl">
+                            {course.progress || 0}%
+                          </span>
+                        </div>
+
+                        <p className="text-sm text-gray-500 mt-2">
+                          Instructor: {course.instructor}
+                        </p>
+
+                        <div className="mt-4 w-full h-2 bg-gray-200 rounded-full">
+                          <div
+                            className="h-2 rounded-full bg-[var(--primary)]"
+                            style={{
+                              width: `${course.progress || 0}%`,
+                            }}
+                          />
+                        </div>
+
+                        <button
+                          onClick={() =>
+                            router.push(
+                              `/components/dashboard/programs/${course.programId}/courses/${course.id}`
+                            )
+                          }
+                          className="w-full mt-5 bg-black hover:bg-gray-800 text-white py-3 rounded-2xl font-medium transition"
+                        >
+                          View Course
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* PROGRESS */}
+      {tab === "progress" && (
+        <div className="mt-6 bg-white rounded-3xl p-6 shadow-sm">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">
+            Learning Progress
+          </h2>
+
+          <div className="bg-gray-100 rounded-3xl p-6">
+            <div className="flex justify-between mb-3">
+              <span className="font-medium">
+                Overall Completion
+              </span>
+
+              <span className="font-bold text-[var(--primary)]">
+                {overallProgress}%
+              </span>
+            </div>
+
+            <div className="w-full bg-gray-200 h-5 rounded-full overflow-hidden">
+              <div
+                className="bg-gradient-to-r from-[var(--primary)] to-indigo-600 h-5 rounded-full"
+                style={{
+                  width: `${overallProgress}%`,
+                }}
+              />
+            </div>
+          </div>
+
+          <div className="mt-8 space-y-5">
+            {enrolledCourses.map((course, index) => (
+              <div
+                key={index}
+                className="border border-gray-100 rounded-2xl p-5"
+              >
+                <div className="flex justify-between mb-3">
+                  <div>
+                    <h3 className="font-semibold text-gray-800">
+                      {course.name}
+                    </h3>
+
+                    <p className="text-sm text-gray-500">
+                      {course.program}
+                    </p>
+                  </div>
+
+                  <span className="font-bold text-[var(--primary)]">
+                    {course.progress || 0}%
+                  </span>
+                </div>
+
+                <div className="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
+                  <div
+                    className="bg-green-500 h-3 rounded-full"
+                    style={{
+                      width: `${course.progress || 0}%`,
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       )}

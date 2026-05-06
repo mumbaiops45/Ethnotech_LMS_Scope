@@ -379,6 +379,11 @@ export default function DashboardLayout({ children }) {
         icon: <FaUser />,
         path: "/instructor/batch/add-students",
       },
+        {
+        name: "Add Courses to Batch",
+        icon: <FaUser />,
+        path: "/instructor/batch/assign-courses",
+      },
     ],
   },
 
