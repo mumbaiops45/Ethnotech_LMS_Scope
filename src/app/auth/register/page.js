@@ -77,12 +77,12 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
+    <div className="h-screen flex bg-gray-50 overflow-hidden">
       {/* LEFT SIDE */}
-      
-<div className="flex-1 flex items-center justify-center px-6 py-10">
+
+      <div className="flex-1 flex items-center justify-center px-6 py-6 h-full">
         <div className="w-full max-w-md">
-          <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8">
+          <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6">
             {/* Header */}
             <div className="mb-8">
               <p className="text-sm uppercase tracking-[0.2em] text-[var(--primary)] font-semibold">
@@ -129,11 +129,10 @@ export default function RegisterPage() {
                     clearFieldError("email");
                   }}
                   autoComplete="email"
-                  className={`w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] ${
-                    errors.email
-                      ? "border-red-400"
-                      : "border-gray-300"
-                  }`}
+                  className={`w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] ${errors.email
+                    ? "border-red-400"
+                    : "border-gray-300"
+                    }`}
                 />
 
                 {errors.email && (
@@ -163,11 +162,10 @@ export default function RegisterPage() {
                     clearFieldError("mobile");
                   }}
                   autoComplete="tel"
-                  className={`w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] ${
-                    errors.mobile
-                      ? "border-red-400"
-                      : "border-gray-300"
-                  }`}
+                  className={`w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] ${errors.mobile
+                    ? "border-red-400"
+                    : "border-gray-300"
+                    }`}
                 />
 
                 {errors.mobile && (
@@ -192,11 +190,10 @@ export default function RegisterPage() {
                     clearFieldError("password");
                   }}
                   autoComplete="new-password"
-                  className={`w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] ${
-                    errors.password
-                      ? "border-red-400"
-                      : "border-gray-300"
-                  }`}
+                  className={`w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] ${errors.password
+                    ? "border-red-400"
+                    : "border-gray-300"
+                    }`}
                 />
 
                 {errors.password ? (
@@ -246,7 +243,7 @@ export default function RegisterPage() {
 
             <div>
               <h2 className="text-xl font-bold">Ethnotech</h2>
-             
+
             </div>
           </div>
 

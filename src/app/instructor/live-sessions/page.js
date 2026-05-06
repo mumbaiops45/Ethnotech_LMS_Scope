@@ -5,6 +5,15 @@ import CreateLiveclass from "../../components/createLiveclass";
 import { useLiveSession } from "../../../../hooks/useLiveSession";
 import { useRouter } from "next/navigation";
 
+const cardColors = [
+  "from-blue-100 to-blue-50 border-blue-200",
+  "from-green-100 to-green-50 border-green-200",
+  "from-purple-100 to-purple-50 border-purple-200",
+  "from-orange-100 to-orange-50 border-orange-200",
+  "from-pink-100 to-pink-50 border-pink-200",
+  "from-cyan-100 to-cyan-50 border-cyan-200",
+];
+
 import {
   FaPlus,
   FaVideo,
@@ -91,7 +100,10 @@ const Page = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
 
-          {sessions.map((session) => {
+          {sessions.map((session, index) => {
+
+            const cardStyle =
+              cardColors[index % cardColors.length];
 
             const safeDate = session?.scheduledAt
               ? new Date(session.scheduledAt).toLocaleString()
@@ -100,7 +112,7 @@ const Page = () => {
             return (
               <div
                 key={session._id}
-                className="bg-gradient-to-br from-[var(--primary)]/10 to-gray-100 border border-[var(--primary)]/20 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden"
+                className={`bg-gradient-to-br ${cardStyle} rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden`}
               >
 
                 <div className="p-4">
@@ -222,13 +234,12 @@ const Page = () => {
                       </div>
 
                       <span
-                        className={`font-semibold ${
-                          session.status === "completed"
+                        className={`font-semibold ${session.status === "completed"
                             ? "text-green-600"
                             : session.status === "cancelled"
-                            ? "text-red-500"
-                            : "text-orange-500"
-                        }`}
+                              ? "text-red-500"
+                              : "text-orange-500"
+                          }`}
                       >
                         {session.status || "Active"}
                       </span>
@@ -386,8 +397,8 @@ const Page = () => {
                       const datePart = editData.scheduledAt
                         ? editData.scheduledAt.split("T")[0]
                         : new Date()
-                            .toISOString()
-                            .split("T")[0];
+                          .toISOString()
+                          .split("T")[0];
 
                       handleEditChange(
                         "scheduledAt",

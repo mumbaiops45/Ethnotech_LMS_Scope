@@ -162,7 +162,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
+    <div className="h-screen flex overflow-hidden bg-gray-50">
       {/* LEFT SIDE */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-[var(--primary)]">
         <div className="absolute inset-0 bg-black/20"></div>
@@ -222,17 +222,17 @@ export default function LoginPage() {
       </div>
 
       {/* RIGHT SIDE */}
-      <div className="flex-1 flex items-center justify-center px-6 py-10">
+      <div className="flex-1 flex items-center justify-center px-6 py-6 overflow-hidden">
         <div className="w-full max-w-md">
           {/* Card */}
-          <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8">
+          <div className="md:h-[90vh] bg-white rounded-3xl shadow-xl border border-gray-100 p-8">
             {/* Header */}
-            <div className="mb-8">
+            <div className="mb-3">
               <p className="text-sm uppercase tracking-[0.2em] text-[var(--primary)] font-semibold">
                 Welcome Back
               </p>
 
-              <h1 className="text-4xl font-bold text-gray-800 mt-2">
+              <h1 className="text-3xl font-bold text-gray-800 mt-2">
                 Sign In
               </h1>
 
@@ -242,7 +242,7 @@ export default function LoginPage() {
             </div>
 
             {/* Toggle */}
-            <div className="bg-gray-100 rounded-xl p-1 flex mb-6 relative">
+            <div className="bg-gray-100 rounded-xl p-1 flex mb-3 relative">
               <div
                 className={`absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-lg bg-[var(--primary)] transition-all duration-300 ${
                   mode === "email" ? "left-1" : "left-1/2"
@@ -299,7 +299,7 @@ export default function LoginPage() {
 
             {/* EMAIL LOGIN */}
             {mode === "email" && (
-              <div className="space-y-5">
+              <div className="space-y-2">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Email Address
@@ -440,7 +440,7 @@ export default function LoginPage() {
             <button
               onClick={handleLogin}
               disabled={loading}
-              className="w-full mt-8 bg-[var(--primary)] hover:opacity-90 text-white py-3.5 rounded-xl font-medium transition disabled:opacity-50"
+              className="w-full mt-4 bg-[var(--primary)] hover:opacity-90 text-white py-3.5 rounded-xl font-medium transition disabled:opacity-50"
             >
               {loading ? "Please wait..." : "Continue"}
             </button>
