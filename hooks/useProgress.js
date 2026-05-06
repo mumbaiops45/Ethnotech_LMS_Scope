@@ -12,10 +12,11 @@ export const useMyProgress = (courseId) => {
     } = useProgressStore();
 
     useEffect(() => {
+         console.log("HOOK courseId:", courseId);
         if (courseId) {
             getMyProgress(courseId);
         }
-    }, [courseId , getMyProgress]);
+    }, [courseId ]);
 
     return {
         myProgress,
@@ -37,7 +38,7 @@ export const useStudentProgress = (studentId, courseId) => {
         if (studentId && courseId) {
             getStudentProgress(studentId, courseId);
         }
-    }, [studentId, courseId , studentProgressLoading]);
+    }, [studentId, courseId, getStudentProgress]);
 
     return {
         studentProgress,

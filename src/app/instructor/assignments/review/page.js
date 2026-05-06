@@ -14,8 +14,7 @@ const Page = () => {
 
   return (
     <div>
-      <h2>Pending Assignments</h2>
-
+    
       {pending?.length === 0 && <p>No pending submissions</p>}
 
       {pending?.map((item) => (
