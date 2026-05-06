@@ -1,7 +1,7 @@
 import { useLiveSessionStore } from "../store/livesession.store";
 
 export const useLiveSession = () => {
-    const { sessions, singleSession, loading, error, fetchSessions, fetchSingleSession , createSession , updateSession , deleteSession } = useLiveSessionStore();
+    const { sessions, singleSession, loading, error, fetchSessions, fetchSingleSession , createSession , updateSession , cancelSession , deleteSession } = useLiveSessionStore();
 
     return {
     sessions,
@@ -12,6 +12,7 @@ export const useLiveSession = () => {
     fetchSingleSession,
     createSession,
     updateSession,
+    cancelSession,
     deleteSession,
   };
 

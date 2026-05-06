@@ -29,9 +29,9 @@ export const updateLiveSessionService = async (id, data) => {
     return res?.data ?? res;
 }
 
-export const cancelLiveSessionService = async (id) => {
-    const res = await cancelLiveSession(id);
-    return res?.data ?? res;
+
+export const cancelLiveSessionService = async (id, data = {}) => {
+    return (await cancelLiveSession(id, data))?.data;
 }
 
 export const deleteLiveSessionService = async (id) => {

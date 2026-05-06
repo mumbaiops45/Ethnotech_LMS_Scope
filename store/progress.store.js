@@ -10,7 +10,6 @@ export const useProgressStore = create((set , get) => ({
     studentProgress: null,
     pending: null,
 
-    // loading: false,
     myProgressLoading: false,
     studentProgressLoading: false,
     pendingLoading: false,
@@ -19,8 +18,8 @@ export const useProgressStore = create((set , get) => ({
     error: null,
 
     getMyProgress: async (courseId) => {
-        // set({loading: true , error: null});
-         set({ myProgressLoading: true, error: null });
+         console.log("STORE CALL:", courseId);
+        set({ myProgressLoading: true, error: null });
 
         try {
             const data = await getMyProgressService(courseId);
@@ -28,6 +27,7 @@ export const useProgressStore = create((set , get) => ({
             set({myProgress: data, myProgressLoading: false});
             return data;
         } catch (error) {
+            console.log("STORE ERROR:", error);
             set({error: error.message , myProgressLoading: false});
         }
     },

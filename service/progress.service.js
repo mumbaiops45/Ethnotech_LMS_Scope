@@ -1,10 +1,9 @@
-// import {getMyProgress , updateLessonProgress ,getPending , getStudentProgress,  } from "../api/auth/progress.api";
-import { getMyProgress , updateLessonProgress , getPending,getStudentProgress  } from "../api/progress.api";
+import { getMyProgress , updateLessonProgress , getPending,getStudentProgress  } from "../api/auth/progress.api";
 
 
 export const getMyProgressService = async (courseId) => {
     const res = await getMyProgress(courseId);
-  console.log("SERVICE RESPONSE:", res);
+    console.log("SERVICE RESPONSE:", res);
     return res;
 }
 

@@ -6,7 +6,7 @@ export const createLiveSession = async (data) => {
 }
 
 export const getLiveSession = async (params) => {
-    const response = await api.get("/live-sessions", { params }); // ✅ fixed
+    const response = await api.get("/live-sessions", { params }); 
     return response.data;
 }
 
@@ -26,7 +26,7 @@ export const cancelLiveSession = async (id, data) => {
 }
 
 export const deleteLiveSession = async (id) => {
-    const response = await api.delete(`/live-sessions/${id}`); // ✅ actual delete
+    const response = await api.delete(`/live-sessions/${id}`); 
     return response.data;
 }
 
