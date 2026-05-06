@@ -459,7 +459,7 @@ export default function DashboardLayout({ children }) {
   }
 
   return (
-    <div className="flex min-h-screen md:h-screen">
+    <div className="flex h-screen">
       {/* Mobile overlay/backdrop */}
       {sidebarOpen && (
         <div
@@ -548,12 +548,12 @@ export default function DashboardLayout({ children }) {
       {/* MAIN CONTENT */}
       <div className="flex-1 flex flex-col bg-gray-100 w-[100%]">
         {/* HEADER */}
-        <header className="bg-[var(--primary)] shadow-sm px-6 py-3 flex justify-between md:justify-end items-center sticky md:static top-0 z-50">
+        <header className="bg-[var(--primary)] shadow-sm px-6 py-3 flex justify-between md:justify-end items-center">
           <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
+            onClick={() => setSidebarOpen(true)}
             className="text-white text-2xl md:hidden"
           >
-            {sidebarOpen?<FiX />:<FiMenu />}
+            <FiMenu />
           </button>
           <div className="flex items-center gap-5">
             {/* Notifications */}
