@@ -4,7 +4,7 @@ import {
   authLoginService, 
   sendOtpService, 
   verifyOtpService,
-  getProfileService      // ✅ import from service, not direct API
+  getProfileService       
 } from '../service/login.service';
 
 export const useAuthStore = create(

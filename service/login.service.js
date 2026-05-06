@@ -55,7 +55,12 @@ export const deactivateAdmin = (id) => api.patch(`/admin/${id}/deactivate`, {});
 
 // ================= STUDENT MANAGEMENT =================
 const STUDENT_BASE = "/student/admin/students";
-export const getStudents = () => api.get(STUDENT_BASE);
+// export const getStudents = () => api.get(STUDENT_BASE);
+// ================= STUDENT MANAGEMENT =================
+export const getStudents = async () => {
+  const res = await api.get(STUDENT_BASE);
+  return res.data; // ✅ array of students
+};
 export const getStudentById = (id) => api.get(`${STUDENT_BASE}/${id}`);
 export const updateStudent = (id, data) => api.put(`${STUDENT_BASE}/${id}`, data);
 export const deleteStudent = (id) => api.delete(`${STUDENT_BASE}/${id}`);
@@ -91,6 +96,10 @@ export const cancelSession = (id) => api.patch(`/live-sessions/${id}/cancel`, {}
 const COURSE_BASE = "/courses";
 
 export const getCourses = () => api.get(COURSE_BASE);
+export const getCoursesAdmin = async () => {
+  const res = await api.get("/courses/admin/all");   // ✅ quotes and leading slash
+  return res.data;
+};
 export const getCourseById = (id) => api.get(`${COURSE_BASE}/${id}`);
 export const createCourse = (data) => api.post(COURSE_BASE, data);
 export const updateCourse = (id, data) => api.put(`${COURSE_BASE}/${id}`, data);
@@ -100,14 +109,21 @@ export const reorderModules = (courseId, orderArray) => api.put(`${COURSE_BASE}/
 
 // ================= LESSON MANAGEMENT =================
 export const createLesson = (courseId, moduleId, data) =>
-  api.post(`/${courseId}/module/${moduleId}/lesson`, data);
+  api.post(`/lesson/${courseId}/module/${moduleId}/lesson`, data);
+
 export const updateLesson = (lessonId, data) =>
   api.put(`/lesson/${lessonId}`, data);
+
 export const deleteLesson = (lessonId) =>
   api.delete(`/lesson/${lessonId}`);
+
 export const reorderLessons = (courseId, moduleId, orderArray) =>
-  api.put(`/${courseId}/module/${moduleId}/lesson/reorder`, { order: orderArray });
+  api.put(`/lesson/${courseId}/module/${moduleId}/lesson/reorder`, { order: orderArray });
   
+export const getAllLessons = async (params) => {
+    const response = await api.get("/lessons", { params });
+    return response.data;
+};
 // ================= ANNOUNCEMENT MANAGEMENT =================
 const ANNOUNCEMENT_BASE = "/announcements";
 
