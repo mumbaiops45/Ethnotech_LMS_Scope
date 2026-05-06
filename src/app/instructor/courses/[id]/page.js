@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { getCourseById,  addModule,createLesson,updateLesson,deleteLesson, } from "../../../../../service/login.service";
+// import { getCourseById,  addModule,createLesson,updateLesson,deleteLesson, } from "../../../../../service/login.service";
+import { getCourseById ,addModule , createLesson , updateLesson ,  deleteLesson } from "../../../../../service/login.service";
 import { FaArrowLeft, FaPlus, FaTrash, FaVideo } from "react-icons/fa";
 
 export default function InstructorCourseDetailPage() {

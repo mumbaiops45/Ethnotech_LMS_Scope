@@ -758,24 +758,29 @@ export default function UsersPage() {
         </button>
       </div>
 
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-       <h1 className="text-2xl font-bold text-[var(--primary)]">Admin Management</h1>
-        <div className="flex gap-3 w-full sm:w-auto">
-          <input
-            type="text"
-            placeholder="Search by name, email or mobile..."
-           className="border rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-[var(--primary)] w-full sm:w-64" 
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <button
-            onClick={openAddModal}
-           className="bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-white px-4 py-2 rounded-lg flex items-center gap-2"
-          >
-            + Add Admin
-          </button>
-        </div>
-      </div>
+      {/* Top Section */}
+<div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
+  <h1 className="text-xl sm:text-2xl font-bold text-[var(--primary)]">
+    Admin Management
+  </h1>
+
+  <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+    <input
+      type="text"
+      placeholder="Search by name, email or mobile..."
+      className="border rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-[var(--primary)] w-full sm:w-64"
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+    />
+
+    <button
+      onClick={openAddModal}
+      className="bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 whitespace-nowrap"
+    >
+      + Add Admin
+    </button>
+  </div>
+</div>
 
       {loading ? (
         <div className="text-center py-10 text-gray-500">Loading admins...</div>
@@ -783,85 +788,181 @@ export default function UsersPage() {
         <div className="text-center py-10 text-gray-500">No admins found</div>
       ) : (
         <>
-          <div className="overflow-x-auto bg-white rounded-xl shadow-md">
-            <table className="min-w-full text-sm text-left">
-              <thead className="bg-[var(--primary)] text-white uppercase text-xs">
-                <tr>
-                  <th className="px-4 py-3">#</th>
-                  <th className="px-4 py-3">Full Name</th>
-                  <th className="px-4 py-3">Email</th>
-                  <th className="px-4 py-3">Mobile</th>
-                  <th className="px-4 py-3">Role</th>
-                  <th className="px-4 py-3">Branch</th>
-                  <th className="px-4 py-3">Gender</th>
-                  {/* <th className="px-4 py-3">Status</th> */}
-                  <th className="px-4 py-3 text-center">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {paginatedAdmins.map((admin, idx) => (
-                  <tr key={admin._id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3">{startIndex + idx + 1}</td>
-                    <td className="px-4 py-3 font-medium">{admin.fullName}</td>
-                    <td className="px-4 py-3">{admin.email}</td>
-                    <td className="px-4 py-3">{admin.mobile || "—"}</td>
-                    <td className="px-4 py-3 capitalize">{admin.role}</td>
-                    <td className="px-4 py-3">{admin.branch || "—"}</td>
-                    <td className="px-4 py-3">{admin.gender || "—"}</td>
-                    {/* <td className="px-4 py-3">
-                      <span className={`px-2 py-1 text-xs rounded-full ${admin.isActive ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
-                        {admin.isActive ? "Active" : "Inactive"}
-                      </span>
-                    </td> */}
-                    <td className="px-4 py-3 text-center space-x-3">
-                      <button onClick={() => openViewModal(admin)} className="text-gray-600 hover:text-gray-800" title="View Details">
-                        <FaEye className="inline" />
-                      </button>
-                      <button onClick={() => openEditModal(admin)} className="text-[var(--primary)] hover:text-[var(--primary)]/80" title="Edit">
-                        <FaEdit className="inline" />
-                      </button>
-                      {/* <button onClick={() => handleDeactivate(admin._id, admin.isActive)} className={admin.isActive ? "text-orange-600" : "text-green-600"} title={admin.isActive ? "Deactivate" : "Activate"}>
-                        {admin.isActive ? <FaToggleOn className="inline text-xl" /> : <FaToggleOff className="inline text-xl" />}
-                      </button> */}
-                      <button onClick={() => handleDelete(admin._id)} className="text-red-600 hover:text-red-800" title="Delete">
-                        <FaTrash className="inline" />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+  {/* Desktop Table */}
+  <div className="hidden md:block overflow-x-auto bg-white rounded-xl shadow-md">
+    <table className="min-w-full text-sm text-left">
+      <thead className="bg-[var(--primary)] text-white uppercase text-xs">
+        <tr>
+          <th className="px-4 py-3">#</th>
+          <th className="px-4 py-3">Full Name</th>
+          <th className="px-4 py-3">Email</th>
+          <th className="px-4 py-3">Mobile</th>
+          <th className="px-4 py-3">Role</th>
+          <th className="px-4 py-3">Branch</th>
+          <th className="px-4 py-3">Gender</th>
+          <th className="px-4 py-3 text-center">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody className="divide-y divide-gray-100">
+        {paginatedAdmins.map((admin, idx) => (
+          <tr key={admin._id} className="hover:bg-gray-50">
+            <td className="px-4 py-3">{startIndex + idx + 1}</td>
+            <td className="px-4 py-3 font-medium">{admin.fullName}</td>
+            <td className="px-4 py-3">{admin.email}</td>
+            <td className="px-4 py-3">{admin.mobile || "—"}</td>
+            <td className="px-4 py-3 capitalize">{admin.role}</td>
+            <td className="px-4 py-3">{admin.branch || "—"}</td>
+            <td className="px-4 py-3">{admin.gender || "—"}</td>
+
+            <td className="px-4 py-3 text-center space-x-3">
+              <button
+                onClick={() => openViewModal(admin)}
+                className="text-gray-600 hover:text-gray-800"
+                title="View Details"
+              >
+                <FaEye className="inline" />
+              </button>
+
+              <button
+                onClick={() => openEditModal(admin)}
+                className="text-[var(--primary)] hover:text-[var(--primary)]/80"
+                title="Edit"
+              >
+                <FaEdit className="inline" />
+              </button>
+
+              <button
+                onClick={() => handleDelete(admin._id)}
+                className="text-red-600 hover:text-red-800"
+                title="Delete"
+              >
+                <FaTrash className="inline" />
+              </button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  {/* Mobile Cards */}
+  <div className="grid grid-cols-1 gap-4 md:hidden">
+    {paginatedAdmins.map((admin, idx) => (
+      <div
+        key={admin._id}
+        className="bg-white rounded-xl shadow-md p-4 border border-gray-100"
+      >
+        <div className="flex justify-between items-start mb-3">
+          <div>
+            <h3 className="font-semibold text-gray-800 text-base">
+              {admin.fullName}
+            </h3>
+
+            <p className="text-sm text-gray-500">
+              #{startIndex + idx + 1}
+            </p>
           </div>
 
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex justify-center items-center gap-2 mt-6">
-              <button
-                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                disabled={currentPage === 1}
-                className="px-3 py-1 border rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Previous
-              </button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <button
-                  key={page}
-                  onClick={() => setCurrentPage(page)}
-                  className={`px-3 py-1 border rounded-lg transition ${currentPage === page ? "bg-[var(--primary)] text-white" : "hover:bg-gray-50"} cursor-pointer`}
-                >
-                  {page}
-                </button>
-              ))}
-              <button
-                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                disabled={currentPage === totalPages}
-                className="px-3 py-1 border rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Next
-              </button>
-            </div>
-          )}
-        </>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => openViewModal(admin)}
+              className="text-gray-600 hover:text-gray-800"
+            >
+              <FaEye />
+            </button>
+
+            <button
+              onClick={() => openEditModal(admin)}
+              className="text-[var(--primary)] hover:text-[var(--primary)]/80"
+            >
+              <FaEdit />
+            </button>
+
+            <button
+              onClick={() => handleDelete(admin._id)}
+              className="text-red-600 hover:text-red-800"
+            >
+              <FaTrash />
+            </button>
+          </div>
+        </div>
+
+        <div className="space-y-2 text-sm">
+          <div className="flex justify-between gap-3">
+            <span className="text-gray-500">Email</span>
+            <span className="text-gray-800 text-right break-all">
+              {admin.email}
+            </span>
+          </div>
+
+          <div className="flex justify-between gap-3">
+            <span className="text-gray-500">Mobile</span>
+            <span className="text-gray-800">
+              {admin.mobile || "—"}
+            </span>
+          </div>
+
+          <div className="flex justify-between gap-3">
+            <span className="text-gray-500">Role</span>
+            <span className="text-gray-800 capitalize">
+              {admin.role}
+            </span>
+          </div>
+
+          <div className="flex justify-between gap-3">
+            <span className="text-gray-500">Branch</span>
+            <span className="text-gray-800">
+              {admin.branch || "—"}
+            </span>
+          </div>
+
+          <div className="flex justify-between gap-3">
+            <span className="text-gray-500">Gender</span>
+            <span className="text-gray-800">
+              {admin.gender || "—"}
+            </span>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  {/* Pagination */}
+  {totalPages > 1 && (
+    <div className="flex flex-wrap justify-center items-center gap-2 mt-6">
+      <button
+        onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+        disabled={currentPage === 1}
+        className="px-3 py-1 border rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+      >
+        Previous
+      </button>
+
+      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+        <button
+          key={page}
+          onClick={() => setCurrentPage(page)}
+          className={`px-3 py-1 border rounded-lg transition text-sm ${
+            currentPage === page
+              ? "bg-[var(--primary)] text-white"
+              : "hover:bg-gray-50"
+          }`}
+        >
+          {page}
+        </button>
+      ))}
+
+      <button
+        onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+        disabled={currentPage === totalPages}
+        className="px-3 py-1 border rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+      >
+        Next
+      </button>
+    </div>
+  )}
+</>
       )}
 
       {/* Add/Edit Modal (unchanged) */}

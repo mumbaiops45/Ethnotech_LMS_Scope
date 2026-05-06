@@ -5,8 +5,10 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 
-import { getCertificateTemplates,createCertificateTemplate, updateCertificateTemplate,
-  deleteCertificateTemplate } from "../../../../service/certificate-templates.service";
+import {
+  getCertificateTemplates, createCertificateTemplate, updateCertificateTemplate,
+  deleteCertificateTemplate
+} from "../../../../service/certificate-templates.service";
 import {
   FiPlus,
   FiEdit2,
@@ -17,7 +19,7 @@ import {
   FiAward,
   FiHome,
   FiUser,
-  FiBookOpen 
+  FiBookOpen
 } from "react-icons/fi";
 
 export default function CertificateTemplatesPage() {
@@ -204,63 +206,70 @@ export default function CertificateTemplatesPage() {
             {templates.map((template) => (
               <div
                 key={template._id}
-                className="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden"
+                className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden"
               >
                 {/* Top Bar */}
-                <div className="h-1.5 bg-[var(--primary)]"></div>
+                <div className="h-1 bg-[var(--primary)]"></div>
 
-                <div className="p-5">
+                <div className="p-4">
                   {/* Header */}
                   <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-800 line-clamp-1">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-base font-semibold text-gray-800 truncate">
                         {template.name}
                       </h3>
-                      <p className="text-sm text-gray-500 mt-1 flex items-center gap-2">
-                        <FiBookOpen
-                          size={13}
-                          className="text-[var(--primary)]"
-                        />
-                        {template.program || "All Programs"}
-                      </p>
-                    </div>
 
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => openEditModal(template)}
-                        className="p-2 rounded-lg text-[var(--primary)] hover:bg-[var(--primary)]/10 transition"
-                        title="Edit"
-                      >
-                        <FiEdit2 size={16} />
-                      </button>
+                      <div className="flex items-center justify-between gap-3 mt-1">
+                        <p className="text-sm text-gray-500 flex items-center gap-2 min-w-0">
+                          <FiBookOpen
+                            size={13}
+                            className="text-[var(--primary)] shrink-0"
+                          />
 
-                      <button
-                        onClick={() => handleDelete(template._id)}
-                        className="p-2 rounded-lg text-red-500 hover:bg-red-50 transition"
-                        title="Delete"
-                      >
-                        <FiTrash2 size={16} />
-                      </button>
-                    </div>
-                  </div>
+                          <span className="truncate">
+                            {template.program || "All Programs"}
+                          </span>
+                        </p>
 
-                  {/* Logo */}
-                  {template.logoUrl && (
-                    <div className="mt-5 flex justify-center">
-                      <div className="bg-gray-50 border border-gray-100 rounded-xl p-3 w-full flex justify-center">
-                        <img
-                          src={template.logoUrl}
-                          alt="logo"
-                          className="h-14 object-contain"
-                        />
+                        {/* Actions shifted here */}
+                        <div className="flex items-center gap-1 shrink-0">
+                          <button
+                            onClick={() => openEditModal(template)}
+                            className="p-1.5 rounded-md text-[var(--primary)] hover:bg-[var(--primary)]/10 transition"
+                            title="Edit"
+                          >
+                            <FiEdit2 size={15} />
+                          </button>
+
+                          <button
+                            onClick={() => handleDelete(template._id)}
+                            className="p-1.5 rounded-md text-red-500 hover:bg-red-50 transition"
+                            title="Delete"
+                          >
+                            <FiTrash2 size={15} />
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  )}
+
+                    {/* Logo shifted top right */}
+                    {template.logoUrl && (
+                      <div className="shrink-0">
+                        <div className="bg-gray-50 border border-gray-100 rounded-lg p-2 w-16 h-16 flex items-center justify-center">
+                          <img
+                            src={template.logoUrl}
+                            alt="logo"
+                            className="h-10 w-10 object-contain"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
 
                   {/* Details */}
-                  <div className="mt-5 border-t border-gray-100 pt-4 space-y-3">
-                    <div className="flex justify-between gap-4">
-                      <span className="text-sm text-gray-500">
+                  <div className="mt-4 border-t border-gray-100 pt-3 space-y-2">
+                    <div className="flex justify-between gap-3">
+                      <span className="text-sm text-gray-500 shrink-0">
                         Institution
                       </span>
 
@@ -269,8 +278,8 @@ export default function CertificateTemplatesPage() {
                       </span>
                     </div>
 
-                    <div className="flex justify-between gap-4">
-                      <span className="text-sm text-gray-500 flex items-center gap-1">
+                    <div className="flex justify-between gap-3">
+                      <span className="text-sm text-gray-500 flex items-center gap-1 shrink-0">
                         <FiUser size={12} />
                         Signatory
                       </span>
@@ -281,9 +290,9 @@ export default function CertificateTemplatesPage() {
                     </div>
 
                     {template.isDefault && (
-                      <div className="pt-2">
-                        <span className="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium rounded-full bg-[var(--primary)]/10 text-[var(--primary)]">
-                          <FiAward size={12} />
+                      <div className="pt-1">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded-full bg-[var(--primary)]/10 text-[var(--primary)]">
+                          <FiAward size={11} />
                           Default Template
                         </span>
                       </div>

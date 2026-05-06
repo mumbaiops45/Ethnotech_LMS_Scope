@@ -157,7 +157,7 @@ export default function DashboardLayout({ children }) {
   }
 
   return (
-    <div className="flex h-screen">
+    <div className="flex min-h-screen md:h-screen">
       {/* Mobile overlay/backdrop */}
       {sidebarOpen && (
         <div
@@ -169,7 +169,7 @@ export default function DashboardLayout({ children }) {
       {/* Sidebar - responsive */}
       <aside
         className={`
-          fixed top-0 left-0 z-50 h-screen w-64
+          fixed top-0 left-0 z-50 h-[100%] w-80 md:w-64
           bg-[var(--primary)] text-white flex flex-col p-5
           transition-transform duration-300
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
@@ -195,7 +195,7 @@ export default function DashboardLayout({ children }) {
                     onClick={() => toggleMenu(item.key || item.name)}
                     className="w-full flex items-center justify-between px-3 py-2 rounded hover:bg-white/10 transition"
                   >
-                    <span className="flex items-center gap-3">
+                    <span className="md:text-sm flex items-center gap-3">
                       {item.icon}
                       {item.name}
                     </span>
@@ -215,7 +215,7 @@ export default function DashboardLayout({ children }) {
                           key={sub.path}
                           href={sub.path}
                           onClick={() => setSidebarOpen(false)}
-                          className={`flex items-center gap-3 px-3 py-2 rounded transition ${pathname === sub.path ? "bg-white/20" : "hover:bg-white/10"
+                          className={`md:text-xs  flex items-center gap-3 px-3 py-2 rounded transition ${pathname === sub.path ? "bg-white/20" : "hover:bg-white/10"
                             }`}
                         >
                           {sub.icon}
@@ -230,7 +230,7 @@ export default function DashboardLayout({ children }) {
                   <Link
                     href={item.path}
                     onClick={() => setSidebarOpen(false)}
-                    className={`flex items-center gap-3 px-3 py-2 rounded transition ${pathname === item.path ? "bg-white/20" : "hover:bg-white/10"
+                    className={`md:text-sm flex items-center gap-3 px-3 py-2 rounded transition ${pathname === item.path ? "bg-white/20" : "hover:bg-white/10"
                       }`}
                   >
                     {item.icon}
@@ -244,14 +244,14 @@ export default function DashboardLayout({ children }) {
       </aside>
 
       {/* MAIN CONTENT */}
-      <div className="flex-1 flex flex-col bg-gray-100">
+      <div className="flex-1 flex flex-col bg-gray-100 w-[100%]">
         {/* HEADER */}
-        <header className="bg-[var(--primary)] shadow-sm px-6 py-3 flex justify-between md:justify-end items-center">
+        <header className="bg-[var(--primary)] shadow-sm px-6 py-3 flex justify-between md:justify-end items-center sticky md:static top-0 z-50">
           <button
-            onClick={() => setSidebarOpen(true)}
+            onClick={() => setSidebarOpen(!sidebarOpen)}
             className="text-white text-2xl md:hidden"
           >
-            <FiMenu />
+            {sidebarOpen?<FiX />:<FiMenu />}
           </button>
           <div className="flex items-center gap-5">
             {/* Notifications */}
@@ -306,7 +306,7 @@ export default function DashboardLayout({ children }) {
           </div>
         </header>
 
-        <main className="p-6 overflow-y-auto">{children}</main>
+        <main className="p-6 overflow-y-none md:overflow-y-auto">{children}</main>
       </div>
     </div>
   );
