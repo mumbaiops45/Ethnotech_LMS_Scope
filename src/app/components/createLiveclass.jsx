@@ -65,7 +65,7 @@ const CreateLiveClass = () => {
 
   return (
     <div className="p-6 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-5">Create Live Session</h1>
+     
 
       <form onSubmit={handleSubmit} className="space-y-4">
 
@@ -183,7 +183,7 @@ const CreateLiveClass = () => {
         <button
           type="submit"
           disabled={loading}
-          className="bg-black text-white px-5 py-3 rounded w-full"
+          className="bg-[var(--primary)] text-white px-5 py-3 rounded w-full"
         >
           {loading ? "Creating..." : "Create Session"}
         </button>
