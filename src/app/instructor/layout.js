@@ -402,18 +402,62 @@ export default function DashboardLayout({ children }) {
   },
 ];
 
-  const instructorMenu = [
-    { name: "Dashboard", icon: <FaHome />, path: "/instructor/dashboard" },
-    { name: "My Courses", icon: <FaBook />, path: "/instructor/courses" },
-    { name: "Live Sessions", icon: <FaVideo />, path: "/instructor/live-sessions" },
-    { name: "Assignments to Grade", icon: <FaClipboardList />, path: "/instructor/assignments/review" },
-    { name: "Create Questions", icon: <FaClipboardList />, path: "/instructor/assignments/question" },
-    { name: "Student Progress", icon: <FaChartBar />, path: "/instructor/progress" },
-    { name: "Announcements", icon: <FaBullhorn />, path: "/instructor/announcements" },
-    { name: "Profile", icon: <FaUser />, path: "/instructor/profile" },
-    { name: "User", icon: <FaUsers />, path: "/components/card" },
-  ];
+  // const instructorMenu = [
+  //   { name: "Dashboard", icon: <FaHome />, path: "/instructor/dashboard" },
+  //   { name: "My Courses", icon: <FaBook />, path: "/instructor/courses" },
+  //   { name: "Live Sessions", icon: <FaVideo />, path: "/instructor/live-sessions" },
+  //   { name: "Assignments Create", icon: <FaClipboardList />, path: "/instructor/assignments/assignmentCreate" },
+  //   { name: "Assignments Review", icon: <FaClipboardList />, path: "/instructor/assignments/review" },
+  //   { name: "Create Questions", icon: <FaClipboardList />, path: "/instructor/assignments/question" },
+  //   { name: "Student Progress", icon: <FaChartBar />, path: "/instructor/progress" },
+  //   { name: "Announcements", icon: <FaBullhorn />, path: "/instructor/announcements" },
+  //   { name: "Lessons", icon: <FaUsers />, path: "/instructor/lessons" },
+  //   { name: "Profile", icon: <FaUser />, path: "/instructor/profile" },
+  // ];
+const instructorMenu = [
+  { name: "Dashboard", icon: <FaHome />, path: "/instructor/dashboard" },
 
+  { name: "My Courses", icon: <FaBook />, path: "/instructor/courses" },
+
+  { name: "Live Sessions", icon: <FaVideo />, path: "/instructor/live-sessions" },
+
+  {
+    name: "Assignments",
+    icon: <FaClipboardList />,
+    isMaster: true,
+    key: "assignments",
+    subItems: [
+      {
+        name: "Create Assignment",
+        icon: <FaClipboardList />,
+        path: "/instructor/assignments/assignmentCreate",
+      },
+      {
+        name: "Create Assessment",
+        icon: <FaClipboardList />,
+        path: "/instructor/assignments/assessment",
+      },
+      {
+        name: "Review Assignments",
+        icon: <FaClipboardList />,
+        path: "/instructor/assignments/review",
+      },
+      {
+        name: "Create Questions",
+        icon: <FaClipboardList />,
+        path: "/instructor/assignments/question",
+      },
+    ],
+  },
+
+  { name: "Student Progress", icon: <FaChartBar />, path: "/instructor/progress" },
+
+  { name: "Announcements", icon: <FaBullhorn />, path: "/instructor/announcements" },
+
+  { name: "Lessons", icon: <FaUsers />, path: "/instructor/lessons" },
+
+  { name: "Profile", icon: <FaUser />, path: "/instructor/profile" },
+];
   const studentMenu = [
     { name: "Dashboard", icon: <FaHome />, path: "/student/dashboard" },
     { name: "My Courses", icon: <FaBook />, path: "/student/courses" },
