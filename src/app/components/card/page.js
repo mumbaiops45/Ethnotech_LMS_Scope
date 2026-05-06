@@ -26,14 +26,22 @@ export default function DashboardHome() {
       route: "/components/user",
     },
   ];
+
   return (
-    <div className="p-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-[var(--primary)]">Dashboard</h1>
-        <p className="text-gray-500 mt-1">Welcome back! Manage your platform from here.</p>
+    <div className="p-6 max-sm:p-3">
+      {/* Header */}
+      <div className="mb-6 max-sm:mb-4">
+        <h1 className="text-3xl max-sm:text-xl font-bold text-[var(--primary)]">
+          Dashboard
+        </h1>
+
+        <p className="text-gray-500 mt-1 text-sm max-sm:text-xs">
+          Welcome back! Manage your platform from here.
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {/* Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-sm:gap-4">
         {cards.map((card) => (
           <div
             key={card.title}
@@ -41,24 +49,36 @@ export default function DashboardHome() {
             className={`
               relative overflow-hidden rounded-2xl shadow-lg cursor-pointer
               bg-gradient-to-r ${card.bgGradient}
-              hover:shadow-2xl hover:scale-101 transition-all duration-300
+              hover:shadow-2xl hover:scale-[1.01]
+              transition-all duration-300
             `}
           >
-            {/* Animated background shape */}
-            <div className="absolute top-0 right-0 w-40 h-40 bg-white opacity-10 rounded-full -mr-16 -mt-16"></div>
-            <div className="absolute bottom-0 left-0 w-32 h-32 bg-white opacity-10 rounded-full -ml-12 -mb-12"></div>
+            {/* Background Shapes */}
+            <div className="absolute top-0 right-0 w-32 h-32 max-sm:w-24 max-sm:h-24 bg-white/10 rounded-full -mr-10 -mt-10"></div>
 
-            <div className="relative p-8 text-white">
-              <div className="flex items-center gap-6">
-                <div className="text-5xl mb-4">{card.icon}</div>
-              <h2 className="text-2xl font-bold mb-2">{card.title}</h2>
+            <div className="absolute bottom-0 left-0 w-28 h-28 max-sm:w-20 max-sm:h-20 bg-white/10 rounded-full -ml-10 -mb-10"></div>
+
+            {/* Content */}
+            <div className="relative p-6 max-sm:p-4 text-white">
+              <div className="flex items-center gap-4 max-sm:gap-3">
+                <div className="text-5xl max-sm:text-3xl shrink-0">
+                  {card.icon}
+                </div>
+
+                <h2 className="text-2xl max-sm:text-lg font-bold leading-tight">
+                  {card.title}
+                </h2>
               </div>
-              
-              <p className="text-white/80 text-sm leading-relaxed">{card.description}</p>
 
+              <p className="text-white/80 text-sm max-sm:text-xs leading-relaxed mt-4">
+                {card.description}
+              </p>
+
+              {/* Footer */}
               <div className="mt-6 flex justify-end">
-                <span className="inline-flex items-center gap-1 text-sm font-medium group">
+                <span className="inline-flex items-center gap-1 text-sm max-sm:text-xs font-medium group">
                   Manage
+
                   <svg
                     className="w-4 h-4 transition-transform group-hover:translate-x-1"
                     fill="none"
@@ -76,7 +96,7 @@ export default function DashboardHome() {
               </div>
             </div>
 
-            {/* Subtle bottom line */}
+            {/* Bottom Line */}
             <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/30"></div>
           </div>
         ))}

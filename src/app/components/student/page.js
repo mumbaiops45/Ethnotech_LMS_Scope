@@ -676,7 +676,8 @@ export default function StudentsPage() {
         <div className="text-center py-10 text-gray-500">No students found</div>
       ) : (
         <>
-          <div className="overflow-x-auto bg-white rounded-xl shadow-md">
+          {/* Desktop Table */}
+          <div className="hidden md:block overflow-x-auto bg-white rounded-xl shadow-md">
             <table className="min-w-full text-sm text-left">
               <thead className="bg-[var(--primary)] text-white uppercase text-xs">
                 <tr>
@@ -691,19 +692,24 @@ export default function StudentsPage() {
                   <th className="px-4 py-3 text-center">Actions</th>
                 </tr>
               </thead>
+
               <tbody className="divide-y divide-gray-100">
                 {paginatedStudents.map((student, idx) => {
                   const profile = student.profile || {};
+
                   return (
                     <tr key={student._id} className="hover:bg-gray-50">
                       <td className="px-4 py-3">{startIndex + idx + 1}</td>
-                      <td className="px-4 py-3 font-medium">{profile.fullName || "—"}</td>
+                      <td className="px-4 py-3 font-medium">
+                        {profile.fullName || "—"}
+                      </td>
                       <td className="px-4 py-3">{student.email}</td>
                       <td className="px-4 py-3">{student.mobile || "—"}</td>
                       <td className="px-4 py-3">{profile.gender || "—"}</td>
                       <td className="px-4 py-3">{profile.education || "—"}</td>
                       <td className="px-4 py-3">{profile.program || "—"}</td>
                       <td className="px-4 py-3">{profile.branch || "—"}</td>
+
                       <td className="px-4 py-3">
                         <div className="flex justify-center items-center gap-3 h-full">
                           <button
@@ -738,29 +744,122 @@ export default function StudentsPage() {
             </table>
           </div>
 
+          {/* Mobile Cards */}
+          <div className="md:hidden space-y-4">
+            {paginatedStudents.map((student, idx) => {
+              const profile = student.profile || {};
+
+              return (
+                <div
+                  key={student._id}
+                  className="bg-white rounded-xl shadow-md p-4 border border-gray-100"
+                >
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <h3 className="font-semibold text-gray-800 text-base">
+                        {profile.fullName || "—"}
+                      </h3>
+
+                      <p className="text-sm text-gray-500 break-all">
+                        {student.email}
+                      </p>
+                    </div>
+
+                    <span className="text-xs bg-gray-100 px-2 py-1 rounded-full">
+                      #{startIndex + idx + 1}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div>
+                      <p className="text-gray-400">Mobile</p>
+                      <p className="font-medium">{student.mobile || "—"}</p>
+                    </div>
+
+                    <div>
+                      <p className="text-gray-400">Gender</p>
+                      <p className="font-medium">{profile.gender || "—"}</p>
+                    </div>
+
+                    <div>
+                      <p className="text-gray-400">Education</p>
+                      <p className="font-medium">
+                        {profile.education || "—"}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="text-gray-400">Program</p>
+                      <p className="font-medium">
+                        {profile.program || "—"}
+                      </p>
+                    </div>
+
+                    <div className="col-span-2">
+                      <p className="text-gray-400">Branch</p>
+                      <p className="font-medium">
+                        {profile.branch || "—"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end items-center gap-4 mt-4 pt-3 border-t">
+                    <button
+                      onClick={() => openViewModal(student)}
+                      className="text-gray-600 hover:text-gray-800"
+                    >
+                      <FaEye size={18} />
+                    </button>
+
+                    <button
+                      onClick={() => openEditModal(student)}
+                      className="text-[var(--primary)] hover:text-[var(--primary)]/80"
+                    >
+                      <FaEdit size={18} />
+                    </button>
+
+                    <button
+                      onClick={() => handleDelete(student._id)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <FaTrash size={18} />
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="flex justify-center items-center gap-2 mt-6">
+            <div className="flex flex-wrap justify-center items-center gap-2 mt-6">
               <button
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
-                className="px-3 py-1 border rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-3 py-1 border rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
               >
                 Previous
               </button>
+
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                 <button
                   key={page}
                   onClick={() => setCurrentPage(page)}
-                  className={`px-3 py-1 border rounded-lg transition ${currentPage === page ? "bg-[var(--primary)] text-white" : "hover:bg-gray-50"}`}
+                  className={`px-3 py-1 border rounded-lg transition text-sm ${currentPage === page
+                      ? "bg-[var(--primary)] text-white"
+                      : "hover:bg-gray-50"
+                    }`}
                 >
                   {page}
                 </button>
               ))}
+
               <button
-                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                onClick={() =>
+                  setCurrentPage((p) => Math.min(totalPages, p + 1))
+                }
                 disabled={currentPage === totalPages}
-                className="px-3 py-1 border rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-3 py-1 border rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
               >
                 Next
               </button>

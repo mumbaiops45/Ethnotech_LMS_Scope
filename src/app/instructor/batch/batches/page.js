@@ -248,19 +248,19 @@ export default function BatchesPage() {
         </button>
       </div>
 
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-        <h1 className="text-2xl font-bold text-[var(--primary)]">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
+        <h1 className="text-xl sm:text-2xl font-bold text-[var(--primary)]">
           Batch Management
         </h1>
 
-        <div className="flex gap-3 w-full sm:w-auto">
-          <div className="relative">
+        <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+          <div className="relative w-full">
             <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
 
             <input
               type="text"
               placeholder="Search by name, program or branch..."
-              className="pl-9 border rounded-lg px-4 py-2 text-sm w-full sm:w-64 focus:ring-2 focus:ring-[var(--primary)]"
+              className="pl-9 border rounded-lg px-4 py-2 text-sm w-full sm:w-72 focus:ring-2 focus:ring-[var(--primary)]"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -268,9 +268,10 @@ export default function BatchesPage() {
 
           <button
             onClick={openAddModal}
-            className="bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+            className="bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 whitespace-nowrap"
           >
-            <FaPlus /> Add Batch
+            <FaPlus />
+            Add Batch
           </button>
         </div>
       </div>
@@ -285,7 +286,8 @@ export default function BatchesPage() {
         </div>
       ) : (
         <>
-          <div className="overflow-x-auto bg-white rounded-xl shadow-md">
+          {/* Desktop Table */}
+          <div className="hidden md:block overflow-x-auto bg-white rounded-xl shadow-md">
             <table className="min-w-full text-sm text-left">
               <thead className="bg-[var(--primary)] text-white uppercase text-xs">
                 <tr>
@@ -376,15 +378,110 @@ export default function BatchesPage() {
             </table>
           </div>
 
+          {/* Mobile Cards */}
+          <div className="grid grid-cols-1 gap-4 md:hidden">
+            {paginatedBatches.map((batch, idx) => (
+              <div
+                key={batch._id}
+                className="bg-white rounded-xl shadow-md border border-gray-100 p-4"
+              >
+                <div className="flex justify-between items-start gap-3 mb-4">
+                  <div>
+                    <h3 className="font-semibold text-gray-800 text-base">
+                      {batch.name}
+                    </h3>
+
+                    <p className="text-sm text-gray-500">
+                      #{startIndex + idx + 1}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => openViewModal(batch)}
+                      className="text-gray-600 hover:text-gray-800"
+                    >
+                      <FaEye />
+                    </button>
+
+                    <button
+                      onClick={() => openEditModal(batch)}
+                      className="text-[var(--primary)] hover:text-[var(--primary)]/80"
+                    >
+                      <FaEdit />
+                    </button>
+
+                    <button
+                      onClick={() => openAssignModal(batch._id)}
+                      className="text-green-600 hover:text-green-800"
+                    >
+                      <FaUserPlus />
+                    </button>
+
+                    <button
+                      onClick={() => handleDelete(batch._id)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <FaTrash />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between gap-3">
+                    <span className="text-gray-500">Program</span>
+                    <span className="text-gray-800 text-right">
+                      {batch.program || "—"}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between gap-3">
+                    <span className="text-gray-500">Branch</span>
+                    <span className="text-gray-800 text-right">
+                      {batch.branch || "—"}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between gap-3">
+                    <span className="text-gray-500">Instructor</span>
+                    <span className="text-gray-800 text-right">
+                      {batch.instructor
+                        ? batch.instructor.fullName
+                        : "—"}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between gap-3">
+                    <span className="text-gray-500">Start Date</span>
+                    <span className="text-gray-800 text-right">
+                      {batch.startDate
+                        ? new Date(batch.startDate).toLocaleDateString()
+                        : "—"}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between gap-3">
+                    <span className="text-gray-500">End Date</span>
+                    <span className="text-gray-800 text-right">
+                      {batch.endDate
+                        ? new Date(batch.endDate).toLocaleDateString()
+                        : "—"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="flex justify-center items-center gap-2 mt-6">
+            <div className="flex flex-wrap justify-center items-center gap-2 mt-6">
               <button
                 onClick={() =>
                   setCurrentPage((p) => Math.max(1, p - 1))
                 }
                 disabled={currentPage === 1}
-                className="px-3 py-1 border rounded-lg hover:bg-gray-50 disabled:opacity-50"
+                className="px-3 py-1 border rounded-lg hover:bg-gray-50 disabled:opacity-50 text-sm"
               >
                 Previous
               </button>
@@ -396,11 +493,10 @@ export default function BatchesPage() {
                 <button
                   key={page}
                   onClick={() => setCurrentPage(page)}
-                  className={`px-3 py-1 border rounded-lg transition ${
-                    currentPage === page
+                  className={`px-3 py-1 border rounded-lg transition text-sm ${currentPage === page
                       ? "bg-[var(--primary)] text-white"
                       : "hover:bg-gray-50"
-                  }`}
+                    }`}
                 >
                   {page}
                 </button>
@@ -413,7 +509,7 @@ export default function BatchesPage() {
                   )
                 }
                 disabled={currentPage === totalPages}
-                className="px-3 py-1 border rounded-lg hover:bg-gray-50 disabled:opacity-50"
+                className="px-3 py-1 border rounded-lg hover:bg-gray-50 disabled:opacity-50 text-sm"
               >
                 Next
               </button>
@@ -430,104 +526,104 @@ export default function BatchesPage() {
               {isAddMode ? "Add New Batch" : "Edit Batch"}
             </h2>
 
-           <form onSubmit={handleSubmit} className="space-y-4">
-  <div>
-    <label className="block text-sm font-medium mb-1">
-      Name <span className="text-red-500">*</span>
-    </label>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Name <span className="text-red-500">*</span>
+                </label>
 
-    <input
-      type="text"
-      name="name"
-      value={formData.name}
-      onChange={handleChange}
-      required
-      className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[var(--primary)]"
-    />
-  </div>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[var(--primary)]"
+                />
+              </div>
 
-  <div>
-    <label className="block text-sm font-medium mb-1">
-      Program <span className="text-red-500">*</span>
-    </label>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Program <span className="text-red-500">*</span>
+                </label>
 
-    <input
-      type="text"
-      name="program"
-      value={formData.program}
-      onChange={handleChange}
-      required
-      className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[var(--primary)]"
-    />
-  </div>
+                <input
+                  type="text"
+                  name="program"
+                  value={formData.program}
+                  onChange={handleChange}
+                  required
+                  className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[var(--primary)]"
+                />
+              </div>
 
-  <div>
-    <label className="block text-sm font-medium mb-1">
-      Branch <span className="text-red-500">*</span>
-    </label>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Branch <span className="text-red-500">*</span>
+                </label>
 
-    <input
-      type="text"
-      name="branch"
-      value={formData.branch}
-      onChange={handleChange}
-      required
-      className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[var(--primary)]"
-    />
-  </div>
+                <input
+                  type="text"
+                  name="branch"
+                  value={formData.branch}
+                  onChange={handleChange}
+                  required
+                  className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[var(--primary)]"
+                />
+              </div>
 
-  <div>
-    <label className="block text-sm font-medium mb-1">
-      Start Date <span className="text-red-500">*</span>
-    </label>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Start Date <span className="text-red-500">*</span>
+                </label>
 
-    <input
-      type="date"
-      name="startDate"
-      value={formData.startDate}
-      onChange={handleChange}
-      required
-      className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[var(--primary)]"
-    />
-  </div>
+                <input
+                  type="date"
+                  name="startDate"
+                  value={formData.startDate}
+                  onChange={handleChange}
+                  required
+                  className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[var(--primary)]"
+                />
+              </div>
 
-  <div>
-    <label className="block text-sm font-medium mb-1">
-      End Date <span className="text-red-500">*</span>
-    </label>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  End Date <span className="text-red-500">*</span>
+                </label>
 
-    <input
-      type="date"
-      name="endDate"
-      value={formData.endDate}
-      onChange={handleChange}
-      required
-      className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[var(--primary)]"
-    />
-  </div>
+                <input
+                  type="date"
+                  name="endDate"
+                  value={formData.endDate}
+                  onChange={handleChange}
+                  required
+                  className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[var(--primary)]"
+                />
+              </div>
 
-  <div className="flex justify-end gap-3 pt-2">
-    <button
-      type="button"
-      onClick={closeModal}
-      className="px-4 py-2 border rounded-lg hover:bg-gray-50"
-    >
-      Cancel
-    </button>
+              <div className="flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="px-4 py-2 border rounded-lg hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
 
-    <button
-      type="submit"
-      disabled={submitting}
-      className="px-4 py-2 bg-[var(--primary)] text-white rounded-lg hover:bg-[var(--primary)]/90 disabled:opacity-50"
-    >
-      {submitting
-        ? "Saving..."
-        : isAddMode
-        ? "Create"
-        : "Update"}
-    </button>
-  </div>
-</form>
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="px-4 py-2 bg-[var(--primary)] text-white rounded-lg hover:bg-[var(--primary)]/90 disabled:opacity-50"
+                >
+                  {submitting
+                    ? "Saving..."
+                    : isAddMode
+                      ? "Create"
+                      : "Update"}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
@@ -586,8 +682,8 @@ export default function BatchesPage() {
                 <p className="text-gray-800">
                   {viewingBatch.startDate
                     ? new Date(
-                        viewingBatch.startDate
-                      ).toLocaleDateString()
+                      viewingBatch.startDate
+                    ).toLocaleDateString()
                     : "—"}
                 </p>
               </div>
@@ -599,8 +695,8 @@ export default function BatchesPage() {
                 <p className="text-gray-800">
                   {viewingBatch.endDate
                     ? new Date(
-                        viewingBatch.endDate
-                      ).toLocaleDateString()
+                      viewingBatch.endDate
+                    ).toLocaleDateString()
                     : "—"}
                 </p>
               </div>
